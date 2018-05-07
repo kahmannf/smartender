@@ -1,7 +1,7 @@
 'use strict';
 const db = require('../db');
 
-const getByLogin = (login, user_clb) => new Promise((resolve, reject) => {
+const getByLogin = (login) => new Promise((resolve, reject) => {
   var sql = 'select * from user where lower(login) like lower(?)';
   var params = [login];
 

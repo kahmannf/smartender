@@ -17,6 +17,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^5.0.1",
     "js-yaml": "^3.3.0",
+    "jsonwebtoken": "^8.2.1",
     "sqlite3": "^4.0.0",
     "swagger-tools": "0.10.1"
   }
