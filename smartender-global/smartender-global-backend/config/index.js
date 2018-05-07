@@ -1,3 +1,4 @@
+'use strict';
 require('dotenv').load();
 
 const db = require('./db');

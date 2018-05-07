@@ -1,3 +1,4 @@
+'use strict';
 const db = require('../db');
 
 const getByLogin = (login, user_clb) => new Promise((resolve, reject) => {
