@@ -1,6 +1,6 @@
 {
   "name": "smartender-global-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Description of the global smartender API",
   "main": "index.js",
   "scripts": {

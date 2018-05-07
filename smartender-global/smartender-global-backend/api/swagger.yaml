@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Description of the global smartender API"
-  version: "1.0.1"
+  version: "1.0.2"
   title: "smartender-global-server"
 host: "vahlkamp.selfhost.eu:10000"
 basePath: "/smartender/api"
@@ -64,6 +64,21 @@ paths:
           description: "OK"
         403:
           description: "user was not logged in"
+      x-swagger-router-controller: "Authentication"
+  /register:
+    post:
+      tags:
+      - "authentication"
+      operationId: "registerPOST"
+      parameters: []
+      responses:
+        202:
+          description: "user successfully created"
+        default:
+          description: "Invalid request"
+          schema:
+            $ref: "#/definitions/inline_response_default"
+      security: []
       x-swagger-router-controller: "Authentication"
   /drinks:
     get:

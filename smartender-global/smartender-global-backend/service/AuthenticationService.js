@@ -26,3 +26,14 @@ exports.logoutPOST = function() {
   });
 }
 
+
+/**
+ *
+ * no response value expected for this operation
+ **/
+exports.registerPOST = function() {
+  return new Promise(function(resolve, reject) {
+    resolve();
+  });
+}
+
