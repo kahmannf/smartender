@@ -33,7 +33,7 @@ paths:
       - "multipart/form-data"
       - "application/x-www-form-urlencoded"
       parameters:
-      - name: "loginform"
+      - name: "login"
         in: "formData"
         description: "login and password data of the user"
         required: true
