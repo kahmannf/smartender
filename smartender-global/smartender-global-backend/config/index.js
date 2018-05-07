@@ -4,6 +4,6 @@ const db = require('./db');
 const general = require('./general');
 
 module.exports = {
-    db,
-    general
+  db,
+  general
 }
