@@ -14,3 +14,13 @@ module.exports.loginPOST = function loginPOST (req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+module.exports.logoutPOST = function logoutPOST (req, res, next) {
+  Authentication.logoutPOST()
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};

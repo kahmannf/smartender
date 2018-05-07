@@ -2,7 +2,7 @@
 swagger: "2.0"
 info:
   description: "Description of the global smartender API"
-  version: "1.0.0"
+  version: "1.0.1"
   title: "smartender-global-server"
 host: "vahlkamp.selfhost.eu:10000"
 basePath: "/smartender/api"
@@ -54,6 +54,8 @@ paths:
       x-swagger-router-controller: "Authentication"
   /logout:
     post:
+      tags:
+      - "authentication"
       description: "logs to user out"
       operationId: "logoutPOST"
       parameters: []
@@ -62,7 +64,7 @@ paths:
           description: "OK"
         403:
           description: "user was not logged in"
-      x-swagger-router-controller: "Default"
+      x-swagger-router-controller: "Authentication"
   /drinks:
     get:
       tags:
