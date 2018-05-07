@@ -105,3 +105,4 @@ Thumbs.db
 
 #Sqlite databse files
 *.sqlite
+!schema.sqlite
