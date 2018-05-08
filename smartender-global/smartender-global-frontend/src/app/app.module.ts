@@ -1,3 +1,4 @@
+import { AuthGuard } from './guards/auth.guard';
 import { AuthService } from './shared/auth.service';
 import { MockService } from './service-client/mock.service';
 import { BrowserModule } from '@angular/platform-browser';
@@ -22,7 +23,8 @@ import { LoginComponent } from './_modules/login/login.component';
   ],
   providers: [
     MockService,
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
