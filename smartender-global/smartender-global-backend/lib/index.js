@@ -1,6 +1,7 @@
 'use strict';
-const user = require('./user');
+
+const google = require('./google');
 
 module.exports = {
-  user
+  google
 }
