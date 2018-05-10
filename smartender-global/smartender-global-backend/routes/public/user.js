@@ -29,5 +29,27 @@ router.get('/by-register-key/:key', (req, res) => {
   
 });
 
+router.get('/is-alias-available/:alias', (req, res) => {
+  user.isAliasAvailable(req.params.alias)
+  .then(result => {
+    res.json(result);
+  })
+  .catch(err => {
+    logger.error(err, 500);
+    res.sendStatus(500);
+  })
+});
+
+router.get('/is-email-available/:email', (req, res) => {
+  user.isEmailAvailable(req.params.email)
+  .then(result => {
+    res.json(result);
+  })
+  .catch(err => {
+    logger.error(err, 500);
+    res.sendStatus(500);
+  })
+});
+
 
 module.exports = router;

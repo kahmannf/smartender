@@ -30,6 +30,49 @@ const isAliasAndEmailAvailable = (alias, email) => {
   });
 };
 
+const isAliasAvailable = (alias) => {
+  return new Promise((resolve, reject) => {
+    if(alias) {
+      var sql = 'select alias from user where lower(alias) like lower(?)';
+      var params = [alias];
+
+      db.get(sql, params, (err, row) => {
+        if(err) {
+          reject(err)
+        } else if (row) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    } else {
+      resolve(false);
+    }
+  });
+}
+
+const isEmailAvailable = (email) => {
+  return new Promise((resolve, reject) => {
+    if(email) {
+      var sql = 'select email from user where lower(email) like lower(?)';
+      var params = [email];
+
+      db.get(sql, params, (err, row) => {
+        if(err) {
+          reject(err)
+        } else if (row) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
+      });
+    } else {
+      resolve(false);
+    }
+  });
+}
+
+
 const createUser = (alias, email) => {
   return new Promise((resolve, reject) => {
     var registerkey = auth.genRandomString(20);
@@ -172,5 +215,7 @@ module.exports = {
   getByRegisterkey,
   getForLogin,
   getForTokenPayload,
-  isAliasAndEmailAvailable
+  isAliasAndEmailAvailable,
+  isAliasAvailable,
+  isEmailAvailable
 };
