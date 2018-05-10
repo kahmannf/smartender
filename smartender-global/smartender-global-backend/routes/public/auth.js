@@ -69,7 +69,7 @@ router.post('/login', (req, res) => {
         user.getForTokenPayload(req.body.id)
         .then(token_user => {
 
-        res.end(auth.getToken(token_user));
+        res.json({ token: auth.getToken(token_user), user: token_user });
 
         })
         .catch(err => {
