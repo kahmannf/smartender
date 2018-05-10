@@ -3,14 +3,17 @@ const router = express.Router();
 
 const logger = require('../logger');
 
-const auth = require('./auth');
+const public = require('./public');
+const secure = require('./secure');
 
 //log incomming requests
 router.use((req, res, next) => {
-  logger.log(`${req.method} ${req.url}`);
+  logger.log(`${req.method} ${req.url}`, 1000);
   next();
 });
 
-router.use('/auth', auth);
+
+router.use('/public', public);
+router.use('/secure', secure);
 
 module.exports = router;
