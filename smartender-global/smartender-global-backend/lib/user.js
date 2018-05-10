@@ -112,7 +112,7 @@ const updatePassword = (user) => {
 
 const getByRegisterkey = (registerkey) => {
   return new Promise((resolve, reject) => {
-    var sql = "select alias, email, id from user where registerkey = ?";
+    var sql = "select alias, email, id, registerky from user where registerkey = ?";
     var params = [registerkey];
     db.get(sql, params, (err, row) => {
       if(err) {
