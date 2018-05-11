@@ -114,4 +114,10 @@ export class ConnectorService {
       { machinekey, name },
       { headers: this.getHttpHeaders() });
   }
+
+  secureMachineByIdGET(machineid: number): Observable<Machine> {
+    return this.http.get<Machine>(
+      env.apiBaseUrl + 'secure/machine/by-id/' + machineid,
+      { headers: this.getHttpHeaders() });
+  }
 }

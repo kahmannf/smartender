@@ -48,6 +48,22 @@ const getMachineByKey = (machinekey) => {
   });
 }
 
+const getMachineById = (id) => {
+  return new Promise((resolve, reject) => {
+    var sql = "select id, name, owner_id from machine where id = ?";
+    var params = [id];
+
+    db.get(sql, params, (err, row) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+}
+
+
 const registerMachine = (user_id, machinekey, name) => {
   return new Promise((resolve, reject) => {
     getMachineByKey(machinekey)
@@ -83,5 +99,7 @@ const registerMachine = (user_id, machinekey, name) => {
 module.exports = {
   isUserOwner,
   getUserMachines,
+  getMachineById,
+  getMachineByKey,
   registerMachine
 }
