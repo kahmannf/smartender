@@ -53,6 +53,8 @@ const isAliasAvailable = (alias) => {
 
 const isEmailAvailable = (email) => {
   return new Promise((resolve, reject) => {
+
+    console.log(email);
     if(email) {
       var sql = 'select email from user where lower(email) like lower(?)';
       var params = [email];
@@ -77,7 +79,7 @@ const createUser = (alias, email) => {
   return new Promise((resolve, reject) => {
     var registerkey = auth.genRandomString(20);
 
-    var sql = "insert into user(alias, email, registerkey) values($alias, $email, $registerkey)";
+    var sql = "insert into user(email, alias, registerkey) values($email, $alias, $registerkey)";
     var params = {
       $alias: alias, 
       $email: email, 
@@ -190,10 +192,10 @@ const getForLogin = (email) => {
   });
 }
 
-const getForTokenPayload = (id) => {
+const getForTokenPayload = (email) => {
   return new Promise((resolve, reject) => {
-    var sql = "select email, alias, id from user where id = ?";
-    var params = [id];
+    var sql = "select email, alias, id from user where email = ?";
+    var params = [email];
 
     db.get(sql, params, (err, row) => {
       if(err) {
@@ -203,7 +205,7 @@ const getForTokenPayload = (id) => {
         resolve(row);
       }
       else {
-        reject(`No user with id ${id}`);
+        reject(`No user with email ${email}`);
       }
     });
   });

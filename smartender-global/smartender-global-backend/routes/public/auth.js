@@ -10,14 +10,14 @@ const email = require('../../lib/email');
 
 router.post('/register', (req, res) => {
   
-  user.isAliasAndEmailAvailable(req.body.email, req.body.alias)
+  user.isAliasAndEmailAvailable(req.body.alias, req.body.email)
   .then(result => {
     if(result.available) {
-      return user.createUser(req.body.email, req.body.alias);
+      return user.createUser(req.body.alias, req.body.email);
     }
     else {
       var message = '';
-      if(result.alias && result.message) {
+      if(result.alias && result.email) {
         message += "Both alias and email are already in use!";
       }
       else if (result.alias) {
@@ -27,17 +27,21 @@ router.post('/register', (req, res) => {
         message += `Email \'${req.body.email}\' is already in use!`;
       }
 
-      res.end({
+      res.json({
         success: false,
         message
       });
     }
   })
   .then((created_user) => {
-    email.registrationmail(user);
-    res.end({
-      success: true
-    });
+    if(created_user) {
+      email.registrationmail(created_user);
+      res.json({
+        success: true
+      });
+    } else {
+      //whatever
+    }
   })
   .catch(err => {
     logger.error(err, 500);
@@ -49,7 +53,7 @@ router.post('/register', (req, res) => {
 router.post('/activate', (req, res) => {
   if(req.body.password && req.body.registerkey && req.body.id) {
     user.activateUser(req.body)
-    .then(() => res.end())
+    .then(() => res.json(true))
     .catch(err => {
       logger.error(err, 500);
       
@@ -66,7 +70,7 @@ router.post('/login', (req, res) => {
     user.getForLogin(req.body.email)
     .then(pw_user => {
       if(auth.verifyPassword(req.body.password, pw_user.hash, pw_user.salt)){
-        user.getForTokenPayload(req.body.id)
+        user.getForTokenPayload(req.body.email)
         .then(token_user => {
 
         res.json({ token: auth.getToken(token_user), user: token_user });

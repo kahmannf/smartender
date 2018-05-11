@@ -23,7 +23,7 @@ module.exports = {
         var message = {
             text: 'Hello '+ user.alias +',\n\n'
                     + 'To activate your Smartender account please follow this link:\n' 
-                    + config.general.baseurl_client + 'complete_register/' + user.registerkey + '\n\n'
+                    + config.general.baseurl_client + 'complete-register/' + user.registerkey + '\n\n'
                     + '\n\n\n\n'
                     + 'This email was automatically generated. Do not reply to this address. You can always contact the support via support@smartender.kahmann.com \n', 
             from: 'Smartender Account System <noreply@smartender.kahmann.com>',
