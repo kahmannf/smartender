@@ -1,4 +1,7 @@
+import { map, switchMap } from 'rxjs/operators';
+import { Machine } from './../../shared/machine';
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../../shared/user.service';
 
 @Component({
   selector: 'sm-machines',
@@ -7,9 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MachinesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private userService: UserService) { }
+
+  machines: Machine[];
 
   ngOnInit() {
+    this.userService.getMyMachines()
+    .subscribe(
+      result => {
+        this.machines = result;
+      });
+
+    this.userService.machineRegistered
+    .pipe(
+      switchMap(result => {
+        return this.userService.getMyMachines();
+      })
+    ).subscribe(
+      result => {
+        this.machines = result;
+      });
   }
 
 }

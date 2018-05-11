@@ -23,7 +23,7 @@ const routes: Routes = [
       { path: 'drink/:id', component: DrinkDetailComponent},
       { path: 'machines', component: MachinesComponent, children: [
         { path: 'new', component: CreateMachineComponent},
-        { path: ':id', component: MachineDetailComponent}
+        { path: 'machine/:id', component: MachineDetailComponent}
       ]},
       { path: 'sessions', component: SessionsComponent},
       { path: '**', redirectTo: 'dashboard' }

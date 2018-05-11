@@ -2,11 +2,11 @@
   <div class="row mt-3">
     <div class="col col-3">
       <ul class="list-group">
-        <li class="list-group-item text-secondary" >
-          <a [routerLinkActive]="'text-dark'" >test</a>
+        <li *ngFor="let machine of machines" class="list-group-item" >
+          <a class="text-secondary" [routerLink]="'./machine/' + machine.id" [routerLinkActive]="'text-dark'" >{{machine.name}}</a>
         </li>
-        <li class="list-group-item text-secondary">
-          <a [routerLink]="'./new'" [routerLinkActive]="'text-dark'">register machine</a>
+        <li class="list-group-item">
+          <a class="text-secondary" [routerLink]="'./new'" [routerLinkActive]="'text-dark'">register machine</a>
         </li>
       </ul>
     </div>

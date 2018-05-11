@@ -22,11 +22,25 @@ export class CustomValidators {
   alphanumric(control: AbstractControl) {
     const value = control.value;
 
-    const regex = new RegExp(/^[a-z0-9 ]*$/i);
+    const regex = new RegExp(/^[a-z0-9]*$/i);
 
     if (value) {
       if (!regex.test(value)) {
         return { alphanumeric: true };
+      }
+    }
+
+    return null;
+  }
+
+  alphanumricwhitespace(control: AbstractControl) {
+    const value = control.value;
+
+    const regex = new RegExp(/^[a-z0-9 ]*$/i);
+
+    if (value) {
+      if (!regex.test(value)) {
+        return { alphanumricwhitespace: true };
       }
     }
 

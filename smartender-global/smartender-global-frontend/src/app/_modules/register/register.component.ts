@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
     this.projectName = environment.projectName;
 
     this.registerForm = new FormGroup({
-      alias: new FormControl('', [Validators.required, this.custValidators.alphanumric], this.custValidators.aliasavailable),
+      alias: new FormControl('', [Validators.required, this.custValidators.alphanumricwhitespace], this.custValidators.aliasavailable),
       email: new FormControl('', [Validators.required, this.custValidators.emailformat], this.custValidators.emailavailable)
     });
   }

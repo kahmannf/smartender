@@ -19,4 +19,17 @@ router.get('/my-machines', (req, res) => {
   });
 });
 
+router.post('/register-machine', (req, res) => {
+  if(req.body.machinekey && req.body.name) {
+    machine.registerMachine(req.oauth.payload.id, req.body.machinekey, req.body.name)
+    .then(result => res.json(result))
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+    });
+  } else {
+    res.status(400).end('No machinekey/name parameter provided');
+  }
+})
+
 module.exports = router;

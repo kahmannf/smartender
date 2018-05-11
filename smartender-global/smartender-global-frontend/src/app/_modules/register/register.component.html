@@ -36,7 +36,7 @@
           <div class="text-danger" *ngIf="hasError('alias', 'required')">
             Alias is required!
           </div>
-          <div class="text-danger" *ngIf="hasError('alias', 'alphanumeric')">
+          <div class="text-danger" *ngIf="hasError('alias', 'alphanumricwhitespace')">
             Alias can only contain letters, numbers and spaces ('a'-'z', 'A'-'Z', '0'-'9', ' ');
           </div>
           <div class="text-danger" *ngIf="isValueAvailable('alias')">

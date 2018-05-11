@@ -4,14 +4,19 @@ const machine_lib = require('./machine');
 
 const getUserSessions = (userid) => {
   return new Promise((resolve, reject) => {
-    var sql = "select shm.*, " +
+    var sql = "select shm.session_id, " +
+                    " shm.user_id, " +
+                    " shm.can_edit_machine, " +
+                    " shm.can_edit_session, " +
+                    " shm.is_owner, " +
+                    " shm.is_user_active_session, " +
                     " s.name " +
                     " from session_has_members shm," +
                     " session s " + 
                     " where s.id = shm.session_id " + 
-                    " and s.active <> 0 ";
-                    " and shm.user_id = ? ";
-    var params = [userid];
+                    " and s.active != 0 " +
+                    " and shm.user_id = $userid ";
+    var params = { $userid: userid };
 
     db.all(sql, params, (err, rows) => {
       if(err) {
