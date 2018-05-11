@@ -1,31 +1,54 @@
-import { Observable } from 'rxjs';
-import { MockService } from './../service-client/mock.service';
+import { map, catchError } from 'rxjs/operators';
+import { ConnectorService } from './../service-client/connector.service';
+import { Observable, of } from 'rxjs';
 import { Injectable, Output, EventEmitter } from '@angular/core';
+import { User } from './user';
+import { ServerOperationResult } from './server-operation-result';
 
 @Injectable()
 export class AuthService {
 
-  constructor(public mockService: MockService) { }
+  constructor(public connector: ConnectorService) { }
 
-  token: string;
+  user: User;
 
-  @Output() login_returned = new EventEmitter<boolean>();
+  loggedInChanged = new  EventEmitter<boolean>();
 
   login(email: string, password: string) {
-    this.mockService.login(email, password).toPromise().then(token => {
-      this.token = token;
-      this.login_returned.emit(true);
-     }).catch(err => {
-      this.login_returned.emit(false);
-     });
-
+    return this.connector.publicAuthLoginPOST(email, password)
+    .pipe(
+      map(tokenResponse => {
+        if (tokenResponse && tokenResponse.token) {
+          localStorage.setItem('token', tokenResponse.token);
+          this.user = tokenResponse.user;
+          this.loggedInChanged.emit(true);
+          return true;
+        } else {
+          return false;
+        }
+      })
+    );
   }
 
   logout() {
-    this.mockService.logout();
+    localStorage.setItem('token', undefined);
   }
 
-  isLoggedIn() {
-    return this.mockService.isLoggedIn();
+  isLoggedIn(): Observable<boolean> {
+    return this.connector.secureUserCurrentGET()
+    .pipe(
+      catchError(err => of(false)),
+      map(user => {
+        return !!user;
+      })
+    );
+  }
+
+  register(user: User): Observable<ServerOperationResult> {
+    return this.connector.publicAuthRegisterPOST(user.email, user.alias);
+  }
+
+  activateAccount(user: User, password: string) {
+    return this.connector.publicAuthActivatePOST(user, password);
   }
 }

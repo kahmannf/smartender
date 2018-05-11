@@ -1,0 +1,64 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+
+    </div>
+    <div class="col-sm-8 col-md-4">
+      <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="form-group mt-5">
+          <h1>
+            <img width="100" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+            Smartender
+
+          </h1>
+        </div>
+        <div class="form-group">
+          <h3>
+            Register:
+          </h3>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input formControlName="email" type="text" id="email" class="form-control">
+          <div class="text-danger" *ngIf="hasError('email', 'required')">
+            Email is required!
+          </div>
+          <div class="text-danger" *ngIf="hasError('email', 'emailformat')">
+            Not a valid email!
+          </div>
+          <div class="text-danger" *ngIf="isValueAvailable('email')">
+            Email already registered!
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="alias">Alias</label>
+          <input formControlName="alias" type="text" id="alias" class="form-control">
+          <div class="text-danger" *ngIf="hasError('alias', 'required')">
+            Alias is required!
+          </div>
+          <div class="text-danger" *ngIf="hasError('alias', 'alphanumeric')">
+            Alias can only contain letters, numbers and spaces ('a'-'z', 'A'-'Z', '0'-'9', ' ');
+          </div>
+          <div class="text-danger" *ngIf="isValueAvailable('alias')">
+            Alias already taken!
+          </div>
+        </div>
+        <div class="form-group text-danger">
+          {{errorMessage}}
+        </div>
+        <div class="form-group text-success" *ngIf="success">
+          Registration successful! Verify your email-address to proceed. An email will be send to you shortly!
+        </div>
+        <div class="form-group">
+          <button type="submit" class="form-control btn btn-primary">Register</button>
+        </div>
+        <div class="form-group">
+          <button type="button" [routerLink]="'/login'" class="form-control btn btn-primary">Back to login</button>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+
+    </div>
+  </div>
+</div>

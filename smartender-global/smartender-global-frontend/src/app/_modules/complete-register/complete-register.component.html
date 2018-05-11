@@ -4,7 +4,7 @@
 
     </div>
     <div class="col-sm-8 col-md-4">
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <form [formGroup]="registerForm" (ngSubmit)="complete()">
         <div class="form-group mt-5">
           <h1>
             <img width="100" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
@@ -14,31 +14,36 @@
         </div>
         <div class="form-group">
           <h3>
-            Login:
+            Activate Account
           </h3>
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input formControlName="email" type="text" class="form-control" id="email">
-          <div class="text-danger" *ngIf="isInvalid('email', 'required')">
-            Please enter your email
-          </div>
+          <input class="form-control" type="text" id="email" disabled value="{{user.email}}">
+        </div>
+        <div class="form-group">
+          <label for="alias">Alias</label>
+          <input class="form-control" type="text" id="alias" disabled value="{{user.alias}}">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input formControlName="password" type="password" class="form-control" id="password">
-          <div class="text-danger" *ngIf="isInvalid('password', 'required')">
-              Please enter your password
+          <input class="form-control" type="password" id="password" formControlName="password">
+          <div class="text-danger" *ngIf="hasError('password')">
+            Password has to be at least 6 characters long!
           </div>
         </div>
-        <div class="form-group" class="text-danger">
-          {{errorMessage}}
-        </div>
-        <div class="form-group mt-3">
-          <button type="submit" class="form-control btn btn-primary">Login</button>
+        <div class="form-group">
+          <label for="passwordrepeat">Password (confirm)</label>
+          <input class="form-control" type="password" id="passwordrepeat" formControlName="passwordRepeat">
+          <div class="text-danger" *ngIf="hasError('passwordRepeat')">
+            Passwords do not match!
+          </div>
         </div>
         <div class="form-group">
-          <button type="button" [routerLink]="'/register'" class="form-control btn btn-primary">Register</button>
+          <button type="submit" class="form-control btn btn-primary">Activate Account</button>
+        </div>
+        <div class="form-group">
+          <button type="button" [routerLink]="'/login'" class="form-control btn btn-primary">Back to login</button>
         </div>
       </form>
     </div>
