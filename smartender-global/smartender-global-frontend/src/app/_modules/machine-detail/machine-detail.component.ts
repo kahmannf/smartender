@@ -30,12 +30,9 @@ export class MachineDetailComponent implements OnInit {
     const getById = this.id$.pipe(switchMap(id => this.machineService.getMachineById(id)));
     const bySocket = this.id$.pipe(switchMap(id => this.machineService.subscribeMachineById(id)));
 
-    bySocket.subscribe(result => console.log(result));
-
     this.machine$ = bySocket.pipe(merge(getById));
 
     this.machine$.subscribe(machine => this.machine = machine);
 
   }
-
 }
