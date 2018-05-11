@@ -1,3 +1,4 @@
+import { Machine } from './../shared/machine';
 import { TokenResponse } from './../shared/token-response';
 import { ServerOperationResult } from './../shared/server-operation-result';
 import { Observable } from 'rxjs';
@@ -5,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment as env } from '../../environments/environment';
 import { User } from '../shared/user';
+import { UserSession } from '../shared/user-session';
 
 @Injectable({
   providedIn: 'root'
@@ -77,5 +79,25 @@ export class ConnectorService {
   publicUserIsEmailAvailableGET(email: string): Observable<boolean> {
     return this.http.get<boolean>(env.apiBaseUrl + 'public/user/is-email-available/' + email,
     { headers: this.getHttpHeaders(false) });
+  }
+
+  secureSessionMineGET(): Observable<UserSession[]> {
+    return this.http.get<UserSession[]>(env.apiBaseUrl + 'secure/session/mine',
+    { headers: this.getHttpHeaders() } );
+  }
+
+  secureSessionNewPOST(machine_id: number, user_id: number, name: string): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(env.apiBaseUrl + 'secure/session/new',
+    {
+      machine_id,
+      user_id,
+      name
+    },
+    { headers: this.getHttpHeaders() } );
+  }
+
+  secureUserMyMachinesGET(): Observable<Machine[]> {
+    return this.http.get<Machine[]>(env.apiBaseUrl + 'secure/user/my-machines',
+    { headers: this.getHttpHeaders() } );
   }
 }

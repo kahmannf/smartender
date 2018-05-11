@@ -1,0 +1,17 @@
+<div class="container-fluid max-width">
+  <div class="row mt-3">
+    <div class="col col-3">
+      <ul class="list-group">
+        <li class="list-group-item text-secondary" >
+          <a [routerLinkActive]="'text-dark'" >test</a>
+        </li>
+        <li class="list-group-item text-secondary">
+          <a [routerLink]="'./new'" [routerLinkActive]="'text-dark'">register machine</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

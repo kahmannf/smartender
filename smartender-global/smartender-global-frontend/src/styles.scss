@@ -5,3 +5,10 @@
 button:disabled {
   cursor: not-allowed;
 }
+
+div.container-fluid.max-width {
+  padding-right:0;
+  padding-left:0;
+  margin-right:auto;
+  margin-left:auto
+}

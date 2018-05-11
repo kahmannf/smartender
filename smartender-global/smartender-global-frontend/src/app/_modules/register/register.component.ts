@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { AuthService } from './../../shared/auth.service';
 import { CustomValidators } from './../../custom-validators';
 import { Component, OnInit } from '@angular/core';
@@ -23,7 +24,11 @@ export class RegisterComponent implements OnInit {
 
   success = false;
 
+  projectName: string;
+
   ngOnInit() {
+    this.projectName = environment.projectName;
+
     this.registerForm = new FormGroup({
       alias: new FormControl('', [Validators.required, this.custValidators.alphanumric], this.custValidators.aliasavailable),
       email: new FormControl('', [Validators.required, this.custValidators.emailformat], this.custValidators.emailavailable)

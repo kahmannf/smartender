@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'sm-login',
@@ -15,11 +16,15 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
+  projectName: string;
+
   errorMessage = '';
 
   submitted = false;
 
   ngOnInit() {
+    this.projectName = environment.projectName;
+
     this.loginForm = new FormGroup({
       email: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required),

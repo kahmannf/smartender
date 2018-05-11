@@ -1,22 +1,20 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" [routerLink]="'/home/dashboard'">Smartender</a>
+    <a class="navbar-brand" [routerLink]="'/home/dashboard'">{{projectName}}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-item nav-link" [routerLink]="'/home/dashboard'" [routerLinkActive]="'active'">Home</a>
-        <a class="nav-item nav-link" [routerLink]="'/home/drinks'" [routerLinkActive]="'active'" >Features</a>
-        <a class="nav-item nav-link" [routerLink]="'/home/machines'" [routerLinkActive]="'active'" >Pricing</a>
-        <a class="nav-item nav-link" [routerLink]="'/home/sessions'" [routerLinkActive]="'active'" >Disabled</a>
+        <a class="nav-item nav-link" [routerLink]="'/home/drinks'" [routerLinkActive]="'active'" >Drinks</a>
+        <a class="nav-item nav-link" [routerLink]="'/home/machines'" [routerLinkActive]="'active'" >Machines</a>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
+            {{session_dropdown_label}}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item">Action</a>
-            <a class="dropdown-item">Another action</a>
-            <a class="dropdown-item">Something else here</a>
+            <a class="dropdown-item" [routerLink]="'/home/sessions'" *ngFor="let session of sessions"><div [ngClass]="{'bold': session.is_user_active_session }">{{session.name}}</div></a>
+            <a class="dropdown-item" [routerLink]="'/home/sessions'" >Manage Sessions</a>
           </div>
         </div>
       </div>

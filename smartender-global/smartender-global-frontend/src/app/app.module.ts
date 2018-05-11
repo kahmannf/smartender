@@ -16,6 +16,12 @@ import { CustomValidators } from './custom-validators';
 import { CompleteRegisterComponent } from './_modules/complete-register/complete-register.component';
 import { NavbarComponent } from './_modules/navbar/navbar.component';
 import { DashboardComponent } from './_modules/dashboard/dashboard.component';
+import { SessionsComponent } from './_modules/sessions/sessions.component';
+import { DrinkBrowserComponent } from './_modules/drink-browser/drink-browser.component';
+import { DrinkDetailComponent } from './_modules/drink-detail/drink-detail.component';
+import { MachinesComponent } from './_modules/machines/machines.component';
+import { MachineDetailComponent } from './_modules/machine-detail/machine-detail.component';
+import { CreateMachineComponent } from './_modules/create-machine/create-machine.component';
 
 
 @NgModule({
@@ -27,6 +33,12 @@ import { DashboardComponent } from './_modules/dashboard/dashboard.component';
     CompleteRegisterComponent,
     NavbarComponent,
     DashboardComponent,
+    SessionsComponent,
+    DrinkBrowserComponent,
+    DrinkDetailComponent,
+    MachinesComponent,
+    MachineDetailComponent,
+    CreateMachineComponent,
   ],
   imports: [
     BrowserModule,

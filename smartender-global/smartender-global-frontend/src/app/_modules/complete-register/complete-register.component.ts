@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../../shared/user';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'sm-complete-register',
@@ -35,7 +36,12 @@ export class CompleteRegisterComponent implements OnInit {
 
   submitted = false;
 
+  projectName: string;
+
   ngOnInit() {
+
+    this.projectName = environment.projectName;
+
     this.route.params
     .pipe(
       map(params => params['registerkey']),

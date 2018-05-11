@@ -1,3 +1,9 @@
+import { MachineDetailComponent } from './_modules/machine-detail/machine-detail.component';
+import { CreateMachineComponent } from './_modules/create-machine/create-machine.component';
+import { MachinesComponent } from './_modules/machines/machines.component';
+import { DrinkDetailComponent } from './_modules/drink-detail/drink-detail.component';
+import { DrinkBrowserComponent } from './_modules/drink-browser/drink-browser.component';
+import { SessionsComponent } from './_modules/sessions/sessions.component';
 import { DashboardComponent } from './_modules/dashboard/dashboard.component';
 import { CompleteRegisterComponent } from './_modules/complete-register/complete-register.component';
 import { AuthGuard } from './guards/auth.guard';
@@ -13,6 +19,13 @@ const routes: Routes = [
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', component: DashboardComponent},
+      { path: 'drinks', component: DrinkBrowserComponent},
+      { path: 'drink/:id', component: DrinkDetailComponent},
+      { path: 'machines', component: MachinesComponent, children: [
+        { path: 'new', component: CreateMachineComponent},
+        { path: ':id', component: MachineDetailComponent}
+      ]},
+      { path: 'sessions', component: SessionsComponent},
       { path: '**', redirectTo: 'dashboard' }
     ]},
   { path: 'login', component: LoginComponent },
@@ -22,7 +35,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { enableTracing: true })],
+  imports: [RouterModule.forRoot(routes, { enableTracing: false })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
