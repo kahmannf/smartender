@@ -24,7 +24,9 @@ export class CompleteRegisterComponent implements OnInit {
     email: undefined,
     alias: undefined,
     registerkey: undefined,
-    id: 0
+    id: 0,
+    iat: 0,
+    exp: 0
   };
 
   registerForm: FormGroup;

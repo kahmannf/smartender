@@ -3,4 +3,6 @@ export interface User {
   alias: string;
   email: string;
   registerkey: string;
+  iat: number;
+  exp: number;
 }
