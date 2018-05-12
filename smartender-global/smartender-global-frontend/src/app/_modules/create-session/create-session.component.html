@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col col-sm-8 col-md-5" *ngIf="!machines || machines.length == 0">
+      You dont own a machine! <br>
+      You must be the proud owner of a smartender to create a session!
+    </div>
+    <div class="col col-sm-8 col-md-5" *ngIf="machines && machines.length > 0">
+      <form [formGroup]="createSessionForm" (ngSubmit)="onCreate()" >
+        <div class="form-group">
+          <label for="name">Session-name</label>
+          <input autocomplete="off" type="text" formControlName="name" id="name" class="form-control">
+          <div class="text-danger" *ngIf="hasError('name', 'required')">
+            A name is required
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="machineid">Machine:</label>
+          <select id="machineid" formControlName="machineid" class="form-control">
+            <option *ngFor="let machine of machines" [ngValue]="machine.id">{{machine.name}}</option>
+          </select>
+          <div class="text-danger" *ngIf="hasError('machineid', 'min')">
+            Select a machine
+          </div>
+        </div>
+        <div class="form-group text-danger">
+          {{errorMessage}}
+        </div>
+        <div class="form-group mt-2">
+          <button type="submit" class="form-control btn btn-primary">Create</button>
+        </div>
+      </form>
+    </div>
+    <div class="col">
+
+    </div>
+  </div>

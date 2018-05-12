@@ -77,8 +77,12 @@ router.post('/login', (req, res) => {
 
         })
         .catch(err => {
-          logger.error(err, 500);
-          res.sendStatus(500);
+          if(err) {
+            logger.error(err, 500);
+            res.sendStatus(500);
+          } else {
+            res.sendStatus(401);
+          }
         });
       }
       else {

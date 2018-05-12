@@ -38,6 +38,7 @@ export class CreateMachineComponent implements OnInit {
         this.createNewForm.value.name)
       .subscribe(result => {
         if (result && result.success) {
+          this.createNewForm.reset();
         } else if (result) {
           this.errorMessage = result.message;
         } else {

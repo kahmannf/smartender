@@ -22,6 +22,8 @@ import { DrinkDetailComponent } from './_modules/drink-detail/drink-detail.compo
 import { MachinesComponent } from './_modules/machines/machines.component';
 import { MachineDetailComponent } from './_modules/machine-detail/machine-detail.component';
 import { CreateMachineComponent } from './_modules/create-machine/create-machine.component';
+import { SessionDetailComponent } from './_modules/session-detail/session-detail.component';
+import { CreateSessionComponent } from './_modules/create-session/create-session.component';
 
 
 @NgModule({
@@ -39,6 +41,8 @@ import { CreateMachineComponent } from './_modules/create-machine/create-machine
     MachinesComponent,
     MachineDetailComponent,
     CreateMachineComponent,
+    SessionDetailComponent,
+    CreateSessionComponent,
   ],
   imports: [
     BrowserModule,

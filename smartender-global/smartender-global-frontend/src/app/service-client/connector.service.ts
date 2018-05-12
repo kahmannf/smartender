@@ -1,3 +1,4 @@
+import { Session } from './../shared/session';
 import { Machine } from './../shared/machine';
 import { TokenResponse } from './../shared/token-response';
 import { ServerOperationResult } from './../shared/server-operation-result';
@@ -91,12 +92,12 @@ export class ConnectorService {
       { headers: this.getHttpHeaders() } );
   }
 
-  secureSessionNewPOST(machine_id: number, user_id: number, name: string): Observable<ServerOperationResult> {
+  secureSessionNewPOST(machine_id: number, name: string): Observable<ServerOperationResult> {
+    console.log(name);
     return this.http.post<ServerOperationResult>(
       env.apiBaseUrl + 'secure/session/new',
       {
         machine_id,
-        user_id,
         name
       },
       { headers: this.getHttpHeaders() } );
@@ -119,5 +120,28 @@ export class ConnectorService {
     return this.http.get<Machine>(
       env.apiBaseUrl + 'secure/machine/by-id/' + machineid,
       { headers: this.getHttpHeaders() });
+  }
+
+  secureSessionSetActivePOST(sessionid: number): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + 'secure/session/set-active/' + sessionid,
+      { },
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureSessionByIdGET(sessionid: number): Observable<Session> {
+    return this.http.get<Session>(
+      env.apiBaseUrl + 'secure/session/by-id/' + sessionid,
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureSessionSetStatePOST(sessionid: number, state: number) {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + 'secure/session/set-state/' + sessionid + '/' + state,
+      { },
+      { headers: this.getHttpHeaders() }
+    );
   }
 }

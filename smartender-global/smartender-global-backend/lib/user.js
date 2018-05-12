@@ -175,7 +175,7 @@ const getByRegisterkey = (registerkey) => {
 
 const getForLogin = (email) => {
   return new Promise((resolve, reject) => {
-    var sql = "select hash, salt from user where email like ?";
+    var sql = "select hash, salt from user where lower(email) like lower(?)";
     var params = [email];
 
     db.get(sql, params, (err, row) => {
@@ -194,7 +194,7 @@ const getForLogin = (email) => {
 
 const getForTokenPayload = (email) => {
   return new Promise((resolve, reject) => {
-    var sql = "select email, alias, id from user where email = ?";
+    var sql = "select email, alias, id from user where lower(email) = lower(?)";
     var params = [email];
 
     db.get(sql, params, (err, row) => {
@@ -205,7 +205,7 @@ const getForTokenPayload = (email) => {
         resolve(row);
       }
       else {
-        reject(`No user with email ${email}`);
+        reject(undefined);
       }
     });
   });

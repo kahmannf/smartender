@@ -34,7 +34,7 @@ module.exports = {
                 {
                     data: '<html><p>Hello '+ user.alias +',</p>'
                     + '<p>To activate your Smartender account please follow this link:</p>' 
-                    + '<a href="' + config.general.baseurl_client + 'password.html?key=' + user.registerkey + '">Set your password</a>'
+                    + '<a href="' + config.general.baseurl_client + 'complete-register/' + user.registerkey + '">Set your password</a>'
                     + '<br/><br/><br/><br/>'
                     + '<p>This email was automatically generated. Do not reply to this address. You can always contact the support via support@smartender.kahmann.com</p>'
                     + '</html>', 

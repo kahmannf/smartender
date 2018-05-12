@@ -7,6 +7,10 @@ const machine = require('./machine');
 
 const auth_lib = require('../../lib/auth');
 
+const init = (io) => {
+  session.init(io)
+};
+
 
 //decode oauth token
 router.use(auth_lib.decodeToken);
@@ -20,7 +24,7 @@ router.use((req, res, next) => {
 });
 
 router.use('/user', user);
-router.use('/session', session);
+router.use('/session', session.router);
 router.use('/machine', machine);
 
-module.exports = router;
+module.exports = { router, init };

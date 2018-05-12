@@ -1,3 +1,4 @@
+import { SessionDetailComponent } from './_modules/session-detail/session-detail.component';
 import { MachineDetailComponent } from './_modules/machine-detail/machine-detail.component';
 import { CreateMachineComponent } from './_modules/create-machine/create-machine.component';
 import { MachinesComponent } from './_modules/machines/machines.component';
@@ -12,6 +13,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './_modules/login/login.component';
 import { RegisterComponent } from './_modules/register/register.component';
+import { CreateSessionComponent } from './_modules/create-session/create-session.component';
 
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/home'},
@@ -25,7 +27,10 @@ const routes: Routes = [
         { path: 'new', component: CreateMachineComponent},
         { path: 'machine/:id', component: MachineDetailComponent}
       ]},
-      { path: 'sessions', component: SessionsComponent},
+      { path: 'sessions', component: SessionsComponent, children: [
+        { path: 'new', component: CreateSessionComponent},
+        { path: 'session/:id', component: SessionDetailComponent}
+      ]},
       { path: '**', redirectTo: 'dashboard' }
     ]},
   { path: 'login', component: LoginComponent },

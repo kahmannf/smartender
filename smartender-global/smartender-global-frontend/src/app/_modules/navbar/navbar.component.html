@@ -10,13 +10,20 @@
         <a class="nav-item nav-link" [routerLink]="'/home/machines'" [routerLinkActive]="'active'" >Machines</a>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{session_dropdown_label}}
+            {{getSessionLabelText()}}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" [routerLink]="'/home/sessions'" *ngFor="let session of sessions"><div [ngClass]="{'bold': session.is_user_active_session }">{{session.name}}</div></a>
+            <a class="dropdown-item" (click)="setActiveSession(session)" *ngFor="let session of sessions"><div [ngClass]="{'bold': session.is_user_active_session }">{{session.name}}</div></a>
             <a class="dropdown-item" [routerLink]="'/home/sessions'" >Manage Sessions</a>
           </div>
         </div>
+
+      </div>
+      <div class="navbar-nav ml-auto">
+        <div class="nav-item nav-link">
+          Logged in as {{currentUser.alias}}
+        </div>
+        <button class="btn btn-outline-primary my-2 my-sm-0 nav-item" type="button" (click)="logout()">Logout</button>
       </div>
     </div>
   </nav>

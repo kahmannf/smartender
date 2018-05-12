@@ -19,6 +19,6 @@ export class MachineService {
   }
 
   subscribeMachineById(id: number): Observable<Machine> {
-    return this.wsService.connectToChannel('machine ' + id);
+    return this.wsService.connectToChannel<Machine>('machine ' + id);
   }
 }

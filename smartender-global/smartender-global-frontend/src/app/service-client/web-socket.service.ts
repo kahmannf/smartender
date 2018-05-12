@@ -13,10 +13,10 @@ export class WebSocketService {
 
   private socket: SocketIOClient.Socket;
 
-  connectToChannel(channel: string): Observable<Machine> {
+  connectToChannel<T>(channel: string): Observable<T> {
     this.socket = io(environment.apiBaseUrl);
 
-    const observable = new Observable<Machine>(observer_internal => {
+    const observable = new Observable<T>(observer_internal => {
       this.socket.on(channel, (machine) => {
         observer_internal.next(machine);
       });

@@ -1,0 +1,8 @@
+A file to document socket 'channels'
+
+#called when active session changes
+#update of all sessions useful
+user $userid sessions
+
+#specific session value changed
+session $sessionid

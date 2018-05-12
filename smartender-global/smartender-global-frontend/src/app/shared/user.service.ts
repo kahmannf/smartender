@@ -44,4 +44,8 @@ export class UserService {
       })
     );
   }
+
+  getCurrentUser(): Observable<User> {
+    return this.connector.secureUserCurrentGET();
+  }
 }

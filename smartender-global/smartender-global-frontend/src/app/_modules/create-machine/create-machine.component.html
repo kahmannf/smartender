@@ -3,14 +3,14 @@
     <form [formGroup]="createNewForm" (ngSubmit)="onRegister()">
       <div class="form-group">
         <label for="machinekey">Machine-key</label>
-        <input type="text" class="form-control" id="machinekey" formControlName="machinekey">
+        <input autocomplete="off"  type="text" class="form-control" id="machinekey" formControlName="machinekey">
         <div class="text-danger" *ngIf="hasError('machinekey')">
           Machine-key has to be a 10 characters long alphanumeric without whitespaces
         </div>
       </div>
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" formControlName="name">
+        <input autocomplete="off"  type="text" class="form-control" id="name" formControlName="name">
         <div class="text-danger" *ngIf="hasError('name')">
           Name is required!
         </div>

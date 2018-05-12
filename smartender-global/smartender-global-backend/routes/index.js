@@ -8,6 +8,7 @@ const secure = require('./secure');
 const machine_services = require('./machine_service');
 
 const init = (io) => {
+  secure.init(io);
   machine_services.init(io);
 }
 
@@ -32,7 +33,7 @@ router.use((req, res, next) => {
 });
 
 router.use('/public', public);
-router.use('/secure', secure);
+router.use('/secure', secure.router);
 router.use('/machine_services', machine_services.router);
 
 module.exports = { 

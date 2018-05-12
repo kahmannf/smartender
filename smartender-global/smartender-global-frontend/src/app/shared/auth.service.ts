@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
 import { ConnectorService } from './../service-client/connector.service';
 import { Observable, of } from 'rxjs';
@@ -8,7 +9,7 @@ import { ServerOperationResult } from './server-operation-result';
 @Injectable()
 export class AuthService {
 
-  constructor(public connector: ConnectorService) { }
+  constructor(private connector: ConnectorService, private router: Router) { }
 
   user: User;
 
@@ -30,8 +31,13 @@ export class AuthService {
     );
   }
 
+
   logout() {
     localStorage.setItem('token', undefined);
+
+    this.loggedInChanged.emit(false);
+
+    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): Observable<boolean> {

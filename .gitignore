@@ -106,3 +106,5 @@ Thumbs.db
 #Sqlite databse files
 *.sqlite
 !schema.sqlite
+
+/smartender-global/smartender-global-frontend/dist/*.*
