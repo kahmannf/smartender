@@ -4,5 +4,11 @@ A file to document socket 'channels'
 #update of all sessions useful
 user $userid sessions
 
-#specific session value changed
+#specific session values changed
 session $sessionid
+
+#specific session machine statu changed
+session status $sessionid
+
+#invites for user changed
+invites $userid

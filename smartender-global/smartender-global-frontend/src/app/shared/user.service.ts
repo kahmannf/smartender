@@ -1,4 +1,6 @@
-import { map } from 'rxjs/operators';
+import { WebSocketService } from './../service-client/web-socket.service';
+import { Invitation } from './invitation';
+import { map, switchMap } from 'rxjs/operators';
 import { ServerOperationResult } from './server-operation-result';
 import { Machine } from './machine';
 import { User } from './user';
@@ -11,7 +13,10 @@ import { ConnectorService } from '../service-client/connector.service';
 })
 export class UserService {
 
-  constructor(public connector: ConnectorService) {
+  constructor(
+    private connector: ConnectorService,
+    private wbService: WebSocketService
+  ) {
     this.machineRegistered = new EventEmitter<string>();
    }
 
@@ -51,5 +56,18 @@ export class UserService {
 
   getByIdArray(ids: number[]): Observable<User[]> {
     return this.connector.secureUserByIdArrayPOST(ids);
+  }
+
+  getInvites(): Observable<Invitation[]> {
+    return this.connector.secureUserMyInvitesGET();
+  }
+
+  getInvitesUpdates(userid: number): Observable<Invitation[]> {
+    return this.wbService.connectToChannel('invites ' + userid)
+    .pipe(
+      switchMap(anything => {
+        return this.getInvites();
+      })
+    );
   }
 }

@@ -20,6 +20,30 @@
 
       </div>
       <div class="navbar-nav ml-auto">
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Invites
+            <span class="badge badge-pill badge-primary">{{invites.length}}</span>
+          </a>
+          <div *ngIf="invites && invites.length" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <div class="dropdown-item" *ngFor="let invite of invites">
+              <div class="row">
+                <div class="col col-auto text-center my-auto">
+                  {{invite.from + ': ' + invite.sessionname}}
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col col-auto">
+                  <button type="button" class="btn btn-outline-primary mr-2">Join</button>
+                </div>
+                <div class="col col-auto">
+                  <button type="button" class="btn btn-outline-danger mr-2">Delete</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="nav-item nav-link">
           Logged in as {{currentUser.alias}}
         </div>

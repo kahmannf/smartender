@@ -1,7 +1,7 @@
 <div class="container-fluid max-width">
     <div class="row mt-3">
       <div class="col col-3">
-        <ul class="list-group">
+        <ul class="list-group ml-2">
           <li *ngFor="let session of sessions" class="list-group-item" >
             <a class="text-secondary" [routerLink]="'./session/' + session.session_id" [routerLinkActive]="'font-weight-bold text-dark'" >{{session.name}}</a>
           </li>

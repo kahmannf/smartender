@@ -230,11 +230,34 @@ const getById = (id) => {
   });
 }
 
+const getInvites = (userid) => {
+  return new Promise((resolve, reject) => {
+    var sql = 'select u.alias as \'from\', ' + 
+              ' s.name as sessionname, ' + 
+              ' s.id as session_id ' +
+              ' from user_has_invites uhi, user u, session s ' +
+              ' where uhi.invited_by_id = u.id ' + 
+              ' and uhi.session_id = s.id ' +
+              ' and uhi.user_id = ? ';
+              
+    var params = [userid];
+
+    db.all(sql, params, (err, rows) => {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 module.exports = {
   activateUser, 
   createUser,
   getById,
   getByRegisterkey,
+  getInvites,
   getForLogin,
   getForTokenPayload,
   isAliasAndEmailAvailable,

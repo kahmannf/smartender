@@ -198,7 +198,7 @@ const setSessionActiveState = (session_id, state, user_id) => {
     .then(session => {
       if(session) {
         // undefined if user cannot edit session
-        if(session.members) {
+        if(canUserEditSession(session)) {
           //remove active state of all members if deactivating
           var sql = 'select ?';
           if(!state || state === '0') {
@@ -242,12 +242,42 @@ const canUserEditSession = (user_id, session) => {
   return false;
 }
 
+const inviteUser = (source_user_id, target_user_id, session_id) => {
+  return new Promise((resolve, reject) => {
+    getSessionById(session_id, source_user_id)
+    .then(session => {
+      if(canUserEditSession(session)) {
+        var sql = "insert into user_has_invites(user_id, session_id, invited_by_id) values () ";
+        var params = {
+          $user_id: target_user_id, 
+          $session_id: session_id, 
+          $invited_by_id: source_user_id
+        }
+
+        db.run(sql, params, err => {
+          if(err) {
+            reject(err);
+          } else {
+            resolve({success: true, message: ''});
+          }
+        });
+
+      } else {
+        resolve({success: false, message: 'You dont have permission to do that!'});
+      }
+    })
+    .catch(err => reject(err));
+  });
+}
+
 module.exports = {
   createSession,
   getSessionById,
+  canUserEditSession,
   //getSessionByMachine,
   getUserSessions,
   getUserUpdateIds,
+  inviteUser,
   setActiveSession,
   setSessionActiveState
 }

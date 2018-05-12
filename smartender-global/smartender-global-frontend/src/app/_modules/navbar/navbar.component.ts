@@ -1,3 +1,4 @@
+import { Invitation } from './../../shared/invitation';
 import { UserService } from './../../shared/user.service';
 import { AuthService } from './../../shared/auth.service';
 import { environment } from './../../../environments/environment';
@@ -43,6 +44,8 @@ export class NavbarComponent implements OnInit {
     exp: 0
   };
 
+  invites: Invitation[] = [];
+
   ngOnInit() {
     this.projectName = environment.projectName;
 
@@ -75,17 +78,24 @@ export class NavbarComponent implements OnInit {
     .subscribe(user =>  {
       this.currentUser = user;
 
+
+      this.userService.getInvitesUpdates(user.id)
+      .subscribe(invites => this.invites = invites);
+
       this.sessionService.getSessionsUpdates(user.id)
       .subscribe(resultHandler);
     });
 
     this.sessionService.getMySessions()
     .subscribe(resultHandler);
+
+    this.userService.getInvites()
+    .subscribe(invites => this.invites = invites);
   }
 
   getSessionLabelText() {
     if (this.activeSession && this.activeSession.session_id) {
-      return this.activeSession.name;
+      return 'Session: ' + this.activeSession.name;
     } else if (this.sessions) {
       return `Sessions (${this.sessions.length})`;
     } else {

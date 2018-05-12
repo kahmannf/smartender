@@ -1,10 +1,11 @@
+import { Invitation } from './../shared/invitation';
 import { Session } from './../shared/session';
 import { Machine } from './../shared/machine';
 import { TokenResponse } from './../shared/token-response';
 import { ServerOperationResult } from './../shared/server-operation-result';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment as env } from '../../environments/environment';
 import { User } from '../shared/user';
 import { UserSession } from '../shared/user-session';
@@ -149,6 +150,21 @@ export class ConnectorService {
     return this.http.post<User[]>(
       env.apiBaseUrl + 'secure/user/by-id-array',
       { ids },
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureSessionInitePOST(sessionid: number, userid: number): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + `secure/session/invite/${sessionid}/${userid}`,
+      {},
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureUserMyInvitesGET(): Observable<Invitation[]> {
+    return this.http.get<Invitation[]>(
+      env.apiBaseUrl + 'secure/user/my-invites',
       { headers: this.getHttpHeaders() }
     );
   }

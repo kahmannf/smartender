@@ -107,4 +107,22 @@ router.post('/set-state/:session_id/:state', (req, res) => {
   }
 })
 
+router.post('/invite/:sessionid/:userid', (req, res) => {
+  if(req.params.sessionid && req.body.userid) {
+    
+    session.inviteUser(req.oauth.payload.id, req.body.userid, req.params.sessionid)
+    .then(result => {
+      res.json(result)
+      io.emit('invites ' + req.body.userid, 'come in!');
+    })
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+    })
+
+  } else {
+    res.sendStatus(400);
+  }
+});
+
 module.exports = { router, init };
