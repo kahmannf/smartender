@@ -14,7 +14,7 @@ const getUserSessions = (userid) => {
                     " from session_has_members shm," +
                     " session s " + 
                     " where s.id = shm.session_id " + 
-                    " and (s.active != 0 or s.owner_id = $userid) " +
+                   // " and (s.active != 0 or s.owner_id = $userid) " +
                     " and shm.user_id = $userid " +
                     " order by lower(s.name) asc ";
     var params = { $userid: userid };

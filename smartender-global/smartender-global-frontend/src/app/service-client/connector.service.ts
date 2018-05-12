@@ -144,4 +144,12 @@ export class ConnectorService {
       { headers: this.getHttpHeaders() }
     );
   }
+
+  secureUserByIdArrayPOST(ids: number[]) {
+    return this.http.post<User[]>(
+      env.apiBaseUrl + 'secure/user/by-id-array',
+      { ids },
+      { headers: this.getHttpHeaders() }
+    );
+  }
 }

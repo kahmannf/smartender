@@ -3,10 +3,10 @@
       <div class="col col-3">
         <ul class="list-group">
           <li *ngFor="let session of sessions" class="list-group-item" >
-            <a class="text-secondary" [routerLink]="'./session/' + session.session_id" [routerLinkActive]="'text-dark'" >{{session.name}}</a>
+            <a class="text-secondary" [routerLink]="'./session/' + session.session_id" [routerLinkActive]="'font-weight-bold text-dark'" >{{session.name}}</a>
           </li>
           <li class="list-group-item">
-            <a class="text-secondary" [routerLink]="'./new'" [routerLinkActive]="'text-dark'">create session</a>
+            <a class="text-secondary" [routerLink]="'./new'" [routerLinkActive]="'font-weight-bold text-dark'">create session</a>
           </li>
         </ul>
       </div>

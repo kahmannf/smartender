@@ -1,3 +1,4 @@
+import { UserSession } from './../../shared/user-session';
 import { UserService } from './../../shared/user.service';
 import { ActivatedRoute } from '@angular/router';
 import { SessionService } from './../../shared/session.service';
@@ -5,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import { map, switchMap, merge } from 'rxjs/operators';
 import { Session } from '../../shared/session';
 import { User } from '../../shared/user';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'sm-session-detail',
@@ -21,6 +23,8 @@ export class SessionDetailComponent implements OnInit {
 
   session: Session;
   currentUser: User;
+
+  members: [User, UserSession][];
 
   ngOnInit() {
     this.initSessionObservables();
@@ -58,20 +62,71 @@ export class SessionDetailComponent implements OnInit {
           switchMap(id => this.sessionService.getSessionById(id))
         );
 
-        initial$.pipe(merge(updates$), merge(user_updates$)).subscribe(
+        const all$ = initial$.pipe(merge(updates$), merge(user_updates$));
+
+        all$.subscribe(
           session => this.session = session
         );
+
+        const updateMembers$ = all$
+        .pipe(
+          switchMap(session => {
+            if (session.members) {
+              const ids = [];
+              // tslint:disable-next-line:prefer-const
+              for (let member of session.members) {
+                ids.push(member.user_id);
+              }
+
+              if (ids.length > 0) {
+                return this.userService.getByIdArray(ids);
+              } else {
+                return of<User[]>([]);
+              }
+
+            } else {
+              return of<User[]>([]);
+            }
+          })
+        );
+
+        updateMembers$.subscribe(users => {
+          if (users && users.length) {
+            const result: [User, UserSession][] = [];
+            // tslint:disable-next-line:prefer-const
+            for (let res_user of users) {
+              if (this.session && this.session.members) {
+                const sessUser = this.session.members.find(us => us.user_id === res_user.id);
+                result.push([user, sessUser]);
+              } else {
+                result.push([user, undefined]);
+              }
+            }
+            this.members = result;
+          } else {
+            this.members = [];
+          }
+        });
       }
     );
 
   }
 
-  isOwner() {
+  canEdit() {
     if (this.currentUser && this.session) {
-      return this.currentUser.id === this.session.owner_id;
-    } else {
-      return false;
+      if (this.currentUser.id === this.session.owner_id) {
+        return true;
+      } else if (this.session.members) {
+        // tslint:disable-next-line:prefer-const
+        for (let member of this.session.members) {
+          if (member.user_id === this.currentUser.id && member.can_edit_machine) {
+            return true;
+          }
+        }
+      }
     }
+
+    return false;
   }
 
   deactivateSession() {

@@ -48,4 +48,8 @@ export class UserService {
   getCurrentUser(): Observable<User> {
     return this.connector.secureUserCurrentGET();
   }
+
+  getByIdArray(ids: number[]): Observable<User[]> {
+    return this.connector.secureUserByIdArrayPOST(ids);
+  }
 }

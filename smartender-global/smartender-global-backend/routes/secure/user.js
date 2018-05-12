@@ -32,4 +32,41 @@ router.post('/register-machine', (req, res) => {
   }
 })
 
+router.post('/by-id-array', (req, res) => {
+  if(req.body.ids && req.body.ids.length) {
+    (new Promise((resolve, reject) => {
+      var expected = req.body.ids.length;
+      var current = 0;
+      
+      var result = [];
+
+      for(var i = 0; i < expected; i++) {
+        user.getById(req.body.ids[i])
+        .then(user => {
+          result.push(user);
+          current++;
+
+          if(current == expected) {
+            resolve(result);
+          }
+        })
+        .catch(err => {
+          logger.error(err, 500);
+          current++;
+          if(current == expected) {
+            resolve(result);
+          }
+        })
+      }
+    }))
+    .then(users => res.json(users))
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+    });
+  } else {
+    res.sendStatus(400);
+  }
+})
+
 module.exports = router;

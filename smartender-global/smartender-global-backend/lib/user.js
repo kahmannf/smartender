@@ -211,9 +211,29 @@ const getForTokenPayload = (email) => {
   });
 }
 
+const getById = (id) => {
+  return new Promise((resolve, reject) => {
+    var sql = "select email, alias, id from user where id = ?";
+    var params = [id];
+
+    db.get(sql, params, (err, row) => {
+      if(err) {
+        reject(err);
+      }
+      else if(row) {
+        resolve(row);
+      }
+      else {
+        reject(undefined);
+      }
+    });
+  });
+}
+
 module.exports = {
   activateUser, 
   createUser,
+  getById,
   getByRegisterkey,
   getForLogin,
   getForTokenPayload,

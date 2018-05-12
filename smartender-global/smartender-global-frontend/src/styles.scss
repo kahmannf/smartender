@@ -12,3 +12,11 @@ div.container-fluid.max-width {
   margin-right:auto;
   margin-left:auto
 }
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-default:disabled {
+  cursor: default;
+}
