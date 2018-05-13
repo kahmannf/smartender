@@ -197,8 +197,7 @@ const setSessionActiveState = (session_id, state, user_id) => {
     getSessionById(session_id, user_id)
     .then(session => {
       if(session) {
-        // undefined if user cannot edit session
-        if(canUserEditSession(session)) {
+        if(canUserEditSession(user_id, session)) {
           //remove active state of all members if deactivating
           var sql = 'select ?';
           if(!state || state === '0') {
@@ -246,8 +245,8 @@ const inviteUser = (source_user_id, target_user_id, session_id) => {
   return new Promise((resolve, reject) => {
     getSessionById(session_id, source_user_id)
     .then(session => {
-      if(canUserEditSession(session)) {
-        var sql = "insert into user_has_invites(user_id, session_id, invited_by_id) values () ";
+      if(canUserEditSession(source_user_id, session)) {
+        var sql = "insert into user_has_invites(user_id, session_id, invited_by_id) values ($user_id, $session_id, $invited_by_id) ";
         var params = {
           $user_id: target_user_id, 
           $session_id: session_id, 

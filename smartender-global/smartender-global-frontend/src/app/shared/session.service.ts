@@ -84,4 +84,8 @@ export class SessionService {
   deactivateSession(sessionid: number): Observable<ServerOperationResult> {
     return this.connector.secureSessionSetStatePOST(sessionid, 0);
   }
+
+  inviteUser(sessionid: number, userid: number): Observable<ServerOperationResult> {
+    return this.connector.secureSessionInvitePOST(sessionid, userid);
+  }
 }

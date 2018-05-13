@@ -1,3 +1,4 @@
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserSession } from './../../shared/user-session';
 import { UserService } from './../../shared/user.service';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +8,7 @@ import { map, switchMap, merge } from 'rxjs/operators';
 import { Session } from '../../shared/session';
 import { User } from '../../shared/user';
 import { of } from 'rxjs';
+import { PageResult } from '../../shared/page-result';
 
 @Component({
   selector: 'sm-session-detail',
@@ -24,9 +26,23 @@ export class SessionDetailComponent implements OnInit {
   session: Session;
   currentUser: User;
 
+  lastSearch: string;
+
+  userSearchResult: PageResult<User>;
+
   members: [User, UserSession][];
 
+  searchForm: FormGroup;
+
   ngOnInit() {
+    this.searchForm = new FormGroup({
+      searchValue: new FormControl('')
+    });
+
+    this.searchForm.valueChanges.subscribe(values => {
+      this.search();
+    });
+
     this.initSessionObservables();
 
     this.userService.getCurrentUser().subscribe(
@@ -137,4 +153,62 @@ export class SessionDetailComponent implements OnInit {
     this.sessionService.activateSession(this.session.id).subscribe();
   }
 
+  search() {
+    if (this.lastSearch !== this.searchForm.value.searchValue) {
+      this.lastSearch = this.searchForm.value.searchValue;
+      this.userService.searchFoSession(this.session.id, 20, 0, this.searchForm.value.searchValue)
+      .subscribe(page => {
+        this.userSearchResult = page;
+      });
+    }
+  }
+
+  canGetNext() {
+    return this.userSearchResult
+    && (this.userSearchResult.limit * (this.userSearchResult.offset + 1)) < this.userSearchResult.total;
+  }
+
+  canGetPrevious() {
+    return this.userSearchResult && this.userSearchResult.offset > 0;
+  }
+
+  getNext() {
+    this.userService.searchFoSession(this.session.id, 20, this.userSearchResult.offset + 1, this.searchForm.value.searchValue)
+    .subscribe(page => {
+      this.userSearchResult = page;
+    });
+  }
+
+  getPrevious() {
+    this.userService.searchFoSession(this.session.id, 20, this.userSearchResult.offset - 1, this.searchForm.value.searchValue)
+    .subscribe(page => {
+      this.userSearchResult = page;
+    });
+  }
+
+  getResultText() {
+    let result = 'Results ' + ((this.userSearchResult.offset * this.userSearchResult.limit) + 1);
+    result += ' - ';
+    if ((this.userSearchResult.offset + 1) * this.userSearchResult.limit > this.userSearchResult.total) {
+      result += this.userSearchResult.total;
+    } else {
+      result += ((this.userSearchResult.offset + 1) * this.userSearchResult.limit);
+    }
+
+    result += ' of ' + this.userSearchResult.total;
+    return result;
+  }
+
+  invite(userid: number) {
+    this.sessionService.inviteUser(this.session.id, userid).subscribe(trigger => {
+      this.refresh();
+    });
+  }
+
+  refresh() {
+    this.userService.searchFoSession(this.session.id, 20, this.userSearchResult.offset, this.searchForm.value.searchValue)
+    .subscribe(page => {
+      this.userSearchResult = page;
+    });
+  }
 }

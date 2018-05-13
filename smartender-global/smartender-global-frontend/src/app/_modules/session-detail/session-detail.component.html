@@ -22,7 +22,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Members:</h5>
-          <div class="list-group">
+          <div class="list-group row px-3">
             <div class="list-group-item" *ngFor="let member of members">
               <div class="row">
                 <div class="col col-auto text-center my-auto">
@@ -30,6 +30,9 @@
                 </div>
                 <div class="col">
 
+                </div>
+                <div class="col col-auto" *ngIf="member[0].id !== session.owner_id">
+                  <button type="button" class="btn btn-outline-success permission-button" >Kick</button>
                 </div>
                 <div class="col col-auto" *ngIf="member[0].id !== session.owner_id">
                   <button type="button" class="btn btn-outline-success permission-button" *ngIf="!member[1].can_edit_machine">Allow Machine Edit</button>
@@ -43,6 +46,53 @@
                   <button type="button" class="btn btn-outline-primary font-italic cursor-default" disabled>Owner</button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mt-2" *ngIf="canEdit()">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Invite people:</h5>
+          <form [formGroup]="searchForm" (ngSubmit)="search()" class="row">
+            <div class="col col-auto pl-3">
+              <label for="search">Search (alias or email):</label>
+              <input id="search" type="text" formControlName="searchValue" class="form-control">
+            </div>
+            <!-- <div class="col col-auto px-1">
+              <button type="submit" class="btn btn-outline-primary">Search</button>
+            </div> -->
+          </form>
+          <div class="list-group row px-3 my-3" *ngIf="userSearchResult">
+            <div class="list-group-item" *ngFor="let user of userSearchResult.items">
+              <div class="row">
+                <div class="col col-auto text-center my-auto">
+                  {{user.alias}}
+                </div>
+                <div class="col">
+
+                </div>
+                <div class="col col-auto" >
+                  <button type="button" class="btn btn-outline-primary" (click)="invite(user.id)">Invite</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div *ngIf="userSearchResult" class="text-muted">
+                {{getResultText()}}
+              </div>
+            </div>
+
+            <div class="col col-auto px-1">
+              <button type="button" class="btn btn-outline-primary" [disabled]="!canGetPrevious()" (click)="getPrevious()">Previous</button>
+            </div>
+            <div class="col col-auto px-1">
+              <button type="button" class="btn btn-outline-primary" [disabled]="!canGetNext()" (click)="getNext()">Next</button>
             </div>
           </div>
         </div>

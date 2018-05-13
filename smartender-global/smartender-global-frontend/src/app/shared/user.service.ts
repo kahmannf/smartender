@@ -1,3 +1,4 @@
+import { PageResult } from './page-result';
 import { WebSocketService } from './../service-client/web-socket.service';
 import { Invitation } from './invitation';
 import { map, switchMap } from 'rxjs/operators';
@@ -69,5 +70,8 @@ export class UserService {
         return this.getInvites();
       })
     );
+  }
+  searchFoSession(sessionid: number, limit: number, offset: number, searchString?: string): Observable<PageResult<User>> {
+    return this.connector.secureUserSearchForSessionGET(sessionid, limit, offset, searchString);
   }
 }

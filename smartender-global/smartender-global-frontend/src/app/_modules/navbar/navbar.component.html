@@ -23,7 +23,7 @@
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Invites
-            <span class="badge badge-pill badge-primary">{{invites.length}}</span>
+            <span class="badge badge-pill badge-primary" [ngClass]="{'badge-primary': invites.length, 'badge-danger': !invites.length}" >{{invites.length}}</span>
           </a>
           <div *ngIf="invites && invites.length" class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <div class="dropdown-item" *ngFor="let invite of invites">
@@ -34,10 +34,10 @@
                 <div class="col">
 
                 </div>
-                <div class="col col-auto">
+                <div class="col col-auto px-1">
                   <button type="button" class="btn btn-outline-primary mr-2">Join</button>
                 </div>
-                <div class="col col-auto">
+                <div class="col col-auto px-1 mr-1">
                   <button type="button" class="btn btn-outline-danger mr-2">Delete</button>
                 </div>
               </div>

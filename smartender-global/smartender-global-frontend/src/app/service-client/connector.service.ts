@@ -9,6 +9,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment as env } from '../../environments/environment';
 import { User } from '../shared/user';
 import { UserSession } from '../shared/user-session';
+import { PageResult } from '../shared/page-result';
 
 @Injectable({
   providedIn: 'root'
@@ -154,7 +155,7 @@ export class ConnectorService {
     );
   }
 
-  secureSessionInitePOST(sessionid: number, userid: number): Observable<ServerOperationResult> {
+  secureSessionInvitePOST(sessionid: number, userid: number): Observable<ServerOperationResult> {
     return this.http.post<ServerOperationResult>(
       env.apiBaseUrl + `secure/session/invite/${sessionid}/${userid}`,
       {},
@@ -165,6 +166,17 @@ export class ConnectorService {
   secureUserMyInvitesGET(): Observable<Invitation[]> {
     return this.http.get<Invitation[]>(
       env.apiBaseUrl + 'secure/user/my-invites',
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureUserSearchForSessionGET(sessionid: number, limit: number, offset: number, searchstring?: string): Observable<PageResult<User>> {
+    return this.http.get<PageResult<User>>(
+      (env.apiBaseUrl + `secure/user/search-for-session` +
+      `?sessionid=${sessionid}` +
+      `&limit=${limit}` +
+      `&offset=${offset}` +
+      (!!searchstring ? `&search=${searchstring}` : '')),
       { headers: this.getHttpHeaders() }
     );
   }

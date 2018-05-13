@@ -108,12 +108,12 @@ router.post('/set-state/:session_id/:state', (req, res) => {
 })
 
 router.post('/invite/:sessionid/:userid', (req, res) => {
-  if(req.params.sessionid && req.body.userid) {
+  if(req.params.sessionid && req.params.userid) {
     
-    session.inviteUser(req.oauth.payload.id, req.body.userid, req.params.sessionid)
+    session.inviteUser(req.oauth.payload.id, req.params.userid, req.params.sessionid)
     .then(result => {
       res.json(result)
-      io.emit('invites ' + req.body.userid, 'come in!');
+      io.emit('invites ' + req.params.userid, 'come in!');
     })
     .catch(err => {
       logger.error(err, 500);

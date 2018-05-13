@@ -235,6 +235,7 @@ const getInvites = (userid) => {
     var sql = 'select u.alias as \'from\', ' + 
               ' s.name as sessionname, ' + 
               ' s.id as session_id ' +
+              ' u.id as user_id ' +
               ' from user_has_invites uhi, user u, session s ' +
               ' where uhi.invited_by_id = u.id ' + 
               ' and uhi.session_id = s.id ' +
@@ -252,6 +253,53 @@ const getInvites = (userid) => {
   });
 }
 
+const searchForSession = (sessionid, limit, offset, searchString, userid) => {
+  return new Promise((resolve, reject) => {
+    var sql = ' select u.alias, u.email, u.id ' + 
+              ' from user u ' + 
+              ' left join session_has_members shm ' +
+              ' on u.id = shm.user_id ' +
+              ' and shm.session_id = $sessionid ' +
+              ' left join user_has_invites uhi ' +
+              ' on u.id = uhi.user_id ' +
+              ' and uhi.session_id = $sessionid ' +
+              ' where u.id <> $userid ' +
+              ' and shm.user_id is null ' +
+              ' and uhi.user_id is null ';
+    var params = {
+      $sessionid: sessionid,
+      $userid: userid,
+      $search: !!searchString ? '%' + searchString.trim() + '%' : undefined
+    }
+    if(searchString) {
+      sql += ' and lower(u.email) like lower($search) or lower(u.alias) like lower($search)';
+    }
+
+    db.all(sql, params, (err, rows) => {
+      if(err) {
+        reject(err);
+      } else {
+        var result = {
+          offset: offset,
+          limit: limit,
+          total: rows ? rows.length : 0,
+          items: []
+        }
+        
+        if(limit * offset > rows.length) {
+          
+        } else if (limit * (offset + 1) > rows.length) {
+          result.items = rows.slice(offset * limit);
+        } else {
+          result.items = rows.slice(offset * limit, (offset + 1) * limit);
+        }
+
+        resolve(result);
+      }
+    });
+  })
+}
+
 module.exports = {
   activateUser, 
   createUser,
@@ -262,5 +310,6 @@ module.exports = {
   getForTokenPayload,
   isAliasAndEmailAvailable,
   isAliasAvailable,
-  isEmailAvailable
+  isEmailAvailable,
+  searchForSession
 };

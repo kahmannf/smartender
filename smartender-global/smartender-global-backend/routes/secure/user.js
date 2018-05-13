@@ -78,4 +78,35 @@ router.get('/my-invites', (req, res) => {
   });
 });
 
+router.get('/search-for-session', (req, res) => {
+  
+  if(!req.query.sessionid) {
+    res.sendStatus(400);
+  } else {
+
+    var offset = 0;
+
+    if(req.query.offset) {
+      offset = req.query.offset;
+    }
+
+    var limit = 20;
+
+    if(req.query.limit) {
+      limit = req.query.limit;
+    }
+
+    user.searchForSession(req.query.sessionid,
+                          limit, 
+                          offset, 
+                          req.query.search, 
+                          req.oauth.payload.id)
+    .then(users => res.json(users))
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+    });
+  }
+});
+
 module.exports = router;
