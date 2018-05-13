@@ -234,7 +234,7 @@ const getInvites = (userid) => {
   return new Promise((resolve, reject) => {
     var sql = 'select u.alias as \'from\', ' + 
               ' s.name as sessionname, ' + 
-              ' s.id as session_id ' +
+              ' s.id as session_id, ' +
               ' u.id as user_id ' +
               ' from user_has_invites uhi, user u, session s ' +
               ' where uhi.invited_by_id = u.id ' + 
@@ -272,7 +272,7 @@ const searchForSession = (sessionid, limit, offset, searchString, userid) => {
       $search: !!searchString ? '%' + searchString.trim() + '%' : undefined
     }
     if(searchString) {
-      sql += ' and lower(u.email) like lower($search) or lower(u.alias) like lower($search)';
+      sql += ' and (lower(u.email) like lower($search) or lower(u.alias) like lower($search))';
     }
 
     db.all(sql, params, (err, rows) => {

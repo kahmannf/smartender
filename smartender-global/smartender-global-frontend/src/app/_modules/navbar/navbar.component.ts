@@ -112,11 +112,11 @@ export class NavbarComponent implements OnInit {
   }
 
   acceptInvite(invite: Invitation) {
-
+    this.sessionService.acceptInvite(invite.session_id).subscribe();
   }
 
   declineInvite(invite: Invitation) {
-
+    this.sessionService.declineInvite(invite.session_id).subscribe();
   }
 
 }

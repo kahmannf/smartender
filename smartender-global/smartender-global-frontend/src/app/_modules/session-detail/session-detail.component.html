@@ -14,6 +14,9 @@
         <div class="form-group" *ngIf="session.owner_id === currentUser.id" >
           <button type="button" class="form-control btn btn-danger">delete</button>
         </div>
+        <div class="form-group" *ngIf="session.owner_id !== currentUser.id" >
+          <button type="button" class="form-control btn btn-danger">leave</button>
+        </div>
       </div>
     </div>
   </div>
@@ -31,18 +34,18 @@
                 <div class="col">
 
                 </div>
-                <div class="col col-auto" *ngIf="member[0].id !== session.owner_id">
-                  <button type="button" class="btn btn-outline-success permission-button" >Kick</button>
+                <div class="col col-auto px-1" *ngIf="member[0].id !== session.owner_id">
+                  <button type="button" class="btn btn-outline-danger" >Kick</button>
                 </div>
-                <div class="col col-auto" *ngIf="member[0].id !== session.owner_id">
-                  <button type="button" class="btn btn-outline-success permission-button" *ngIf="!member[1].can_edit_machine">Allow Machine Edit</button>
+                <div class="col col-auto px-1" *ngIf="member[0].id !== session.owner_id">
+                  <button type="button" class="btn btn-outline-primary permission-button" *ngIf="!member[1].can_edit_machine">Allow Machine Edit</button>
                   <button type="button" class="btn btn-outline-danger permission-button" *ngIf="member[1].can_edit_machine" >Deny Machine Edit</button>
                 </div>
-                <div class="col col-auto" *ngIf="member[0].id !== session.owner_id">
-                  <button type="button" class="btn btn-outline-success permission-button" *ngIf="!member[1].can_edit_session" >Allow Session Edit</button>
+                <div class="col col-auto px-1" *ngIf="member[0].id !== session.owner_id">
+                  <button type="button" class="btn btn-outline-primary permission-button" *ngIf="!member[1].can_edit_session" >Allow Session Edit</button>
                   <button type="button" class="btn btn-outline-danger permission-button" *ngIf="member[1].can_edit_session" >Deny Session Edit</button>
                 </div>
-                <div class="col col-auto" *ngIf="member[0].id === session.owner_id">
+                <div class="col col-auto px-1" *ngIf="member[0].id === session.owner_id">
                   <button type="button" class="btn btn-outline-primary font-italic cursor-default" disabled>Owner</button>
                 </div>
               </div>

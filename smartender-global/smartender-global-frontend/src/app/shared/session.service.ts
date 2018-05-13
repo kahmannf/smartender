@@ -88,4 +88,12 @@ export class SessionService {
   inviteUser(sessionid: number, userid: number): Observable<ServerOperationResult> {
     return this.connector.secureSessionInvitePOST(sessionid, userid);
   }
+
+  acceptInvite(sessionid: number): Observable<ServerOperationResult> {
+    return this.connector.secureSessionAcceptInvitePOST(sessionid);
+  }
+
+  declineInvite(sessionid: number): Observable<ServerOperationResult> {
+    return this.connector.secureSessionDeclineInvitePOST(sessionid);
+  }
 }

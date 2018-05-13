@@ -180,4 +180,20 @@ export class ConnectorService {
       { headers: this.getHttpHeaders() }
     );
   }
+
+  secureSessionAcceptInvitePOST(sessionid: number): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + `secure/session/accept-invite/${sessionid}`,
+      { },
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureSessionDeclineInvitePOST(sessionid: number): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + `secure/session/decline-invite/${sessionid}`,
+      { },
+      { headers: this.getHttpHeaders() }
+    );
+  }
 }

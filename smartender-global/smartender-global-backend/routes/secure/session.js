@@ -125,4 +125,49 @@ router.post('/invite/:sessionid/:userid', (req, res) => {
   }
 });
 
+router.post('/accept-invite/:sessionid', (req, res) => {
+
+  if(req.params.sessionid) {
+    session.acceptInvite(req.params.sessionid, req.oauth.payload.id)
+    .then(result => {
+      res.json(result);
+
+      if(result && result.success) {
+        io.emit('invites ' + req.oauth.payload.id);
+        io.emit('session ' + req.params.sessionid);
+        io.emit('user ' + req.oauth.payload.id + ' sessions');
+      }
+      
+    })
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+    });
+  } else {
+    res.sendStatus(400);
+  }
+})
+
+router.post('/decline-invite/:sessionid', (req, res) => {
+
+  if(req.params.sessionid) {
+    session.declineInvite(req.params.sessionid, req.oauth.payload.id)
+    .then(result => {
+      res.json(result);
+
+      if(result && result.success) {
+        io.emit('invites ' + req.oauth.payload.id);
+      }
+      
+    })
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+    });
+  } else {
+    res.sendStatus(400);
+  }
+})
+
+
 module.exports = { router, init };

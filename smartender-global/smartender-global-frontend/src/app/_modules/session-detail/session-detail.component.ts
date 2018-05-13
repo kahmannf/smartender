@@ -113,9 +113,9 @@ export class SessionDetailComponent implements OnInit {
             for (let res_user of users) {
               if (this.session && this.session.members) {
                 const sessUser = this.session.members.find(us => us.user_id === res_user.id);
-                result.push([user, sessUser]);
+                result.push([res_user, sessUser]);
               } else {
-                result.push([user, undefined]);
+                // result.push([res_user, undefined]);
               }
             }
             this.members = result;

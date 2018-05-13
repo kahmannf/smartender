@@ -232,7 +232,7 @@ const canUserEditSession = (user_id, session) => {
   } else if (session.members) {
 
     for(var i = 0; i < session.members.length; i++) {
-      if(session.members[i].user_id === user_id && session.member.can_edit_sessin) {
+      if(session.members[i] && session.members[i].user_id === user_id && session.member.can_edit_session) {
         return true;
       }
     }
@@ -269,8 +269,93 @@ const inviteUser = (source_user_id, target_user_id, session_id) => {
   });
 }
 
+const getInvite = (sessionid, userid) => {
+  return new Promise((resolve, reject) => {
+    var sql = 'select * from user_has_invites where user_id = ? and session_id = ?';
+    var params = [userid, sessionid];
+
+    db.get(sql, params, (err, row) => {
+      if(err) {
+        reject(err)
+      } else {
+        resolve(row);
+      }
+    });
+  });
+}
+
+const acceptInvite = (sessionid, userid) => {
+  return new Promise((resolve, reject) => {
+    getInvite(sessionid, userid)
+    .then(invite => {
+      if(invite) {
+        var sql = 'insert into session_has_members ' + 
+                    ' (session_id, user_id, can_edit_machine, can_edit_session, is_owner, is_user_active_session) ' + 
+                    ' values($sessionid, $userid, 0, 0, 0, -1)';
+        var params = {
+          $sessionid: sessionid, 
+          $userid: userid
+        }
+        
+        db.run(sql, params, err => {
+          if(err) {
+            reject(err);
+          } else {
+            var sql2 = 'delete from user_has_invites ' +
+                        ' where user_id = $userid ' + 
+                        ' and session_id = $sessionid ';
+            db.run(sql2, params, err => {
+              if(err) {
+                reject(err);
+              } else {
+                resolve({ success: true });
+              }
+            })
+          }
+        });
+
+      } else {
+        resolve({ success: false, message: 'no pending invite for that session!'});
+      }
+    })
+    .catch(err => reject(err));
+  });
+}
+
+const declineInvite = (sessionid, userid) => {
+  return new Promise((resolve, reject) => {
+    getInvite(sessionid, userid)
+    .then(invite => {
+      if(invite) {
+        
+        var sql = 'delete from user_has_invites ' +
+                    ' where user_id = $userid ' + 
+                    ' and session_id = $sessionid ';
+
+        var params = {
+          $sessionid: sessionid, 
+          $userid: userid
+        };
+
+        db.run(sql, params, err => {
+          if(err) {
+            reject(err);
+          } else {
+            resolve({ success: true });
+          }
+        })
+      } else {
+        resolve({ success: false, message: 'no pending invite for that session!'});
+      }
+    })
+    .catch(err => reject(err));
+  });
+}
+
 module.exports = {
+  acceptInvite,
   createSession,
+  declineInvite,
   getSessionById,
   canUserEditSession,
   //getSessionByMachine,
