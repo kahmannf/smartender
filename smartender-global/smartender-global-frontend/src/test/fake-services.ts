@@ -1,8 +1,11 @@
+import { Invitation } from './../app/shared/invitation';
 import { SessionService } from './../app/shared/session.service';
 import { AuthService } from './../app/shared/auth.service';
 import { UserService } from './../app/shared/user.service';
 import { EventEmitter } from '@angular/core';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
+import { User } from '../app/shared/user';
+import { UserSession } from '../app/shared/user-session';
 
 export function getUserService() {
   return {
@@ -13,10 +16,18 @@ export function getUserService() {
     getByRegisterKey: () => { },
     getMyMachines: () => of([]),
     registerMachine: () => { },
-    getCurrentUser: () => { },
+    getCurrentUser: (): Observable<User> =>
+    of({
+      id: -1,
+      alias: 'Test User',
+      email: 'test@smartender.kahmann.com',
+      registerkey: '1234567890',
+      iat: 0,
+      exp:  0
+    }),
     getByIdArray: () => { },
-    getInvites: () => { },
-    getInvitesUpdates: () => { },
+    getInvites: (): Observable<Invitation[]> => of([]),
+    getInvitesUpdates: (id: number): Observable<Invitation[]> => of([]),
     searchFoSession: () => { },
     machineRegistered: new EventEmitter<string>()
   };
@@ -42,13 +53,13 @@ export function getSessionService() {
     wbService: undefined,
     router: undefined,
     sessionCreated: new EventEmitter<string>(),
-    getMySessions: () => {},
+    getMySessions: (): Observable<UserSession[]> => of([]),
     createSession: () => {},
     getSessionsUpdates: () => {},
     setActiveSession: () => {},
     navigateToActiveSession: () => {},
     getSessionById: () => {},
-    getSessionUpdates: () => {},
+    getSessionUpdates: (id: number): Observable<UserSession[]> => of([]),
     activateSession: () => {},
     deactivateSession: () => {},
     inviteUser: () => {},
