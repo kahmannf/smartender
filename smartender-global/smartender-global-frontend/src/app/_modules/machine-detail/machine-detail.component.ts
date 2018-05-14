@@ -34,7 +34,7 @@ export class MachineDetailComponent implements OnInit {
     this.machine$ = bySocket.pipe(merge(getById));
 
     this.machine$.subscribe(machine => {
-      this.machine = machine
+      this.machine = machine;
     });
 
   }
