@@ -103,7 +103,6 @@ export class CompleteRegisterComponent implements OnInit {
 
       if (password && passwordRepeat) {
         if (password !== passwordRepeat) {
-          console.log('hey');
           control.get('passwordRepeat').setErrors({ match: true });
         } else {
           return null;
