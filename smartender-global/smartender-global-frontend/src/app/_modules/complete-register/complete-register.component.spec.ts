@@ -1,3 +1,4 @@
+import { of } from 'rxjs';
 import { AuthService } from './../../shared/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './../../shared/user.service';
@@ -9,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-describe('CompleteRegisterComponent', () => {
+fdescribe('CompleteRegisterComponent', () => {
   let component: CompleteRegisterComponent;
   let fixture: ComponentFixture<CompleteRegisterComponent>;
   let debugElement: DebugElement;
@@ -37,7 +38,7 @@ describe('CompleteRegisterComponent', () => {
     authService = debugElement.injector.get(AuthService);
     userService = debugElement.injector.get(UserService);
 
-    spyOn(authService, 'activateAccount');
+    spyOn(authService, 'activateAccount').and.returnValue(of(false));
     spyOn(component, 'passwordValidator');
   });
 
@@ -82,6 +83,19 @@ describe('CompleteRegisterComponent', () => {
     expect(passwordRepeat.valid).toBeTruthy();
   }));
 
+  it('should call authService on register', async(() => {
+    const password = component.registerForm.controls['password'];
+    const passwordRepeat = component.registerForm.controls['passwordRepeat'];
+
+    password.setValue('123456');
+    passwordRepeat.setValue('123456');
+
+    const registerButton = debugElement.query(By.css('[testRegisterSubmit]')).nativeElement;
+
+    registerButton.click();
+
+    expect(authService.activateAccount).toHaveBeenCalled();
+  }));
 });
 
 
