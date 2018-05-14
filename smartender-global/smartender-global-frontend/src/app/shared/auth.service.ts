@@ -6,7 +6,9 @@ import { Injectable, Output, EventEmitter } from '@angular/core';
 import { User } from './user';
 import { ServerOperationResult } from './server-operation-result';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
 
   constructor(private connector: ConnectorService, private router: Router) { }

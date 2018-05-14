@@ -51,9 +51,6 @@ import { CreateSessionComponent } from './_modules/create-session/create-session
     ReactiveFormsModule
   ],
   providers: [
-    MockService,
-    AuthService,
-    AuthGuard,
     CustomValidators
   ],
   bootstrap: [AppComponent]
