@@ -11,7 +11,7 @@ export class MachineService {
 
   constructor(
     private connector: ConnectorService,
-  private wsService: WebSocketService) {
+  private wbService: WebSocketService) {
   }
 
   getMachineById(id: number): Observable<Machine> {
@@ -19,6 +19,6 @@ export class MachineService {
   }
 
   subscribeMachineById(id: number): Observable<Machine> {
-    return this.wsService.connectToChannel<Machine>('machine ' + id);
+    return this.wbService.connectToChannel<Machine>('machine ' + id);
   }
 }

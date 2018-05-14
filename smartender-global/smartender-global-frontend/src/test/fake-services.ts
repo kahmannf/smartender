@@ -56,3 +56,12 @@ export function getSessionService() {
     declineInvite: () => {}
   };
 }
+
+export function getMachineService() {
+  return {
+    connector: undefined,
+    wbService: undefined,
+    getMachineById: () => {},
+    subscribeMachineById: () => {},
+  };
+}

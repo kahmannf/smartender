@@ -1,4 +1,4 @@
-import { PortData } from "./port-data";
+import { PortData } from './port-data';
 
 export interface Machine {
   name: string;
