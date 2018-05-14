@@ -69,7 +69,16 @@ class MachineManager {
   }
 
   isAvailable (machineid) {
-    return !(this.blockedMachines[machineid]); 
+    return new Promise((resolve, reject) => { 
+      var blocked = (this.blockedMachines[machineid]);
+      
+      if(blocked) {
+        resolve(false);
+      } else {
+        // Todo: trigger live update here
+        resolve(true);
+      }
+    });
   }
 
   getBlockedPortReasons(machineid, portid) {

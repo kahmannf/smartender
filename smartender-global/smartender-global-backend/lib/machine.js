@@ -168,15 +168,21 @@ const registerMachine = (user_id, machinekey, name) => {
 const fillLiveData = (machine) => {
   return new Promise((resolve, reject) => {
     if (machine) {
-      machine.isAvailable = machineManager.isAvailable(machine.id);
+      machineManager.isAvailable(machine.id)
+      .then(available => {
+        machine.isAvailable = available;
       
-      if(!machine.isAvailable && machine.ports) {
-        for(var i = 0; i < machine.ports.length; i++) {
-          machine.ports[i].blockReasons = machineManager.getBlockedPortReasons(
-            machine.id, 
-            machine.ports[i].id);
+        if(!machine.isAvailable && machine.ports) {
+          for(var i = 0; i < machine.ports.length; i++) {
+            machine.ports[i].blockReasons = machineManager.getBlockedPortReasons(
+              machine.id, 
+              machine.ports[i].id);
+          }
         }
-      }
+      })
+      .catch(err => {
+        machine.isAvailable = false;  
+      });
 
       resolve(machine);
     } else {
