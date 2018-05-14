@@ -12,3 +12,7 @@ session status $sessionid
 
 #invites for user changed
 invites $userid
+
+
+#machine status changed
+machine $machineid
