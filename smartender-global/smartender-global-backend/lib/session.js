@@ -232,7 +232,7 @@ const canUserEditSession = (user_id, session) => {
   } else if (session.members) {
 
     for(var i = 0; i < session.members.length; i++) {
-      if(session.members[i] && session.members[i].user_id === user_id && session.member.can_edit_session) {
+      if(session.members[i] && session.members[i].user_id === user_id && session.members[i].can_edit_session) {
         return true;
       }
     }

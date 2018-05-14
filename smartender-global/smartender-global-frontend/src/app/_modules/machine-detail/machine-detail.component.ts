@@ -21,7 +21,8 @@ export class MachineDetailComponent implements OnInit {
   machine: Machine = {
     id: 0,
     owner_id: 0,
-    name: ''
+    name: '',
+    ports: []
   };
 
   ngOnInit() {
@@ -32,7 +33,9 @@ export class MachineDetailComponent implements OnInit {
 
     this.machine$ = bySocket.pipe(merge(getById));
 
-    this.machine$.subscribe(machine => this.machine = machine);
+    this.machine$.subscribe(machine => {
+      this.machine = machine
+    });
 
   }
 }

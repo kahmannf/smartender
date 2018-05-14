@@ -9,6 +9,7 @@ const auth_lib = require('../../lib/auth');
 
 const init = (io) => {
   session.init(io)
+  machine.init(io);
 };
 
 
@@ -25,6 +26,6 @@ router.use((req, res, next) => {
 
 router.use('/user', user);
 router.use('/session', session.router);
-router.use('/machine', machine);
+router.use('/machine', machine.router);
 
 module.exports = { router, init };

@@ -5,6 +5,13 @@ const logger = require('../../logger');
 
 const machine = require('../../lib/machine');
 
+var io = undefined;
+
+const init = (socketIO) => {
+  machine.initSockets(socketIO);
+  io = socketIO;
+}
+
 router.get('/by-id/:id', (req, res) => {
   if(req.params.id) {
     machine.getMachineById(req.params.id)
@@ -24,4 +31,7 @@ router.get('/by-id/:id', (req, res) => {
   }
 })
 
-module.exports = router;
+module.exports = { 
+  init,
+  router
+}

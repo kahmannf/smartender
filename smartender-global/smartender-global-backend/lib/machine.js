@@ -1,5 +1,16 @@
 'use strict';
 const db = require('./db');
+const logger = require('../logger');
+const MachineManager = require('./machine_manager');
+
+var socketIo = undefined;
+var machineManager = undefined;
+
+
+const initSockets = (io) => {
+  socketIo = io;
+  machineManager = new MachineManager(io);
+}
 
 const isUserOwner = (machine_id, user_id) => {
   return new Promise((resolve, reject) => {
@@ -42,22 +53,80 @@ const getMachineByKey = (machinekey) => {
       if(err) {
         reject(err);
       } else {
-        resolve(row);
+        if(row) {
+          getPortData(row.port_start, row.port_end)
+          .then(ports => {
+            row.ports = ports;
+
+            fillLiveData(row)
+            .then(result => {
+              resolve(result);
+            })
+            .catch(err => {
+              logger.error(err);
+              resolve(row);
+            })
+          })
+          .catch(err => {
+            logger.error(err);
+            resolve(row);
+          })
+        } else {
+          resolve(undefined);
+        }
       }
     });
   });
 }
 
+const getPortData = (portstart, portend) => {
+  return new Promise((resolve, reject) => {
+    if(portstart <= portend) {
+      var result = [];
+      
+      for(var i = portstart; i <= portend; i++) {
+        result.push({
+          id: i
+        });
+      }
+
+      resolve(result);
+    } else {
+      resolve([]);
+    }
+  });
+}
+
 const getMachineById = (id) => {
   return new Promise((resolve, reject) => {
-    var sql = "select id, name, owner_id from machine where id = ?";
+    var sql = "select id, name, owner_id, port_start, port_end from machine where id = ?";
     var params = [id];
 
     db.get(sql, params, (err, row) => {
       if(err) {
         reject(err);
       } else {
-        resolve(row);
+        if(row) {
+          getPortData(row.port_start, row.port_end)
+          .then(ports => {
+            row.ports = ports;
+
+            fillLiveData(row)
+            .then(result => {
+              resolve(result);
+            })
+            .catch(err => {
+              logger.error(err);
+              resolve(row);
+            })
+          })
+          .catch(err => {
+            logger.error(err);
+            resolve(row);
+          })
+        } else {
+          resolve(undefined);
+        }
       }
     });
   });
@@ -96,7 +165,61 @@ const registerMachine = (user_id, machinekey, name) => {
   });
 }
 
+const fillLiveData = (machine) => {
+  return new Promise((resolve, reject) => {
+    if (machine) {
+      machine.isAvailable = machineManager.isAvailable(machine.id);
+      
+      if(!machine.isAvailable && machine.ports) {
+        for(var i = 0; i < machine.ports.length; i++) {
+          machine.ports[i].blockReasons = machineManager.getBlockedPortReasons(
+            machine.id, 
+            machine.ports[i].id);
+        }
+      }
+
+      resolve(machine);
+    } else {
+      resolve(undefined);
+    }
+  });
+}
+
+const fillLivaDataMulti = (machines) => {
+  return new Promise((resolve, reject) => {
+    if(machines && machines.length) {
+      var expected = machines.length;
+      var current = 0;
+      var result = [];
+
+      for (var i = 0; i < machines.length; i++) {
+        fillLiveData(machines[i])
+        .then(machine => {
+          result.push(machine);
+          current++;
+
+          if(current === expected) {
+            resolve(result);
+          }
+        })
+        .catch(err => {
+          logger.error(err);
+          current++;
+          
+          if(current === expected) {
+            resolve(result);
+          }
+        });
+      }
+
+    } else {
+      resolve([]);
+    }
+  });
+}
+
 module.exports = {
+  initSockets,
   isUserOwner,
   getUserMachines,
   getMachineById,

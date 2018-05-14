@@ -1,8 +1,15 @@
 <div class="row">
-  <div class="col col-sm-8 col-md-5">
-    <div class="form-group">
-      <label for="name"></label>
-      <input type="text" id="name" disabled value="{{machine.name}}">
+  <div class="col">
+    <div>
+      {{machine.name}}
     </div>
+    
   </div>
 </div>
+<div *ngIf="machine.ports">
+  <div class="row" *ngFor="let port of machine.ports">
+    id: {{port.id}}, enabled: {{!port.blockReasons || !blockReasons.length}}
+  </div>
+</div>
+
+TODO: Remove {{machine| json}}
