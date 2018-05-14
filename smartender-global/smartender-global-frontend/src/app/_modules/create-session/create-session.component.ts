@@ -1,3 +1,4 @@
+import { environment } from './../../../environments/environment';
 import { SessionService } from './../../shared/session.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
@@ -24,7 +25,11 @@ export class CreateSessionComponent implements OnInit {
 
   errorMessage: string;
 
+  projectName: string;
+
   ngOnInit() {
+    this.projectName = environment.projectName;
+
     this.userService.getMyMachines().subscribe(result => this.machines = result);
 
     this.createSessionForm = new FormGroup({
