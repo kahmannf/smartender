@@ -11,7 +11,9 @@ import { ServerOperationResult } from './server-operation-result';
 })
 export class AuthService {
 
-  constructor(private connector: ConnectorService, private router: Router) { }
+  constructor(
+    public connector: ConnectorService,
+    public router: Router) { }
 
   user: User;
 

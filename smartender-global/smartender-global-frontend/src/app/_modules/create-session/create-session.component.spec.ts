@@ -7,7 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-fdescribe('CreateSessionComponent', () => {
+describe('CreateSessionComponent', () => {
   let component: CreateSessionComponent;
   let fixture: ComponentFixture<CreateSessionComponent>;
   let debugElement: DebugElement;

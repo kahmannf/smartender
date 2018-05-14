@@ -9,6 +9,7 @@ import { CompleteRegisterComponent } from './complete-register.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { getUserService, getAuthService } from '../../../test/fake-services';
 
 describe('CompleteRegisterComponent', () => {
   let component: CompleteRegisterComponent;
@@ -24,6 +25,15 @@ describe('CompleteRegisterComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientModule
+      ],
+      providers: [{
+          provide: UserService,
+          useValue: getUserService()
+        },
+        {
+          provide: AuthService,
+          useValue: getAuthService()
+        }
       ]
     })
     .compileComponents();
@@ -38,7 +48,8 @@ describe('CompleteRegisterComponent', () => {
     authService = debugElement.injector.get(AuthService);
     userService = debugElement.injector.get(UserService);
 
-    spyOn(authService, 'activateAccount').and.returnValue(of(false));
+    spyOn(userService, 'getByRegisterKey');
+    spyOn(authService, 'activateAccount').and.returnValue(false);
     spyOn(component, 'passwordValidator');
   });
 

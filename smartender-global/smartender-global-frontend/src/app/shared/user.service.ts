@@ -15,8 +15,8 @@ import { ConnectorService } from '../service-client/connector.service';
 export class UserService {
 
   constructor(
-    private connector: ConnectorService,
-    private wbService: WebSocketService
+    public connector: ConnectorService,
+    public wbService: WebSocketService
   ) {
     this.machineRegistered = new EventEmitter<string>();
    }
