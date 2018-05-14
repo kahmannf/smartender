@@ -14,7 +14,9 @@ describe('HomeComponent', () => {
         HomeComponent
       ],
       imports: [
-        RouterTestingModule
+        RouterTestingModule.withRoutes([
+          { path: 'home', children: [{ path: 'dashboard', component: HomeComponent }] }
+        ])
       ],
       schemas: [NO_ERRORS_SCHEMA]
     })

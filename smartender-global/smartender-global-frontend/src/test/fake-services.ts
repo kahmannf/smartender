@@ -1,3 +1,4 @@
+import { ServerOperationResult } from './../app/shared/server-operation-result';
 import { Invitation } from './../app/shared/invitation';
 import { SessionService } from './../app/shared/session.service';
 import { AuthService } from './../app/shared/auth.service';
@@ -15,7 +16,11 @@ export function getUserService() {
     checkEmailAvailable: () => { },
     getByRegisterKey: () => { },
     getMyMachines: () => of([]),
-    registerMachine: () => { },
+    registerMachine: (): Observable<ServerOperationResult> =>
+    of({
+      success: false,
+      message: 'Unit-test result!'
+    }),
     getCurrentUser: (): Observable<User> =>
     of({
       id: -1,
@@ -39,11 +44,11 @@ export function getAuthService() {
     router: undefined,
     user: undefined,
     loggedInChanged: new EventEmitter<boolean>(),
-    login: () => {},
+    login: (): Observable<boolean> => of(false),
     logout: () => {},
     isLoggedIn: () => true,
     register: () => {},
-    activateAccount: () => {},
+    activateAccount: (): Observable<boolean> => of(false),
   };
 }
 

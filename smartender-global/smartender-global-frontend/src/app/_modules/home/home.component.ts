@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     if (this.route.children.length === 0) {
-      this.router.navigate(['home', 'dashbaord']);
+      this.router.navigate(['home', 'dashboard']);
     }
   }
 

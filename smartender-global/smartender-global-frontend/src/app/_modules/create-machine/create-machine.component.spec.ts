@@ -36,7 +36,7 @@ describe('CreateMachineComponent', () => {
 
     userService = debugElement.injector.get(UserService);
 
-    spyOn(userService, 'registerMachine');
+    spyOn(userService, 'registerMachine').and.callThrough();
   });
 
   it('should create', () => {

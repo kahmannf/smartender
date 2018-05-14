@@ -50,7 +50,7 @@ describe('CompleteRegisterComponent', () => {
     userService = debugElement.injector.get(UserService);
 
     spyOn(userService, 'getByRegisterKey');
-    spyOn(authService, 'activateAccount').and.returnValue(false);
+    spyOn(authService, 'activateAccount').and.returnValue(of(false));
     spyOn(component, 'passwordValidator');
   });
 

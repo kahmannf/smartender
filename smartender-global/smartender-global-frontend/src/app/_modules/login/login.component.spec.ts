@@ -19,7 +19,9 @@ describe('LoginComponent', () => {
       declarations: [ LoginComponent ],
       imports: [
         ReactiveFormsModule,
-        RouterTestingModule
+        RouterTestingModule.withRoutes([
+          { path: 'home', children: [{ path: 'dashboard', component: LoginComponent}] }
+        ])
       ],
       providers: [{
         provide: AuthService,
@@ -37,7 +39,7 @@ describe('LoginComponent', () => {
 
     authService = debugElement.injector.get(AuthService);
 
-    spyOn(authService, 'login');
+    spyOn(authService, 'login').and.callThrough();
   });
 
   it('should create', () => {
