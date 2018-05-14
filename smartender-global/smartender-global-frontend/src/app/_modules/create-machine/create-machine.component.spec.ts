@@ -6,6 +6,7 @@ import { CreateMachineComponent } from './create-machine.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { getUserService } from '../../../test/fake-services';
 
 describe('CreateMachineComponent', () => {
   let component: CreateMachineComponent;
@@ -17,9 +18,12 @@ describe('CreateMachineComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CreateMachineComponent ],
       imports: [
-        ReactiveFormsModule,
-        HttpClientModule
-      ]
+        ReactiveFormsModule
+      ],
+      providers: [{
+        provide: UserService,
+        useValue: getUserService()
+      }]
     })
     .compileComponents();
   }));

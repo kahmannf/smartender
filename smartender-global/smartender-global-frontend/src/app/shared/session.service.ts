@@ -14,9 +14,9 @@ import { Router } from '@angular/router';
 export class SessionService {
 
   constructor(
-    private connector: ConnectorService,
-    private wbService: WebSocketService,
-    private router: Router
+    public connector: ConnectorService,
+    public wbService: WebSocketService,
+    public router: Router
   ) { }
 
   sessionCreated = new EventEmitter<string>();

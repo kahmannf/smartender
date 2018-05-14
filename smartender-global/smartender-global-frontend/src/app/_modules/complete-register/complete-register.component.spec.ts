@@ -25,8 +25,7 @@ describe('CompleteRegisterComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule.withRoutes([
           { path: 'login', component: CompleteRegisterComponent }
-      ]),
-        HttpClientModule
+      ])
       ],
       providers: [{
           provide: UserService,

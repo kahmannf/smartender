@@ -1,3 +1,4 @@
+import { SessionService } from './../../shared/session.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -6,6 +7,8 @@ import { CreateSessionComponent } from './create-session.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { getSessionService, getUserService } from '../../../test/fake-services';
+import { UserService } from '../../shared/user.service';
 
 describe('CreateSessionComponent', () => {
   let component: CreateSessionComponent;
@@ -17,9 +20,16 @@ describe('CreateSessionComponent', () => {
       declarations: [ CreateSessionComponent ],
       imports: [
         ReactiveFormsModule,
-        HttpClientModule,
         RouterTestingModule
-      ]
+      ],
+      providers: [{
+        provide: SessionService,
+        useValue: getSessionService()
+      },
+      {
+        provide: UserService,
+        useValue: getUserService()
+      }]
     })
     .compileComponents();
   }));
