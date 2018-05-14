@@ -23,7 +23,9 @@ describe('CompleteRegisterComponent', () => {
       declarations: [ CompleteRegisterComponent ],
       imports: [
         ReactiveFormsModule,
-        RouterTestingModule,
+        RouterTestingModule.withRoutes([
+          { path: 'login', component: CompleteRegisterComponent }
+      ]),
         HttpClientModule
       ],
       providers: [{

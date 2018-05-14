@@ -28,7 +28,7 @@ export function getAuthService() {
     loggedInChanged: new EventEmitter<boolean>(),
     login: () => {},
     logout: () => {},
-    isLoggedIn: () => {},
+    isLoggedIn: () => true,
     register: () => {},
     activateAccount: () => {},
   };
