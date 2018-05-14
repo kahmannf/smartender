@@ -10,7 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-fdescribe('CompleteRegisterComponent', () => {
+describe('CompleteRegisterComponent', () => {
   let component: CompleteRegisterComponent;
   let fixture: ComponentFixture<CompleteRegisterComponent>;
   let debugElement: DebugElement;
