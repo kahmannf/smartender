@@ -9,7 +9,7 @@ import { getAuthService, getCustomValidators } from '../../../test/fake-services
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-fdescribe('RegisterComponent', () => {
+describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let debugElement: DebugElement;
