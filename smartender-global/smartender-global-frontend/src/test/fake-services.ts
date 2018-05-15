@@ -10,6 +10,7 @@ import { UserSession } from '../app/shared/user-session';
 import { CustomValidators } from '../app/custom-validators';
 import { AbstractControl } from '@angular/forms';
 import { Machine } from '../app/shared/machine';
+import { Session } from '../app/shared/session';
 
 export function getUserService() {
   return {
@@ -33,7 +34,7 @@ export function getUserService() {
       iat: 0,
       exp:  0
     }),
-    getByIdArray: () => { },
+    getByIdArray: (): Observable<User[]> => of([]),
     getInvites: (): Observable<Invitation[]> => of([]),
     getInvitesUpdates: (id: number): Observable<Invitation[]> => of([]),
     searchFoSession: () => { },
@@ -50,7 +51,7 @@ export function getAuthService() {
     login: (): Observable<boolean> => of(false),
     logout: () => {},
     isLoggedIn: () => true,
-    register: () => {},
+    register: (): Observable<ServerOperationResult> => of({ success: false, message: 'Test result'}),
     activateAccount: (): Observable<boolean> => of(false),
   };
 }
@@ -66,7 +67,15 @@ export function getSessionService() {
     getSessionsUpdates: (): Observable<UserSession[]> => of([]),
     setActiveSession: () => {},
     navigateToActiveSession: () => {},
-    getSessionById: () => {},
+    getSessionById: (): Observable<Session> => 
+    of({
+      owner_id: -1,
+      machine_id: -1,
+      active: 1,
+      id: -1,
+      name: 'Test Session',
+      members: []
+    }),
     getSessionUpdates: (id: number): Observable<UserSession[]> => of([]),
     activateSession: () => {},
     deactivateSession: () => {},

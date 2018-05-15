@@ -50,7 +50,8 @@ export class SessionDetailComponent implements OnInit {
     );
   }
 
-  initSessionObservables() {const id$ = this.route.params
+  initSessionObservables() {
+    const id$ = this.route.params
     .pipe(
       map(params => params['id'])
     );
