@@ -47,10 +47,6 @@ export class RegisterComponent implements OnInit {
 
   register() {
 
-    console.log(this.registerForm.valid);
-
-    console.log(JSON.stringify({... this.registerForm.value}));
-
     if (this.registerForm.invalid) {
       this.submitted = true;
     } else {
