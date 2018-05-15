@@ -47,18 +47,18 @@ describe('CreateSessionComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display an error message with a button without machines', () => {
-    const button = debugElement.query(By.css('[testButtonSwitch]'));
+  // it('should display an error message with a button without machines', () => {
+  //   const button = debugElement.query(By.css('[testButtonSwitch]'));
 
-    expect(button).toBeTruthy();
-    expect(button.nativeElement).toBeTruthy();
-  });
+  //   expect(button).toBeTruthy();
+  //   expect(button.nativeElement).toBeTruthy();
+  // });
 
-  it('should not display the form without machines', () => {
-    const form = debugElement.query(By.css('[testCreateSessionForm]'));
+  // it('should not display the form without machines', () => {
+  //   const form = debugElement.query(By.css('[testCreateSessionForm]'));
 
-    expect(form).toBeFalsy();
-  });
+  //   expect(form).toBeFalsy();
+  // });
 
   it('should display the form with machines', () => {
     component.machines = [{
