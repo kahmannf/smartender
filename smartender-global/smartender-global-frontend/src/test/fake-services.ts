@@ -7,6 +7,9 @@ import { EventEmitter } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { User } from '../app/shared/user';
 import { UserSession } from '../app/shared/user-session';
+import { CustomValidators } from '../app/custom-validators';
+import { AbstractControl } from '@angular/forms';
+import { Machine } from '../app/shared/machine';
 
 export function getUserService() {
   return {
@@ -60,7 +63,7 @@ export function getSessionService() {
     sessionCreated: new EventEmitter<string>(),
     getMySessions: (): Observable<UserSession[]> => of([]),
     createSession: () => {},
-    getSessionsUpdates: () => {},
+    getSessionsUpdates: (): Observable<UserSession[]> => of([]),
     setActiveSession: () => {},
     navigateToActiveSession: () => {},
     getSessionById: () => {},
@@ -77,7 +80,31 @@ export function getMachineService() {
   return {
     connector: undefined,
     wbService: undefined,
-    getMachineById: () => {},
-    subscribeMachineById: () => {},
+    getMachineById: (id: number): Observable<Machine> => 
+    of({
+      id: 0,
+      owner_id: 0,
+      name: '',
+      ports: []
+    }),
+    subscribeMachineById: (id: number): Observable<Machine> => 
+    of({
+      id: 0,
+      owner_id: 0,
+      name: '',
+      ports: []
+    }),
   };
+}
+
+export function getCustomValidators(): CustomValidators {
+  
+  return {
+    userService: undefined,
+    alphanumric: (control: AbstractControl) => null,
+    alphanumricwhitespace: (control: AbstractControl) => null,
+    emailformat: (control: AbstractControl) => null,
+    aliasavailable: (control: AbstractControl) => of(null),
+    emailavailable: (control: AbstractControl) => of(null),
+  }
 }

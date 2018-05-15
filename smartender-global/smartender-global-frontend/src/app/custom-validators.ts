@@ -15,7 +15,7 @@ export class CustomValidators {
 
   static userService: UserService;
 
-  constructor(private userService: UserService) {
+  constructor(public userService: UserService) {
     CustomValidators.userService = userService;
   }
 
