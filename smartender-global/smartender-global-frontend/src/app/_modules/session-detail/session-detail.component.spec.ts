@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 
 import { SessionDetailComponent } from './session-detail.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -35,24 +35,27 @@ describe('SessionDetailComponent', () => {
     .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     fixture = TestBed.createComponent(SessionDetailComponent);
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
     fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should not render edit-emlements by default', () => {
-    const controlButtons = debugElement.query(By.css('[testControlButtons]'));
-    const membersRow = debugElement.query(By.css('[testMembersRow]'));
-    const inviteRow = debugElement.query(By.css('[testInviteRow]'));
+    // const controlButtons = debugElement.query(By.css('[testControlButtons]'));
+    // const membersRow = debugElement.query(By.css('[testMembersRow]'));
+    // const inviteRow = debugElement.query(By.css('[testInviteRow]'));
+    
+    //find a work-around for this 
+    expect(false).toBeTruthy();
 
-    expect(controlButtons).toBeFalsy();
-    expect(membersRow).toBeFalsy();
-    expect(inviteRow).toBeFalsy();
-  })
+    // expect(controlButtons).toBeFalsy();
+    // expect(membersRow).toBeFalsy();
+    // expect(inviteRow).toBeFalsy();
+  });
 });
