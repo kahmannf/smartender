@@ -5,4 +5,5 @@ export interface Machine {
   id: number;
   owner_id: number;
   ports: PortData[];
+  isAvailable: boolean;
 }

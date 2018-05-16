@@ -20,12 +20,20 @@ const dummyUser = {
   registerkey: '1234567890',
   iat: 0,
   exp:  0
-} 
+};
 
-const dummyServerOperation ={
+const dummyServerOperation = {
   success: false,
   message: 'Unit-test result!'
-}
+};
+
+const dummyMachine = {
+  id: 0,
+  owner_id: 0,
+  name: '',
+  ports: [],
+  isAvailable: false
+};
 
 const dummySession = {
   owner_id: -1,
@@ -33,29 +41,23 @@ const dummySession = {
   active: 1,
   id: -1,
   name: 'Test Session',
-  members: []
-}
-
-const dummyMachine = {
-  id: 0,
-  owner_id: 0,
-  name: '',
-  ports: []
-}
+  members: [],
+  machine: dummyMachine
+};
 
 const dummyInvitation = {
   from: 'Sender',
   sessionname: 'Sessionname',
   session_id: -1,
   user_id: -1
-}
+};
 
 const dummyPageResultUser = {
   offset: 0,
   limit: 20,
   total: 1,
   items: [dummyUser]
-}
+};
 
 export function getUserService() {
   return {
@@ -120,7 +122,7 @@ export function getMachineService() {
 }
 
 export function getCustomValidators(): CustomValidators {
-  
+
   return {
     userService: undefined,
     alphanumric: (control: AbstractControl) => null,
@@ -128,5 +130,5 @@ export function getCustomValidators(): CustomValidators {
     emailformat: (control: AbstractControl) => null,
     aliasavailable: (control: AbstractControl) => of(null),
     emailavailable: (control: AbstractControl) => of(null),
-  }
+  };
 }

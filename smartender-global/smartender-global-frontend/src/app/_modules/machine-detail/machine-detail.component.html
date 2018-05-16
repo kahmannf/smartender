@@ -3,12 +3,12 @@
     <div>
       {{machine.name}}
     </div>
-    
+
   </div>
 </div>
 <div *ngIf="machine.ports">
   <div class="row" *ngFor="let port of machine.ports">
-    id: {{port.id}}, enabled: {{!port.blockReasons || !blockReasons.length}}
+    <sm-port-detail [port]="port"></sm-port-detail>
   </div>
 </div>
 

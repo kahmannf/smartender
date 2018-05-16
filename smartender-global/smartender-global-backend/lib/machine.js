@@ -224,11 +224,45 @@ const fillLivaDataMulti = (machines) => {
   });
 }
 
+const convertIdIntoKey = (id) => {
+  return new Promise((resolve, reject) => {
+    var sql = 'select machinekey from machines where id = ?';
+
+    db.get(sql, [id], (err, row) => {
+      if(err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.machinekey);
+      } else {
+        reject();
+      }
+    });
+  });
+}
+
+const registerMachineAsAvailable = (machinekey) => {
+  return new Promise((resolve, reject) => {
+    machineManager.registerMachine(machinekey)
+    .then(resolve)
+    .catch(err => reject(err));
+  });
+}
+
+const reportMachine = (machinekey) => {
+  return new Promise((resolve, reject) => {
+    machineManager.registerMachine(machinekey)
+    .then(() => resolve(true))
+    .catch(err => reject(err));
+  })
+}
+
 module.exports = {
   initSockets,
   isUserOwner,
   getUserMachines,
   getMachineById,
-  getMachineByKey,
-  registerMachine
+  getMachineByKey: 1,
+  registerMachine,
+  convertIdIntoKey,
+  reportMachine
 }

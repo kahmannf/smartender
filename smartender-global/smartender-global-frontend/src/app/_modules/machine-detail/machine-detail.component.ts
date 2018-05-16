@@ -22,7 +22,8 @@ export class MachineDetailComponent implements OnInit {
     id: 0,
     owner_id: 0,
     name: '',
-    ports: []
+    ports: [],
+    isAvailable: false
   };
 
   ngOnInit() {

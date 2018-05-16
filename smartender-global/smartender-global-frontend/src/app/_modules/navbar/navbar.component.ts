@@ -1,3 +1,4 @@
+import { MachineService } from './../../shared/machine.service';
 import { Invitation } from './../../shared/invitation';
 import { UserService } from './../../shared/user.service';
 import { AuthService } from './../../shared/auth.service';
@@ -18,7 +19,8 @@ export class NavbarComponent implements OnInit {
   constructor(
     private sessionService: SessionService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    public machineService: MachineService
   ) { }
 
   sessions: UserSession[];
@@ -30,7 +32,8 @@ export class NavbarComponent implements OnInit {
     is_owner: 0,
     is_user_active_session: 0,
     name: '',
-    active: 0
+    active: 0,
+    machine: undefined
   };
 
   projectName: string;
@@ -52,20 +55,11 @@ export class NavbarComponent implements OnInit {
     const resultHandler = (result: UserSession[]) => {
       const resultArray = [];
 
-      this.activeSession = {
-        session_id: 0,
-        user_id: 0,
-        can_edit_machine: 0,
-        is_owner: 0,
-        is_user_active_session: 0,
-        name: '',
-        active: 0
-      };
-
       for (let i = 0; i < result.length; i++) {
         if (result[i].active) {
           if (result[i].is_user_active_session) {
             this.activeSession = result[i];
+            console.log(JSON.stringify(this.activeSession));
           }
           resultArray.push(result[i]);
         }
@@ -119,4 +113,15 @@ export class NavbarComponent implements OnInit {
     this.sessionService.declineInvite(invite.session_id).subscribe();
   }
 
+  machineAvailable() {
+    return this.activeSession && this.machineService.machineAvailable(this.activeSession.machine);
+  }
+
+  machineOperating() {
+    return this.activeSession && this.machineService.machineOperating(this.activeSession.machine);
+  }
+
+  machineUnavailable() {
+    return this.activeSession && this.machineService.machineUnavailable(this.activeSession.machine);
+  }
 }

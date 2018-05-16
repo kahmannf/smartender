@@ -1,3 +1,5 @@
+import { Machine } from './machine';
+
 export interface UserSession {
   session_id: number;
   user_id: number;
@@ -6,4 +8,5 @@ export interface UserSession {
   is_owner: number;
   is_user_active_session: number;
   name: string;
+  machine: Machine;
 }

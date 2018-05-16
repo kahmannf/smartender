@@ -2,6 +2,8 @@ const db = require('./db');
 
 const machine_lib = require('./machine');
 
+const logger = require('../logger');
+
 const getUserSessions = (userid) => {
   return new Promise((resolve, reject) => {
     var sql = "select shm.session_id, " +
@@ -10,7 +12,7 @@ const getUserSessions = (userid) => {
                     " shm.can_edit_session, " +
                     " shm.is_owner, " +
                     " shm.is_user_active_session, " +
-                    " s.name, s.active " +
+                    " s.name, s.active, s.machine_id " +
                     " from session_has_members shm," +
                     " session s " + 
                     " where s.id = shm.session_id " + 
@@ -23,7 +25,12 @@ const getUserSessions = (userid) => {
       if(err) {
         reject(err);
       } else {
-        resolve(rows);
+        fillSessionMachineDataMulti(rows)
+        .then(results => {
+          resolve(results);
+        })
+        .catch(err => reject(err));
+        
       }
     });
 
@@ -110,10 +117,61 @@ const fillSessionMembers = (session) => {
         reject(err);
       } else {
         session.members = rows;
-        resolve(session);
+        fillSessionMachineData(session)
+        .then(machine_session => resolve(machine_session))
+        .catch(err => {
+          logger.error(err, 500);
+          resolve(session);
+        })
       }
     });
 
+  });
+}
+
+const fillSessionMachineData = (session) => { 
+  return new Promise((resolve, reject) => {
+    machine_lib.getMachineById(session.machine_id)
+    .then(machine => {
+      session.machine = machine;
+      resolve(session);
+    })
+    .catch(err => reject(err));
+  });
+}
+
+const fillSessionMachineDataMulti = (sessions) => {
+  return new Promise((resolve, reject) => {
+    if(sessions && sessions.length) {
+      var expected = sessions.length;
+      var current = 0;
+      var result = [];
+
+      for(var i = 0; i < expected; i++) {
+        fillSessionMachineData(sessions[i])
+        .then(session => {
+          result.push(session);
+          current++;
+
+          if(current == expected) {
+            resolve(result);
+          }
+
+        })
+        .catch(err => {
+          logger.error(err, 500);
+          current++;
+
+          if(current == expected) {
+            resolve(result);
+          }
+
+        });
+      }
+
+    } else {
+      resolve([]);
+    }
   });
 }
 
