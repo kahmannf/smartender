@@ -1,5 +1,4 @@
 const logger = require('../logger');
-const machine_lib = require('./machine');
 
 // example = {
 // machineid: {
@@ -12,10 +11,12 @@ class MachineManager {
     return Date.now() / 1000 | 0;
   }
 
-  constructor(io) {
+  constructor(machine_lib, io) {
     if(!MachineManager.instance) {
       this.registeredMachines = {};
       this.blockedMachines = {};
+
+      this.machine_lib = machine_lib;
 
       this.operations = Object.freeze(['maintenance', 'cleaning', 'mixing']);
       
@@ -33,7 +34,7 @@ class MachineManager {
           if(this.registeredMachines[machinekeys[i]] < timestamp - 20) {
             logger.log('Deleted machine: ' + machinekeys[i], 10005);
             delete this.registeredMachines[machinekeys[i]];
-            machine_lib.getMachineByKey(machinekeys[i])
+            this.machine_lib.getMachineByKey(machinekeys[i])
             .then(machine => {
               this.triggerUpdateMachine(machine.id);
             })
@@ -102,9 +103,9 @@ class MachineManager {
   }
 
   isAvailable (machineid) {
-    return new Promise((resolve, reject) => { 
+    return new Promise((resolve, reject) => {
       
-      machine_lib.convertIdIntoKey(machineid)
+      this.machine_lib.convertIdIntoKey(machineid)
       .then(machinekey => {
 
         if(!this.registeredMachines[machinekey]) {
@@ -135,29 +136,26 @@ class MachineManager {
     return new Promise((resolve, reject) => {
       if(this.registeredMachines[machinekey]) {
         //update timestamp
-        this.registeredMachines[machinekey] = getTimeStamp();
+        this.registeredMachines[machinekey] = this.getTimeStamp();
         resolve();
       } else {
-        machine_lib.getMachineByKey(machinekey)
+        this.machine_lib.getMachineByKey(machinekey)
         .then(machine => {
           if(!machine) {
-            reject();
+            reject('no machine for key:' + machinekey);
           } else {
             
             //set timestamp
-            this.registeredMachines[machinekey] = getTimeStamp();
+            this.registeredMachines[machinekey] = this.getTimeStamp();
             logger.log('Registered machine: ' + machinekey, 10005);
             //cleanup remaining blocks
             if(this.blockedMachines[machine.id]) {
               delete this.blockedMachines[machine.id];
             }
 
-            this.reportMachineStatusChanged(machine.id)
-            .then(resolve)
-            .catch(err => {
-              logger.error(err, 500);
-              resolve();  
-            });
+            this.triggerUpdateMachine(machine.id);
+            
+            resolve();
           }
         })
         .catch(err => reject(err));

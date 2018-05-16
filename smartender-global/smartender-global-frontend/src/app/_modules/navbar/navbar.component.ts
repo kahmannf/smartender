@@ -8,6 +8,8 @@ import { UserSession } from './../../shared/user-session';
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../shared/user';
 import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Machine } from '../../shared/machine';
 
 @Component({
   selector: 'sm-navbar',
@@ -49,8 +51,16 @@ export class NavbarComponent implements OnInit {
 
   invites: Invitation[] = [];
 
+  machineObservable: Observable<Machine>;
+
   ngOnInit() {
     this.projectName = environment.projectName;
+
+    const machineUpdateHandler = (machine: Machine) => {
+      if (machine && this.activeSession) {
+        this.activeSession.machine = machine;
+      }
+    };
 
     const resultHandler = (result: UserSession[]) => {
       const resultArray = [];
@@ -59,7 +69,12 @@ export class NavbarComponent implements OnInit {
         if (result[i].active) {
           if (result[i].is_user_active_session) {
             this.activeSession = result[i];
-            console.log(JSON.stringify(this.activeSession));
+            if (this.activeSession && this.activeSession.machine) {
+
+              this.machineObservable = this.machineService.subscribeMachineById(this.activeSession.machine.id);
+
+              this.machineObservable.subscribe(machineUpdateHandler);
+            }
           }
           resultArray.push(result[i]);
         }
@@ -114,14 +129,14 @@ export class NavbarComponent implements OnInit {
   }
 
   machineAvailable() {
-    return this.activeSession && this.machineService.machineAvailable(this.activeSession.machine);
+    return !!this.activeSession && this.machineService.machineAvailable(this.activeSession.machine);
   }
 
   machineOperating() {
-    return this.activeSession && this.machineService.machineOperating(this.activeSession.machine);
+    return !!this.activeSession && this.machineService.machineOperating(this.activeSession.machine);
   }
 
   machineUnavailable() {
-    return this.activeSession && this.machineService.machineUnavailable(this.activeSession.machine);
+    return !!this.activeSession && this.machineService.machineUnavailable(this.activeSession.machine);
   }
 }

@@ -6,7 +6,7 @@ const logger = require('../../logger');
 
 router.get('/report/:machinekey', (req, res) => {
   if(req.params.machinekey) {
-    machine.reportMachine(req.params.machinkey)
+    machine.reportMachine(req.params.machinekey)
     .then(result => {
       res.json(result);
     })

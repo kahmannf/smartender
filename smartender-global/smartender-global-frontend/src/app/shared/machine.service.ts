@@ -3,6 +3,7 @@ import { Machine } from './machine';
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ConnectorService } from '../service-client/connector.service';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,12 @@ export class MachineService {
   }
 
   subscribeMachineById(id: number): Observable<Machine> {
-    return this.wbService.connectToChannel<Machine>('machine ' + id);
+    return this.wbService.connectToChannel<Machine>('machine ' + id)
+    .pipe(switchMap(whatever => this.getMachineById(id)));
   }
 
   machineAvailable(machine: Machine) {
-    return machine && machine.isAvailable;
+    return !!machine && machine.isAvailable;
   }
 
   machineOperating(machine: Machine) {

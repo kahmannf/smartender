@@ -6,10 +6,12 @@ const MachineManager = require('./machine_manager');
 var socketIo = undefined;
 var machineManager = undefined;
 
-
 const initSockets = (io) => {
   socketIo = io;
-  machineManager = new MachineManager(io);
+  machineManager = new MachineManager({ 
+    getMachineByKey: getMachineByKey, 
+    convertIdIntoKey: convertIdIntoKey },
+    io);
 }
 
 const isUserOwner = (machine_id, user_id) => {
@@ -179,12 +181,15 @@ const fillLiveData = (machine) => {
               machine.ports[i].id);
           }
         }
+        resolve(machine);
       })
       .catch(err => {
-        machine.isAvailable = false;  
-      });
+        logger.log(err, 500);
+        machine.isAvailable = false;
 
-      resolve(machine);
+        resolve(machine);  
+      });
+      
     } else {
       resolve(undefined);
     }
@@ -226,7 +231,7 @@ const fillLivaDataMulti = (machines) => {
 
 const convertIdIntoKey = (id) => {
   return new Promise((resolve, reject) => {
-    var sql = 'select machinekey from machines where id = ?';
+    var sql = 'select machinekey from machine where id = ?';
 
     db.get(sql, [id], (err, row) => {
       if(err) {
@@ -234,7 +239,7 @@ const convertIdIntoKey = (id) => {
       } else if (row) {
         resolve(row.machinekey);
       } else {
-        reject();
+        reject('Failed to load machinekey by id');
       }
     });
   });
