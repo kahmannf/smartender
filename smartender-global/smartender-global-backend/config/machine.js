@@ -1,3 +1,3 @@
 module.exports = {
-  cleaningTime: 10000
+  cleaningTime: 2000
 }

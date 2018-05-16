@@ -290,7 +290,8 @@ const openAndClosePort = (machineid, portid, operation, idleTime) => {
             if(idleTime > 0) {
               setTimeout(() => {
                 machineManager.releasePort(machineid, portid, operation);
-                closePort(machinekey, portid).then(() => {})
+                closePort(machinekey, portid)
+                .then(() => {})
                 .catch(err => {
                   logger.error(err, 500);
                 })

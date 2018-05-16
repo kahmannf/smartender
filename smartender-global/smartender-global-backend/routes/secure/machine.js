@@ -44,6 +44,7 @@ router.post('/clean/:machineid/:portid', (req, res) => {
       res.json(result);
     })
     .catch(err => {
+      logger.error(err, 500);
       res.sendStatus(500);
     });
   } else {

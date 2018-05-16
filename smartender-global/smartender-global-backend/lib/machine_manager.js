@@ -72,14 +72,14 @@ class MachineManager {
         }
       } else { // machineport has no array
         this.blockedMachines[machineid][portid] = [operation];
-        triggerUpdateMachine(machineid);
+        this.triggerUpdateMachine(machineid);
         return;
       }
     } else { // machine doesnt exist in array
       var machine = {};
       machine[portid] = [operation];
       this.blockedMachines[machineid] = machine;
-      triggerUpdateMachine(machineid);
+      this.triggerUpdateMachine(machineid);
       return;
     }
   }
@@ -87,15 +87,17 @@ class MachineManager {
   releasePort(machineid, portid, operation) {
     if(this.blockedMachines[machineid] && this.blockedMachines[machineid][portid]) {
       if(this.blockedMachines[machineid][portid].includes(operation)) {
-        var array = this.blockedMachines[machineid][portid].splice(this.blockedMachines[machineid][portid].indexOf(operation), 1);
-        if(array.length) {
+        
+        this.blockedMachines[machineid][portid].splice(this.blockedMachines[machineid][portid].indexOf(operation), 1);
+        
+        if(this.blockedMachines[machineid][portid].length) {
           this.blockedMachines[machineid][portid] = array;
         } else {
           delete this.blockedMachines[machineid][portid];
 
           if(!Object.keys(this.blockedMachines[machineid]).length) {
             delete this.blockedMachines[machineid];
-            triggerUpdateMachine(machineid);
+            this.triggerUpdateMachine(machineid);
           }
         }
       }
