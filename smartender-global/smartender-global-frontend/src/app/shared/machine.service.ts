@@ -1,3 +1,4 @@
+import { ServerOperationResult } from './server-operation-result';
 import { WebSocketService } from './../service-client/web-socket.service';
 import { Machine } from './machine';
 import { Observable, Subject } from 'rxjs';
@@ -62,5 +63,13 @@ export class MachineService {
     }
 
     return false;
+  }
+
+  clean(machineid, portid): Observable<ServerOperationResult> {
+    return this.connector.secureMachineCleanPortPOST(machineid, portid);
+  }
+
+  maintenance(machineid, portid): Observable<ServerOperationResult> {
+    return this.connector.secureMachineMaintenancePortPOST(machineid, portid);
   }
 }

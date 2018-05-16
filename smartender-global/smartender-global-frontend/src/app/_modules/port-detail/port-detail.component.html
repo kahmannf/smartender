@@ -1,3 +1,19 @@
-<p>
-  {{ port | json }}
-</p>
+<div class="row mb-2">
+  <div class="col col-2">
+    {{'ID:' + port.id}}
+  </div>
+  <div class="col col-auto">
+    <button class="btn" disabled [ngClass]="{'btn-outline-success': machineAvailable(), 'btn-outline-warning': machineOperating(), 'btn-outline-danger': machineUnavailable() }">
+      {{ getDisplayText() }}
+    </button>
+  </div>
+  <div class="col">
+    {{ port.blockReasons | json}}
+  </div>
+  <div class="col col-auto">
+    <button *ngIf="machine.isAvailable && !port.blockReasons" class="btn btn-outline-primary" (click)="requestMaintenance.emit(port.id)">Change Ingredient</button>
+  </div>
+  <div class="col col-auto mr-5">
+    <button *ngIf="machine.isAvailable && !port.blockReasons" class="btn btn-outline-primary" (click)="requestCleaning.emit(port.id)">Clean</button>
+  </div>
+</div>

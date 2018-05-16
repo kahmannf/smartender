@@ -7,8 +7,8 @@
   </div>
 </div>
 <div *ngIf="machine.ports">
-  <div class="row" *ngFor="let port of machine.ports">
-    <sm-port-detail [port]="port"></sm-port-detail>
+  <div *ngFor="let port of machine.ports">
+    <sm-port-detail [machine]="machine" [port]="port" (requestCleaning)="requestCleaning($event)" (requestMaintance)="requestMaintenance($event)"></sm-port-detail>
   </div>
 </div>
 

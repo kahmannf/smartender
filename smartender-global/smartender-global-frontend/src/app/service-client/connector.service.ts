@@ -196,4 +196,20 @@ export class ConnectorService {
       { headers: this.getHttpHeaders() }
     );
   }
+
+  secureMachineCleanPortPOST(machineid, portid): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + `secure/machine/clean/${machineid}/${portid}`,
+      {},
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureMachineMaintenancePortPOST(machineid, portid): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + `secure/machine/maintenance/${machineid}/${portid}`,
+      {},
+      { headers: this.getHttpHeaders() }
+    );
+  }
 }

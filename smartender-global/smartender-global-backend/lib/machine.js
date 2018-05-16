@@ -3,6 +3,8 @@ const db = require('./db');
 const logger = require('../logger');
 const MachineManager = require('./machine_manager');
 
+const config = require('../config');
+
 var socketIo = undefined;
 var machineManager = undefined;
 
@@ -189,7 +191,7 @@ const fillLiveData = (machine) => {
 
         resolve(machine);  
       });
-      
+
     } else {
       resolve(undefined);
     }
@@ -261,13 +263,62 @@ const reportMachine = (machinekey) => {
   })
 }
 
+const openPort = (machinekey, portid) => {
+  return new Promise((resolve, reject) => {
+    // TODO: implement
+    resolve();
+  });
+}
+
+const closePort = (machinekey, portid) => {
+  return new Promise((resolve, reject) => {
+    // TODO: implement
+    resolve();
+  })
+}
+
+const openAndClosePort = (machineid, portid, operation, idleTime) => {
+  return new Promise((resolve, reject) => {
+    convertIdIntoKey(machineid)
+    .then(machinekey => {
+      machineManager.isPortAvailable(machineid, portid)
+      .then(available => {
+        if(available) {
+          machineManager.blockPort(machineid, portid, operation);
+          openPort(machinekey, portid)
+          .then(() => {
+            if(idleTime > 0) {
+              setTimeout(() => {
+                machineManager.releasePort(machineid, portid, operation);
+                closePort(machinekey, portid).then(() => {})
+                .catch(err => {
+                  logger.error(err, 500);
+                })
+              }, idleTime);
+              resolve({ success: true, message: ''});
+            } else {
+              resolve({ success: true, message: ''});
+            }
+          })
+          .catch(err => reject(err));
+        } else {
+          resolve({ success: false, message: 'Port blocked'});
+        }
+      })
+      .catch(err => reject(err));
+    })
+    .catch(err => reject(err));
+  });
+}
+
 module.exports = {
+  convertIdIntoKey,
   initSockets,
   isUserOwner,
   getUserMachines,
   getMachineById,
-  getMachineByKey: 1,
+  getMachineByKey,
+  openAndClosePort,
   registerMachine,
-  convertIdIntoKey,
   reportMachine
 }

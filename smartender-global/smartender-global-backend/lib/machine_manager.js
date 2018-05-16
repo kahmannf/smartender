@@ -102,6 +102,28 @@ class MachineManager {
     }
   }
 
+  isPortAvailable(machineid, portid) {
+    return new Promise((resolve, reject) => {
+      
+      this.machine_lib.convertIdIntoKey(machineid)
+      .then(machinekey => {
+
+        if(!this.registeredMachines[machinekey]) {
+          resolve(false);
+        } else {
+          var blocked = (this.blockedMachines[machineid] && this.blockedMachines[machineid][portid]);
+      
+          if(blocked) {
+            resolve(false);
+          } else {
+            resolve(true);
+          }
+        }
+      })
+      .catch((err) => reject(err));
+    });
+  }
+
   isAvailable (machineid) {
     return new Promise((resolve, reject) => {
       
