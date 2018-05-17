@@ -7,7 +7,7 @@ user $userid sessions
 #specific session values changed
 session $sessionid
 
-#specific session machine statu changed
+#specific session machine status changed
 session status $sessionid
 
 #invites for user changed

@@ -410,10 +410,41 @@ const declineInvite = (sessionid, userid) => {
   });
 }
 
+const deleteSession = (sessionId, userId) => new Promise((resolve, reject) => {
+  getSessionById(sessionId, userId)
+  .then(session => {
+    if(session.owner_id === userId) {
+      db.run('delete from user_has_invites where session_id = ?', [sessionId], (err) => {
+        if(err) {
+          reject(err);
+        } else {
+          db.run('delete from session_has_members where session_id = ?', [sessionId], (err) => {
+            if(err) {
+              reject(err);
+            } else {
+              db.run('delete from session where id = ?', [sessionId], err => {
+                if(err) {
+                  reject(err);
+                } else {
+                  resolve({ success: true, message: ''});
+                }
+              })
+            }
+          })
+        }
+      });
+    } else {
+      resolve({ success: false, message: 'you dont have the permission to do that'});
+    }
+  })
+  .catch(err => reject(err));
+});
+
 module.exports = {
   acceptInvite,
   createSession,
   declineInvite,
+  deleteSession,
   getSessionById,
   canUserEditSession,
   //getSessionByMachine,

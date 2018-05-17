@@ -169,5 +169,22 @@ router.post('/decline-invite/:sessionid', (req, res) => {
   }
 })
 
+router.post('/delete/:id', (req, res) => {
+  if(req.params.id) {
+    session.deleteSession(req.params.id, req.oauth.payload.id)
+    .then(result => {
+      res.json(result);
+      io.emit('session ' + req.params.id);
+      io.emit('user ' + req.oauth.payload.id + ' sessions');
+    })
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+      io.emit('session ' + req.params.id);
+    });
+  } else {
+    res.status(400);
+  }
+});
 
 module.exports = { router, init };

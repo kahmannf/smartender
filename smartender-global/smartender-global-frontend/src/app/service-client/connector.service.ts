@@ -196,4 +196,12 @@ export class ConnectorService {
       { headers: this.getHttpHeaders() }
     );
   }
+
+  secureSessionDeletePOST(sessionid: number): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + 'secure/session/delete/' + sessionid,
+      {},
+      { headers:  this.getHttpHeaders() }
+    );
+  }
 }

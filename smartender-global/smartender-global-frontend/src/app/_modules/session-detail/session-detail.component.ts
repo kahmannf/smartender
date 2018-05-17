@@ -82,7 +82,8 @@ export class SessionDetailComponent implements OnInit {
         const all$ = initial$.pipe(merge(updates$), merge(user_updates$));
 
         all$.subscribe(
-          session => this.session = session
+          session => this.session = session,
+          error => console.log('error in sessiondetail component obseravable')
         );
 
         const updateMembers$ = all$
@@ -211,5 +212,9 @@ export class SessionDetailComponent implements OnInit {
     .subscribe(page => {
       this.userSearchResult = page;
     });
+  }
+
+  delete() {
+    this.sessionService.deleteSession(this.session.id).subscribe();
   }
 }

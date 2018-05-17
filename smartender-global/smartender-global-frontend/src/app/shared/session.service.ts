@@ -96,4 +96,8 @@ export class SessionService {
   declineInvite(sessionid: number): Observable<ServerOperationResult> {
     return this.connector.secureSessionDeclineInvitePOST(sessionid);
   }
+
+  deleteSession(sessionid: number): Observable<ServerOperationResult> {
+    return this.connector.secureSessionDeletePOST(sessionid);
+  }
 }
