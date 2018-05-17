@@ -4,6 +4,7 @@ const router = express.Router();
 const user = require('./user');
 const session = require('./session');
 const machine = require('./machine');
+const drink = require('./drink');
 
 const auth_lib = require('../../lib/auth');
 
@@ -27,5 +28,6 @@ router.use((req, res, next) => {
 router.use('/user', user);
 router.use('/session', session.router);
 router.use('/machine', machine.router);
+router.use('/drink', drink);
 
 module.exports = { router, init };
