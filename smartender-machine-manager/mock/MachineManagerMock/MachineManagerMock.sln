@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MachineManagerMock", "MachineManagerMock\MachineManagerMock.csproj", "{774A1A75-2063-4724-80D8-85CB1A6D706A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{774A1A75-2063-4724-80D8-85CB1A6D706A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{774A1A75-2063-4724-80D8-85CB1A6D706A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{774A1A75-2063-4724-80D8-85CB1A6D706A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{774A1A75-2063-4724-80D8-85CB1A6D706A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C47B0965-44BE-457D-B11A-F6BCDBD4F6CB}
+	EndGlobalSection
+EndGlobal
