@@ -46,7 +46,8 @@ export class NavbarComponent implements OnInit {
     email: '',
     registerkey: '',
     iat: 0,
-    exp: 0
+    exp: 0,
+    is_admin: 0
   };
 
   invites: Invitation[] = [];

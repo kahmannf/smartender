@@ -5,4 +5,5 @@ export interface User {
   registerkey: string;
   iat: number;
   exp: number;
+  is_admin: number;
 }

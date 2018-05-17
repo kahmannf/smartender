@@ -27,7 +27,8 @@ export class CompleteRegisterComponent implements OnInit {
     registerkey: undefined,
     id: 0,
     iat: 0,
-    exp: 0
+    exp: 0,
+    is_admin: 0
   };
 
   registerForm: FormGroup;

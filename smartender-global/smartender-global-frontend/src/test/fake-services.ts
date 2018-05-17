@@ -19,7 +19,8 @@ const dummyUser = {
   email: 'test@smartender.kahmann.com',
   registerkey: '1234567890',
   iat: 0,
-  exp:  0
+  exp:  0,
+  is_admin: 0
 };
 
 const dummyServerOperation = {
