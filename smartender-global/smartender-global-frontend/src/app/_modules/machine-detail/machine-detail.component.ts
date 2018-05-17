@@ -39,12 +39,4 @@ export class MachineDetailComponent implements OnInit {
     });
 
   }
-
-  requestCleaning(portId: number) {
-    this.machineService.clean(this.machine.id, portId).subscribe();
-  }
-
-  requestMaintenance(portId: number) {
-    this.machineService.maintenance(this.machine.id, portId).subscribe();
-  }
 }

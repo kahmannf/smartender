@@ -64,12 +64,4 @@ export class MachineService {
 
     return false;
   }
-
-  clean(machineid, portid): Observable<ServerOperationResult> {
-    return this.connector.secureMachineCleanPortPOST(machineid, portid);
-  }
-
-  maintenance(machineid, portid): Observable<ServerOperationResult> {
-    return this.connector.secureMachineMaintenancePortPOST(machineid, portid);
-  }
 }
