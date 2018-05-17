@@ -7,7 +7,7 @@ import { CreateSessionComponent } from './create-session.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { getSessionService, getUserService } from '../../../test/fake-services';
+import { getSessionService, getUserService, dummyMachine } from '../../../test/fake-services';
 import { UserService } from '../../shared/user.service';
 
 describe('CreateSessionComponent', () => {
@@ -61,12 +61,7 @@ describe('CreateSessionComponent', () => {
   // });
 
   it('should display the form with machines', () => {
-    component.machines = [{
-      id: -1,
-      name: 'Test Machine',
-      owner_id: -1,
-      ports: []
-    }];
+    component.machines = [dummyMachine];
 
     fixture.detectChanges();
 

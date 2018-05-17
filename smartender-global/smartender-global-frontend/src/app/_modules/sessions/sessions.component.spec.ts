@@ -1,6 +1,9 @@
+import { SessionService } from './../../shared/session.service';
+import { RouterTestingModule } from '@angular/router/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SessionsComponent } from './sessions.component';
+import { getSessionService } from '../../../test/fake-services';
 
 describe('SessionsComponent', () => {
   let component: SessionsComponent;
@@ -8,7 +11,16 @@ describe('SessionsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SessionsComponent ]
+      declarations: [ SessionsComponent ],
+      imports: [
+        RouterTestingModule
+      ],
+      providers: [
+        {
+          provide: SessionService,
+          useValue: getSessionService()
+        }
+      ]
     })
     .compileComponents();
   }));

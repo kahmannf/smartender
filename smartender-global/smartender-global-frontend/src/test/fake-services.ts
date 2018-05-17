@@ -27,7 +27,7 @@ const dummyServerOperation = {
   message: 'Unit-test result!'
 };
 
-const dummyMachine = {
+export const dummyMachine = {
   id: 0,
   owner_id: 0,
   name: '',
