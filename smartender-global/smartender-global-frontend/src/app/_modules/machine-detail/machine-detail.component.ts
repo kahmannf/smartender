@@ -22,17 +22,17 @@ export class MachineDetailComponent implements OnInit {
     id: 0,
     owner_id: 0,
     name: '',
-    ports: [],
-    isAvailable: false
+    isAvailable: false,
+    isBusy: false
   };
 
   ngOnInit() {
     this.id$ = this.route.params.pipe(map(params => params['id']));
 
-    const getById = this.id$.pipe(switchMap(id => this.machineService.getMachineById(id)));
-    const bySocket = this.id$.pipe(switchMap(id => this.machineService.subscribeMachineById(id)));
+    const getById$ = this.id$.pipe(switchMap(id => this.machineService.getMachineById(id)));
+    const bySocket$ = this.id$.pipe(switchMap(id => this.machineService.subscribeMachineById(id)));
 
-    this.machine$ = bySocket.pipe(merge(getById));
+    this.machine$ = bySocket$.pipe(merge(getById$));
 
     this.machine$.subscribe(machine => {
       this.machine = machine;

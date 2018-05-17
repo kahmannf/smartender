@@ -24,7 +24,6 @@ import { MachineDetailComponent } from './_modules/machine-detail/machine-detail
 import { CreateMachineComponent } from './_modules/create-machine/create-machine.component';
 import { SessionDetailComponent } from './_modules/session-detail/session-detail.component';
 import { CreateSessionComponent } from './_modules/create-session/create-session.component';
-import { PortDetailComponent } from './_modules/port-detail/port-detail.component';
 
 
 @NgModule({
@@ -44,7 +43,6 @@ import { PortDetailComponent } from './_modules/port-detail/port-detail.componen
     CreateMachineComponent,
     SessionDetailComponent,
     CreateSessionComponent,
-    PortDetailComponent,
   ],
   imports: [
     BrowserModule,

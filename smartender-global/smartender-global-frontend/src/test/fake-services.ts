@@ -31,8 +31,8 @@ const dummyMachine = {
   id: 0,
   owner_id: 0,
   name: '',
-  ports: [],
-  isAvailable: false
+  isAvailable: false,
+  isBusy: false
 };
 
 const dummySession = {

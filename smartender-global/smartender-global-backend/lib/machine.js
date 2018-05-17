@@ -1,4 +1,5 @@
 'use strict';
+const request = require('request');
 const db = require('./db');
 const logger = require('../logger');
 
@@ -75,6 +76,23 @@ const getMachineByKey = (machinekey) => {
         }
       }
     });
+  });
+}
+
+const convertKeyIntoId = (machinekey) => {
+  return new Promise((resolve, reject) => {
+    var sql = "select id from machine where machinekey = ?";
+    var params = [machinekey];
+
+    db.get(sql, params, (err, row) => {
+      if(err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.id)
+      } else {
+        resolve();
+      }
+    })
   });
 }
 
@@ -166,9 +184,30 @@ const registerMachine = (user_id, machinekey, name) => {
 
 const fillLiveData = (machine) => {
   return new Promise((resolve, reject) => {
+    convertIdIntoKey(machine.id)
+    .then(key => { 
+      request(config.general.baseurl_machine_manager + 'status/' + key, (err, response, body) => {
+
+        if(err) {
+          logger.error(err);
+          reject();
+        } else {
+          
+          if(response.statusCode === 200) {
+            var anwser = JSON.parse(body);
+
+            machine.isAvailable = anwser.available;
+            machine.isBusy = anwser.busy;
+
+          } else {
+            machine.isAvailable = false;
+          }
+          resolve(machine);
+        }
+      });
+    })
+    .catch(err => reject(err));
     // TODO: fetch live data from machine manager server here
-    machine.isAvalable = false;
-    resolve(machine);
   });
 }
 
@@ -221,22 +260,13 @@ const convertIdIntoKey = (id) => {
   });
 }
 
-const reportMachine = (machinekey) => {
-  return new Promise((resolve, reject) => {
-    machineManager.registerMachine(machinekey)
-    .then(() => resolve(true))
-    .catch(err => reject(err));
-  })
-}
-
-
 module.exports = {
   convertIdIntoKey,
+  convertKeyIntoId,
   initSockets,
   isUserOwner,
   getUserMachines,
   getMachineById,
   getMachineByKey,
   registerMachine,
-  reportMachine
 }

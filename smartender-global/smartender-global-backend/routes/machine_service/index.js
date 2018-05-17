@@ -11,16 +11,21 @@ const init = (socket_io) => {
   io = socket_io;
 };
 
-router.get('/report/:machinekey', (req, res) => {
+router.post('/report/:machinekey', (req, res) => {
   if(req.params.machinekey) {
-    machine_lib.reportMachine(req.params.machinekey)
-    .then(result => {
-      res.json(result);
+    machine_lib.convertKeyIntoId(req.params.machinekey)
+    .then(machineid => {
+      if(machineid) {
+        res.sendStatus(200);
+        io.emit('machine ' + machineid);
+      } else {
+        res.sendStatus(400);
+      }
     })
     .catch(err => {
-      logger.error(err, 500);
+      logger.error(err);
       res.sendStatus(500);
-    })
+    });
   } else {
     res.sendStatus(400);
   }

@@ -34,7 +34,7 @@ router.use((req, res, next) => {
 
 router.use('/public', public);
 router.use('/secure', secure.router);
-router.use('/machine_services', machine_services.router);
+router.use('/machine_service', machine_services.router);
 
 module.exports = { 
   router,
