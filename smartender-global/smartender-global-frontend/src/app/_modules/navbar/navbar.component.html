@@ -11,7 +11,7 @@
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             {{getSessionLabelText() }}
-            <span *ngIf="!!activeSession && !!activeSession.machine" class="dot" [ngClass]="{'bg-success': machineAvailable(), 'bg-warning': machineOperating(), 'bg-danger': machineUnavailable()}" ></span>
+            <span *ngIf="!!activeSession && !!activeSession.machine" class="dot" [ngClass]="{'bg-success': activeSession.machine.isAvailable && !activeSession.machine.isBusy, 'bg-warning': activeSession.machine.isAvailable && activeSession.machine.isBusy, 'bg-danger': !activeSession.machine.isAvailable}" ></span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" (click)="setActiveSession(session)" *ngFor="let session of sessions"><div [ngClass]="{'bold': session.is_user_active_session }">{{session.name}}</div></a>

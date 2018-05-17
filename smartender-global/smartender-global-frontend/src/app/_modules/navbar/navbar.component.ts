@@ -127,16 +127,4 @@ export class NavbarComponent implements OnInit {
   declineInvite(invite: Invitation) {
     this.sessionService.declineInvite(invite.session_id).subscribe();
   }
-
-  machineAvailable() {
-    return !!this.activeSession && this.machineService.machineAvailable(this.activeSession.machine);
-  }
-
-  machineOperating() {
-    return !!this.activeSession && this.machineService.machineOperating(this.activeSession.machine);
-  }
-
-  machineUnavailable() {
-    return !!this.activeSession && this.machineService.machineUnavailable(this.activeSession.machine);
-  }
 }

@@ -1,7 +1,7 @@
 'use strict';
+const request = require('request');
 const db = require('./db');
 const logger = require('../logger');
-const MachineManager = require('./machine_manager');
 
 const config = require('../config');
 
@@ -10,10 +10,6 @@ var machineManager = undefined;
 
 const initSockets = (io) => {
   socketIo = io;
-  machineManager = new MachineManager({ 
-    getMachineByKey: getMachineByKey, 
-    convertIdIntoKey: convertIdIntoKey },
-    io);
 }
 
 const isUserOwner = (machine_id, user_id) => {
@@ -80,6 +76,23 @@ const getMachineByKey = (machinekey) => {
         }
       }
     });
+  });
+}
+
+const convertKeyIntoId = (machinekey) => {
+  return new Promise((resolve, reject) => {
+    var sql = "select id from machine where machinekey = ?";
+    var params = [machinekey];
+
+    db.get(sql, params, (err, row) => {
+      if(err) {
+        reject(err);
+      } else if (row) {
+        resolve(row.id)
+      } else {
+        resolve();
+      }
+    })
   });
 }
 
@@ -171,30 +184,30 @@ const registerMachine = (user_id, machinekey, name) => {
 
 const fillLiveData = (machine) => {
   return new Promise((resolve, reject) => {
-    if (machine) {
-      machineManager.isAvailable(machine.id)
-      .then(available => {
-        machine.isAvailable = available;
-      
-        if(!machine.isAvailable && machine.ports) {
-          for(var i = 0; i < machine.ports.length; i++) {
-            machine.ports[i].blockReasons = machineManager.getBlockedPortReasons(
-              machine.id, 
-              machine.ports[i].id);
+    convertIdIntoKey(machine.id)
+    .then(key => { 
+      request(config.general.baseurl_machine_manager + 'status/' + key, (err, response, body) => {
+
+        if(err) {
+          logger.error(err);
+          reject();
+        } else {
+          
+          if(response.statusCode === 200) {
+            var anwser = JSON.parse(body);
+
+            machine.isAvailable = anwser.available;
+            machine.isBusy = anwser.busy;
+
+          } else {
+            machine.isAvailable = false;
           }
+          resolve(machine);
         }
-        resolve(machine);
-      })
-      .catch(err => {
-        logger.log(err, 500);
-        machine.isAvailable = false;
-
-        resolve(machine);  
       });
-
-    } else {
-      resolve(undefined);
-    }
+    })
+    .catch(err => reject(err));
+    // TODO: fetch live data from machine manager server here
   });
 }
 
@@ -247,79 +260,13 @@ const convertIdIntoKey = (id) => {
   });
 }
 
-const registerMachineAsAvailable = (machinekey) => {
-  return new Promise((resolve, reject) => {
-    machineManager.registerMachine(machinekey)
-    .then(resolve)
-    .catch(err => reject(err));
-  });
-}
-
-const reportMachine = (machinekey) => {
-  return new Promise((resolve, reject) => {
-    machineManager.registerMachine(machinekey)
-    .then(() => resolve(true))
-    .catch(err => reject(err));
-  })
-}
-
-const openPort = (machinekey, portid) => {
-  return new Promise((resolve, reject) => {
-    // TODO: implement
-    resolve();
-  });
-}
-
-const closePort = (machinekey, portid) => {
-  return new Promise((resolve, reject) => {
-    // TODO: implement
-    resolve();
-  })
-}
-
-const openAndClosePort = (machineid, portid, operation, idleTime) => {
-  return new Promise((resolve, reject) => {
-    convertIdIntoKey(machineid)
-    .then(machinekey => {
-      machineManager.isPortAvailable(machineid, portid)
-      .then(available => {
-        if(available) {
-          machineManager.blockPort(machineid, portid, operation);
-          openPort(machinekey, portid)
-          .then(() => {
-            if(idleTime > 0) {
-              setTimeout(() => {
-                machineManager.releasePort(machineid, portid, operation);
-                closePort(machinekey, portid)
-                .then(() => {})
-                .catch(err => {
-                  logger.error(err, 500);
-                })
-              }, idleTime);
-              resolve({ success: true, message: ''});
-            } else {
-              resolve({ success: true, message: ''});
-            }
-          })
-          .catch(err => reject(err));
-        } else {
-          resolve({ success: false, message: 'Port blocked'});
-        }
-      })
-      .catch(err => reject(err));
-    })
-    .catch(err => reject(err));
-  });
-}
-
 module.exports = {
   convertIdIntoKey,
+  convertKeyIntoId,
   initSockets,
   isUserOwner,
   getUserMachines,
   getMachineById,
   getMachineByKey,
-  openAndClosePort,
   registerMachine,
-  reportMachine
 }
