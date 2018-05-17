@@ -194,7 +194,7 @@ const getForLogin = (email) => {
 
 const getForTokenPayload = (email) => {
   return new Promise((resolve, reject) => {
-    var sql = "select email, alias, id from user where lower(email) = lower(?)";
+    var sql = "select email, alias, id, is_admin from user where lower(email) = lower(?)";
     var params = [email];
 
     db.get(sql, params, (err, row) => {
@@ -265,7 +265,8 @@ const searchForSession = (sessionid, limit, offset, searchString, userid) => {
               ' and uhi.session_id = $sessionid ' +
               ' where u.id <> $userid ' +
               ' and shm.user_id is null ' +
-              ' and uhi.user_id is null ';
+              ' and uhi.user_id is null ' +
+              ' and u.registerkey is null ';
     var params = {
       $sessionid: sessionid,
       $userid: userid,
