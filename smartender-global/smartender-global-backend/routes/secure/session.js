@@ -187,4 +187,22 @@ router.post('/delete/:id', (req, res) => {
   }
 });
 
+router.post('/leave/:id', (req, res) => {
+  if(req.params.id) {
+    session.leaveSession(req.oauth.payload.id, req.params.id)
+    .then(result => {
+      res.json(result);
+      io.emit('session ' + req.params.id);
+      io.emit('user ' + req.oauth.payload.id + ' sessions');
+    })
+    .catch(err => {
+      logger.error(err, 500);
+      res.sendStatus(500);
+      io.emit('session ' + req.params.id);
+    });
+  } else {
+    res.sendStatus(400);
+  }
+});
+
 module.exports = { router, init };

@@ -204,4 +204,12 @@ export class ConnectorService {
       { headers:  this.getHttpHeaders() }
     );
   }
+
+  secureSessionLeavePost(sessionid: number): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + 'secure/session/leave/' + sessionid,
+      {},
+      { headers: this.getHttpHeaders() }
+    );
+  }
 }

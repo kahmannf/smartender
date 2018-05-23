@@ -31,6 +31,7 @@ export class NavbarComponent implements OnInit {
     session_id: 0,
     user_id: 0,
     can_edit_machine: 0,
+    can_edit_session: 0,
     is_owner: 0,
     is_user_active_session: 0,
     name: '',

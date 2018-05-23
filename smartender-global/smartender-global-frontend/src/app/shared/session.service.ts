@@ -98,6 +98,20 @@ export class SessionService {
   }
 
   deleteSession(sessionid: number): Observable<ServerOperationResult> {
-    return this.connector.secureSessionDeletePOST(sessionid);
+    return this.connector.secureSessionDeletePOST(sessionid).pipe(
+      map(result => {
+        this.sessionCreated.emit('not event created');
+        return result;
+      })
+    );
+  }
+
+  leaverSession(sessionid: number): Observable<ServerOperationResult> {
+    return this.connector.secureSessionLeavePost(sessionid).pipe(
+      map(result => {
+        this.sessionCreated.emit('not event created');
+        return result;
+      })
+    );
   }
 }

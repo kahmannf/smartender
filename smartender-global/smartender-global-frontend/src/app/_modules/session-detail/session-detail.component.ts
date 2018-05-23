@@ -130,7 +130,25 @@ export class SessionDetailComponent implements OnInit {
 
   }
 
-  canEdit() {
+  canEditSession() {
+    if (this.currentUser && this.session) {
+      if (this.currentUser.id === this.session.owner_id) {
+        return true;
+      } else if (this.session.members) {
+        // tslint:disable-next-line:prefer-const
+        for (let member of this.session.members) {
+          console.log(member);
+          if (member.user_id === this.currentUser.id && member.can_edit_session) {
+            return true;
+          }
+        }
+      }
+    }
+
+    return false;
+  }
+
+  canEditMachine() {
     if (this.currentUser && this.session) {
       if (this.currentUser.id === this.session.owner_id) {
         return true;
@@ -216,5 +234,9 @@ export class SessionDetailComponent implements OnInit {
 
   delete() {
     this.sessionService.deleteSession(this.session.id).subscribe();
+  }
+
+  leave() {
+    this.sessionService.leaverSession(this.session.id).subscribe();
   }
 }

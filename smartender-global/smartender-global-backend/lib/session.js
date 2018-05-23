@@ -440,6 +440,37 @@ const deleteSession = (sessionId, userId) => new Promise((resolve, reject) => {
   .catch(err => reject(err));
 });
 
+const leaveSession = (userid, sessionid) => new Promise((resolve, reject) => {
+  getSessionById(sessionid, userid)
+  .then(session => {
+    if(session.owner_id === userid) {
+      resolve({ success: false, message: "the owner cannot leave the session"});
+    } else if(session.members) {
+      var solved = false;
+      for(var i = 0; i < session.members.length; i++) {
+        if(session.members[i].user_id == userid) {
+          db.run('delete from session_has_members where user_id = ?', [userid], err => {
+            if(err) {
+              reject(err);
+            } else {
+              resolve({ success: true, message: ''});
+            }
+          })
+          solved = true;
+          break;
+        }
+      }
+      if(!solved) {
+        resolve({ success: false, message: "user is not member of session"});
+      }
+    } else {
+      reject('failed to load the session');
+    }
+    
+  })
+  .catch(reject);
+});
+
 module.exports = {
   acceptInvite,
   createSession,
@@ -451,6 +482,7 @@ module.exports = {
   getUserSessions,
   getUserUpdateIds,
   inviteUser,
+  leaveSession,
   setActiveSession,
   setSessionActiveState
 }
