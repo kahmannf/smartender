@@ -1,3 +1,4 @@
+import { AdminGuard } from './guards/admin.guard';
 import { SessionDetailComponent } from './_modules/session-detail/session-detail.component';
 import { MachineDetailComponent } from './_modules/machine-detail/machine-detail.component';
 import { CreateMachineComponent } from './_modules/create-machine/create-machine.component';
@@ -10,7 +11,7 @@ import { CompleteRegisterComponent } from './_modules/complete-register/complete
 import { AuthGuard } from './guards/auth.guard';
 import { HomeComponent } from './_modules/home/home.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
 import { LoginComponent } from './_modules/login/login.component';
 import { RegisterComponent } from './_modules/register/register.component';
 import { CreateSessionComponent } from './_modules/create-session/create-session.component';
@@ -33,6 +34,10 @@ const routes: Routes = [
       ]},
       { path: '**', redirectTo: 'dashboard' }
     ]},
+  { path: 'admin', canActivate: [AdminGuard], children: [
+    { path: 'ingredients', component: HomeComponent },
+    { path: 'drinks', component: HomeComponent }
+  ] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'complete-register/:registerkey', component: CompleteRegisterComponent },

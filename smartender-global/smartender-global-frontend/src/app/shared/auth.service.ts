@@ -54,6 +54,19 @@ export class AuthService {
     );
   }
 
+  isAdmin(): Observable<boolean> {
+    return this.connector.secureUserCurrentGET()
+    .pipe(
+      map(user => {
+        if (user) {
+          return !!user.is_admin;
+        } else {
+          return false;
+        }
+      })
+    );
+  }
+
   register(user: User): Observable<ServerOperationResult> {
     return this.connector.publicAuthRegisterPOST(user.email, user.alias);
   }
