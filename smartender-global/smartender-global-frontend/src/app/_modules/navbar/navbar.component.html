@@ -21,13 +21,13 @@
 
       </div>
       <div class="navbar-nav ml-auto">
-        <div class="nav-item dropdown" *ngIf="currentUser.is_admin">
-          <a class="nav-link dropdown-toggle" id="navbarDropDownAdminLink" aria-haspopup="true" aria-expanded="false">
+        <div class="nav-item dropdown" *ngIf="currentUser.is_admin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" id="navbarDropDownAdminLink">
             Admin
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropDownAdminLink">
-            <a class="dropdown-item" [routerLink]="'/admin/ingredients'">Ingredients</a>
-            <a class="dropdown-item" [routerLink]="'/admin/drinks'">Drinks</a>
+            <a class="dropdown-item" [routerLink]="'/home/admin/ingredients'">Ingredients</a>
+            <a class="dropdown-item" [routerLink]="'/home/admin/drinks'">Drinks</a>
           </div>
         </div>
         <div class="nav-item dropdown">

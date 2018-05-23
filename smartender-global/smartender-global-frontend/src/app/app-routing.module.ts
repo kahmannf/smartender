@@ -1,3 +1,5 @@
+import { ManageDrinksComponent } from './_modules/manage-drinks/manage-drinks.component';
+import { ManageIngredientsComponent } from './_modules/manage-ingredients/manage-ingredients.component';
 import { AdminGuard } from './guards/admin.guard';
 import { SessionDetailComponent } from './_modules/session-detail/session-detail.component';
 import { MachineDetailComponent } from './_modules/machine-detail/machine-detail.component';
@@ -32,12 +34,12 @@ const routes: Routes = [
         { path: 'new', component: CreateSessionComponent},
         { path: 'session/:id', component: SessionDetailComponent}
       ]},
+      { path: 'admin', canActivate: [AdminGuard], children: [
+        { path: 'ingredients', component: ManageIngredientsComponent },
+        { path: 'drinks', component: ManageDrinksComponent }
+      ] },
       { path: '**', redirectTo: 'dashboard' }
     ]},
-  { path: 'admin', canActivate: [AdminGuard], children: [
-    { path: 'ingredients', component: HomeComponent },
-    { path: 'drinks', component: HomeComponent }
-  ] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'complete-register/:registerkey', component: CompleteRegisterComponent },
