@@ -1,7 +1,7 @@
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserSession } from './../../shared/user-session';
 import { UserService } from './../../shared/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from './../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, merge } from 'rxjs/operators';
@@ -20,6 +20,7 @@ export class SessionDetailComponent implements OnInit {
   constructor(
     private sessionService: SessionService,
     private route: ActivatedRoute,
+    private router: Router,
     private userService: UserService
   ) { }
 
@@ -82,14 +83,20 @@ export class SessionDetailComponent implements OnInit {
         const all$ = initial$.pipe(merge(updates$), merge(user_updates$));
 
         all$.subscribe(
-          session => this.session = session,
+          session => {
+            if (session) {
+              this.session = session;
+            } else {
+              this.router.navigate(['/home', 'sessions']);
+            }
+          },
           error => console.log('error in sessiondetail component obseravable')
         );
 
         const updateMembers$ = all$
         .pipe(
           switchMap(session => {
-            if (session.members) {
+            if (session && session.members) {
               const ids = [];
               // tslint:disable-next-line:prefer-const
               for (let member of session.members) {
@@ -137,7 +144,6 @@ export class SessionDetailComponent implements OnInit {
       } else if (this.session.members) {
         // tslint:disable-next-line:prefer-const
         for (let member of this.session.members) {
-          console.log(member);
           if (member.user_id === this.currentUser.id && member.can_edit_session) {
             return true;
           }
