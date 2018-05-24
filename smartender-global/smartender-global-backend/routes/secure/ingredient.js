@@ -38,4 +38,13 @@ router.post('/add', (req, res) => {
   });
 })
 
+router.post('/update', (req, res) => {
+  drink.updateIngredient(req.body, req.oauth.payload.id)
+  .then(result => res.json(result))
+  .catch(err => {
+    logger.error(err, 500);
+    res.sendStatus(500);
+  });
+})
+
 module.exports = router;

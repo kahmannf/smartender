@@ -213,7 +213,7 @@ const getForTokenPayload = (email) => {
 
 const getById = (id) => {
   return new Promise((resolve, reject) => {
-    var sql = "select email, alias, id from user where id = ?";
+    var sql = "select email, alias, id, is_admin from user where id = ?";
     var params = [id];
 
     db.get(sql, params, (err, row) => {

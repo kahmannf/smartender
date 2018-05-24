@@ -4,7 +4,7 @@
       <sm-ingredient-list [showNewButton]="true" (ingredientSelected)="ingredientSelected($event)"></sm-ingredient-list>
     </div>
     <div class="col">
-      <sm-edit-ingredient></sm-edit-ingredient>
+      <sm-edit-ingredient [ingredient]="seletedIngredient" (ingredientUpdated)="updateList()"></sm-edit-ingredient>
     </div>
   </div>
 </div>

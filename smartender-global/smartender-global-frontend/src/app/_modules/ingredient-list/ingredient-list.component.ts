@@ -65,6 +65,18 @@ export class IngredientListComponent implements OnInit {
     });
   }
 
+  reload() {
+    if (this.searchResult) {
+      this.drinkService.searchForIngredient(
+        this.searchResult.limit,
+        this.searchResult.offset,
+        this.searchForm.value.searchValue)
+        .subscribe(result => this.searchResult = result);
+    } else {
+      this.search();
+    }
+  }
+
   getResultText() {
     let result = 'Results ' + ((this.searchResult.offset * this.searchResult.limit) + 1);
     result += ' - ';

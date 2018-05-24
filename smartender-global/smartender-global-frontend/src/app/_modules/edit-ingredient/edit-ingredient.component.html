@@ -1,4 +1,15 @@
-<p>
-  edit-ingredient works!
-</p>
-Todo Remove: {{ingredient| json}}
+<div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" >
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input class="form-control" type="text" autocomplete="off" id="name" formControlName="name">
+    </div>
+    <div class="form-group">
+      <label for="alcvol">Alcohol Volume (%)</label>
+      <input class="form-control" type="number" autocomplete="off" id="alcvol" formControlName="alcvol">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>
