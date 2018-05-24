@@ -26,6 +26,8 @@ import { SessionDetailComponent } from './_modules/session-detail/session-detail
 import { CreateSessionComponent } from './_modules/create-session/create-session.component';
 import { ManageDrinksComponent } from './_modules/manage-drinks/manage-drinks.component';
 import { ManageIngredientsComponent } from './_modules/manage-ingredients/manage-ingredients.component';
+import { EditDrinkComponent } from './_modules/edit-drink/edit-drink.component';
+import { EditIngredientComponent } from './_modules/edit-ingredient/edit-ingredient.component';
 
 
 @NgModule({
@@ -47,6 +49,10 @@ import { ManageIngredientsComponent } from './_modules/manage-ingredients/manage
     CreateSessionComponent,
     ManageDrinksComponent,
     ManageIngredientsComponent,
+    EditDrinkComponentComponent,
+    EditIngredientComponentComponent,
+    EditDrinkComponent,
+    EditIngredientComponent,
   ],
   imports: [
     BrowserModule,
