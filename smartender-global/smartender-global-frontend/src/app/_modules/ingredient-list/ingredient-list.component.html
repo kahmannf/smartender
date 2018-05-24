@@ -1,0 +1,28 @@
+<form [formGroup]="searchForm" (ngSubmit)="search()" class="row">
+  <div class="col col-auto pl-3">
+    <label for="search">Search:</label>
+    <input id="search" autocomplete="off" type="text" formControlName="searchValue" class="form-control">
+  </div>
+</form>
+<div *ngIf="showNewButton" class="row" (click)="ingredientSelected.emit(undefined)">
+  New
+</div>
+<div *ngIf="searchResult && searchResult.items">
+  <div class="row" (click)="ingredientSelected.emit(ingredient)" *ngFor="let ingredient of searchResult.items">
+    {{ingredient.name}}
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <div *ngIf="searchResult" class="text-muted">
+      {{getResultText()}}
+    </div>
+  </div>
+
+  <div class="col col-auto px-1">
+    <button type="button" class="btn btn-outline-primary" [disabled]="!canGetPrevious()" (click)="getPrevious()">Previous</button>
+  </div>
+  <div class="col col-auto px-1">
+    <button type="button" class="btn btn-outline-primary" [disabled]="!canGetNext()" (click)="getNext()">Next</button>
+  </div>
+</div>

@@ -1,3 +1,4 @@
+import { Ingredient } from './../shared/ingredient';
 import { Invitation } from './../shared/invitation';
 import { Session } from './../shared/session';
 import { Machine } from './../shared/machine';
@@ -209,6 +210,24 @@ export class ConnectorService {
     return this.http.post<ServerOperationResult>(
       env.apiBaseUrl + 'secure/session/leave/' + sessionid,
       {},
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureIngretiensSearchGET(limit: number, offset: number, searchstring?: string): Observable<PageResult<Ingredient>> {
+    return this.http.get<PageResult<Ingredient>>(
+      (env.apiBaseUrl + `secure/ingredient/search` +
+      `?limit=${limit}` +
+      `&offset=${offset}` +
+      (!!searchstring ? `&search=${searchstring}` : '')),
+      { headers: this.getHttpHeaders() }
+    );
+  }
+
+  secureIngretiensAddPOST(ingredient: Ingredient): Observable<ServerOperationResult> {
+    return this.http.post<ServerOperationResult>(
+      env.apiBaseUrl + 'secure/ingredient/add',
+      ingredient,
       { headers: this.getHttpHeaders() }
     );
   }

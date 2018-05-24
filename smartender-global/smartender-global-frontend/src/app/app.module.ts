@@ -28,6 +28,8 @@ import { ManageDrinksComponent } from './_modules/manage-drinks/manage-drinks.co
 import { ManageIngredientsComponent } from './_modules/manage-ingredients/manage-ingredients.component';
 import { EditDrinkComponent } from './_modules/edit-drink/edit-drink.component';
 import { EditIngredientComponent } from './_modules/edit-ingredient/edit-ingredient.component';
+import { IngredientListComponent } from './_modules/ingredient-list/ingredient-list.component';
+import { DrinkListComponent } from './_modules/drink-list/drink-list.component';
 
 
 @NgModule({
@@ -49,10 +51,10 @@ import { EditIngredientComponent } from './_modules/edit-ingredient/edit-ingredi
     CreateSessionComponent,
     ManageDrinksComponent,
     ManageIngredientsComponent,
-    EditDrinkComponentComponent,
-    EditIngredientComponentComponent,
     EditDrinkComponent,
     EditIngredientComponent,
+    IngredientListComponent,
+    DrinkListComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,4 @@
+import { Ingredient } from './../../shared/ingredient';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -9,7 +10,13 @@ export class ManageIngredientsComponent implements OnInit {
 
   constructor() { }
 
+  seletedIngredient: Ingredient;
+
   ngOnInit() {
+  }
+
+  ingredientSelected(ingredient: Ingredient) {
+    this.seletedIngredient = ingredient;
   }
 
 }

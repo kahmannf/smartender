@@ -1,3 +1,10 @@
-<p>
-  manage-ingredients works!
-</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col col-auto">
+      <sm-ingredient-list [showNewButton]="true" (ingredientSelected)="ingredientSelected($event)"></sm-ingredient-list>
+    </div>
+    <div class="col">
+      <sm-edit-ingredient></sm-edit-ingredient>
+    </div>
+  </div>
+</div>

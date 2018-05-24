@@ -5,6 +5,7 @@ const user = require('./user');
 const session = require('./session');
 const machine = require('./machine');
 const drink = require('./drink');
+const ingredient = require('./ingredient');
 
 const auth_lib = require('../../lib/auth');
 
@@ -29,5 +30,6 @@ router.use('/user', user);
 router.use('/session', session.router);
 router.use('/machine', machine.router);
 router.use('/drink', drink);
+router.use('/ingredient', ingredient);
 
 module.exports = { router, init };

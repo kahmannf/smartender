@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormCanDeactivate } from '../form-can-deactivate';
 import { FormGroup } from '@angular/forms';
+import { Ingredient } from '../../shared/ingredient';
 
 @Component({
   selector: 'sm-edit-ingredient',
@@ -10,6 +11,8 @@ import { FormGroup } from '@angular/forms';
 export class EditIngredientComponent extends FormCanDeactivate implements OnInit {
 
   form: FormGroup;
+
+  @Input() ingredient: Ingredient;
 
   constructor() {
     super();
