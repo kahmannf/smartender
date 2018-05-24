@@ -1,4 +1,4 @@
-Strucktur:
+# Structur:
 
 - fronend (Angular single-page app) <--http--> backend (Node.js server)
 - backend (Node.js server) <--http--> machine-manager (??? server)
