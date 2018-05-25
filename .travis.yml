@@ -19,6 +19,5 @@ before_script:
  - npm i
 
 script: 
-  - cd ./smartender-global/smartender-global-frontend/
   - npm test
   - npm build
