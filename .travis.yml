@@ -19,5 +19,4 @@ before_script:
  - npm i
 
 script: 
-  - npm test
   - npm build
