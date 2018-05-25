@@ -4,9 +4,8 @@ node_js:
 sudo: enabled
 dist: trusty
 
-branches:
-  only:
-  - master
+notifications:
+  slack: smartender:5cMMdqJACv3hGD2T7Mj37exu
 
 before_script:
  - export CHROME_BIN=/usr/bin/google-chrome
