@@ -40,8 +40,6 @@ export class AuthService {
     localStorage.setItem('token', undefined);
 
     this.loggedInChanged.emit(false);
-
-    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): Observable<boolean> {

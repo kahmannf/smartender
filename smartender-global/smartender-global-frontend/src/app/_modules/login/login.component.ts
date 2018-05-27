@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { FormGroupState } from 'ngrx-forms';
@@ -17,7 +17,8 @@ import { getProjectName } from '../../store/selectors/utils.selectors';
 @Component({
   selector: 'sm-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent implements OnInit {
 
@@ -29,8 +30,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private store: Store<State>,
-    private auth: AuthService,
-    private router: Router
   ) { }
 
   ngOnInit() {

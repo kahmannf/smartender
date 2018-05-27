@@ -8,3 +8,8 @@ export const getCurrentUser = createSelector(
   getUserState,
   state => state.currentUser
 );
+
+export const getInvites = createSelector(
+  getUserState,
+  state => state.invites
+);

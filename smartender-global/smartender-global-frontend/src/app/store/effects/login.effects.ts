@@ -1,3 +1,4 @@
+import { LoadCurrentUser } from './../actions/user.actions';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { AuthService } from '../../shared/auth.service';
@@ -54,7 +55,7 @@ export class LoginEffects {
     ofType(LoginActionTypes.LoginSuccessful),
     map(() => {
         this.router.navigate(['/home']);
-        return new RouterNavigated();
+        return new LoadCurrentUser();
     })
   );
 

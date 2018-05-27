@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" [routerLink]="'/home/dashboard'">{{projectName}}</a>
+    <a class="navbar-brand" [routerLink]="'/home/dashboard'">{{ projectName$ | async }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -10,18 +10,18 @@
         <a class="nav-item nav-link" [routerLink]="'/home/machines'" [routerLinkActive]="'active'" >Machines</a>
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{getSessionLabelText() }}
-            <span *ngIf="!!activeSession && !!activeSession.machine" class="dot" [ngClass]="{'bg-success': activeSession.machine.isAvailable && !activeSession.machine.isBusy, 'bg-warning': activeSession.machine.isAvailable && activeSession.machine.isBusy, 'bg-danger': !activeSession.machine.isAvailable}" ></span>
+            {{ getSessionLabelText(activeSession$ | async, sessions$ | async) }}
+            <span *ngIf="!!(activeSession$ | async) && !!(activeSession$ | async).machine" class="dot" [ngClass]="{'bg-success': (activeSession$ | async).machine.isAvailable && !(activeSession$ | async).machine.isBusy, 'bg-warning': (activeSession$ | async).machine.isAvailable && (activeSession$ | async).machine.isBusy, 'bg-danger': !(activeSession$ | async).machine.isAvailable }" ></span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" (click)="setActiveSession(session)" *ngFor="let session of sessions"><div [ngClass]="{'bold': session.is_user_active_session }">{{session.name}}</div></a>
+            <a class="dropdown-item" (click)="setActiveSession(session)" *ngFor="let session of sessions$ | async"><div [ngClass]="{'bold': session.is_user_active_session }">{{session.name}}</div></a>
             <a class="dropdown-item" [routerLink]="'/home/sessions'" >Manage Sessions</a>
           </div>
         </div>
 
       </div>
       <div class="navbar-nav ml-auto">
-        <div class="nav-item dropdown" *ngIf="currentUser.is_admin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <div class="nav-item dropdown" *ngIf="(currentUser$ | async).is_admin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <a class="nav-link dropdown-toggle" id="navbarDropDownAdminLink">
             Admin
           </a>
@@ -33,10 +33,10 @@
         <div class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Invites
-            <span class="badge badge-pill badge-primary" [ngClass]="{'badge-primary': invites.length, 'badge-danger': !invites.length}" >{{invites.length}}</span>
+            <span class="badge badge-pill badge-primary" [ngClass]="{'badge-primary': (invites$ | async).length, 'badge-danger': !(invites$ | async).length}" >{{(invites$ | async).length}}</span>
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <div class="dropdown-item" *ngFor="let invite of invites">
+            <div class="dropdown-item" *ngFor="let invite of invites$ | async">
               <div class="row">
                 <div class="col col-auto text-center my-auto">
                   {{invite.from + ': ' + invite.sessionname}}
@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="nav-item nav-link">
-          Logged in as {{currentUser.alias}}
+          Logged in as {{(currentUser$ | async).alias}}
         </div>
         <button class="btn btn-outline-primary my-2 my-sm-0 nav-item" type="button" (click)="logout()">Logout</button>
       </div>

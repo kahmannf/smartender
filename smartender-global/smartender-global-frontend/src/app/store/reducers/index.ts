@@ -1,3 +1,4 @@
+import { SessionState, sessionReducer } from './session.reducers';
 import { LoginState, loginReducer } from './login.reducers';
 import { CompleteRegisterState, completeRegisterReducer } from './complete-register.reducers';
 import { ActionReducerMap, MetaReducer } from '@ngrx/store';
@@ -14,6 +15,7 @@ import { UtilsState, utilsReducer } from './utils.reducers';
 export interface State {
   completeRegister: CompleteRegisterState;
   login: LoginState;
+  session: SessionState;
   user: UserState;
   utils: UtilsState;
   routerReducer: RouterReducerState<RouterStateUrl>;
@@ -23,6 +25,7 @@ export interface State {
 export const reducers: ActionReducerMap<State> = {
   completeRegister: completeRegisterReducer,
   login: loginReducer,
+  session: sessionReducer,
   user: userReducer,
   utils: utilsReducer,
   routerReducer: routerReducer,

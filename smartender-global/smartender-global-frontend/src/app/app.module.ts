@@ -1,3 +1,4 @@
+import { SessionEffects } from './store/effects/session.effects';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -72,7 +73,12 @@ import { LoginEffects } from './store/effects/login.effects';
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreRouterConnectingModule,
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([CompleteRegisterEffects, UserEffects, LoginEffects])
+    EffectsModule.forRoot([
+      CompleteRegisterEffects,
+      UserEffects,
+      LoginEffects,
+      SessionEffects
+    ])
   ],
   providers: [
     CustomValidators,
