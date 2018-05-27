@@ -1,12 +1,13 @@
-import { LoadCurrentUser } from './../store/actions/user.actions';
+import { LoadCurrentUser, UserActionTypes } from './../store/actions/user.actions';
 import { AuthService } from './../shared/auth.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, first, switchMap } from 'rxjs/operators';
+import { map, first, switchMap, merge } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { State } from '../store/reducers';
 import { getCurrentUser } from '../store/selectors/user.selectors';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ import { getCurrentUser } from '../store/selectors/user.selectors';
 export class AuthGuard implements CanActivate {
 
   constructor(
-    public authService: AuthService,
+    public actions$: Actions,
     private router: Router,
     private store: Store<State>
   ) {
@@ -27,12 +28,17 @@ export class AuthGuard implements CanActivate {
 
     return this.store.pipe(
       select(getCurrentUser),
-      map(user => {
+      switchMap(user => {
         if (user && user.id) {
-          return true;
+          return of(true);
         } else {
           this.store.dispatch(new LoadCurrentUser());
-          return false;
+          return (
+            this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(() => true),
+            merge(
+              this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserFailure), map(() => false)))
+            )
+          );
         }
       })
     );

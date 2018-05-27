@@ -31,7 +31,7 @@ export class LoadUserMachinesFailure implements Action {
 export class RegisterMachine implements Action {
   readonly type = MachineActionTypes.RegisterMachine;
 
-  constructor(public payload: Machine) {}
+  constructor() {}
 }
 
 export class RegisterMachineSuccessful implements Action {

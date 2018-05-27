@@ -1,6 +1,14 @@
+import { RegisterMachine } from './../../store/actions/machine.actions';
+import { getCreateMachineForm, getCreateMachineErrorMessage } from './../../store/selectors/machine.selectors';
+import { FormGroupState, ValidationErrors } from 'ngrx-forms';
+import { Observable } from 'rxjs';
 import { UserService } from './../../shared/user.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { CreateMachineFormValue } from '../../store/reducers/machine.reducers';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../store/reducers';
+import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'sm-create-machine',
@@ -9,7 +17,15 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class CreateMachineComponent implements OnInit {
 
-  constructor(private userService: UserService) { }
+  createMachineForm$: Observable<FormGroupState<CreateMachineFormValue>>;
+  errorMessage$: Observable<string>;
+  machineKeyErrors$: Observable<ValidationErrors>;
+  nameErrors$: Observable<ValidationErrors>;
+
+  constructor(
+    private userService: UserService,
+    private store: Store<State>
+  ) { }
 
   createNewForm: FormGroup;
 
@@ -18,38 +34,31 @@ export class CreateMachineComponent implements OnInit {
   submitted: boolean;
 
   ngOnInit() {
-    this.createNewForm = new FormGroup({
-      machinekey: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10)]),
-      name: new FormControl('', Validators.required)
-    });
-  }
+    this.createMachineForm$ = this.store.pipe(
+      select(getCreateMachineForm)
+    );
 
-  hasError(name: string) {
-    const control = this.createNewForm.get(name);
-    return control.invalid && (control.dirty || this.submitted);
+    this.errorMessage$ = this.store.pipe(
+      select(getCreateMachineErrorMessage)
+    );
+
+    this.machineKeyErrors$ = this.createMachineForm$.pipe(
+      filter(form => !!form),
+      map(form => form.controls.machinekey),
+      filter(machinekey => machinekey.isTouched),
+      map(machinekey => machinekey.errors)
+    );
+
+    this.nameErrors$ = this.createMachineForm$.pipe(
+      filter(form => !!form),
+      map(form => form.controls.name),
+      filter(name => name.isTouched),
+      map(name => name.errors)
+    );
   }
 
   onRegister() {
-    if (this.createNewForm.invalid) {
-      this.submitted = true;
-    } else {
-      this.userService.registerMachine(
-        this.createNewForm.value.machinekey,
-        this.createNewForm.value.name)
-      .subscribe(result => {
-        if (result && result.success) {
-          this.createNewForm.reset();
-        } else if (result) {
-          this.errorMessage = result.message;
-        } else {
-          this.errorMessage = 'Oops, something went wrong! Please try again later.';
-        }
-      }, err => {
-        this.errorMessage = 'Oops, something went wrong! Please try again later.';
-      });
-      this.submitted = false;
-      this.errorMessage = '';
-    }
+    this.store.dispatch(new RegisterMachine());
   }
 
 }
