@@ -60,7 +60,8 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Invite people:</h5>
-          <form [formGroup]="searchForm" (ngSubmit)="search()" class="row">
+          <!-- <form [formGroup]="searchForm" (ngSubmit)="search()" class="row"> -->
+          <form (ngSubmit)="search()" class="row">
             <div class="col col-auto pl-3">
               <label for="search">Search (alias or email):</label>
               <input id="search" type="text" formControlName="searchValue" class="form-control">

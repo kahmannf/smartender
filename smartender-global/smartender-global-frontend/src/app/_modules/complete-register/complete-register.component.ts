@@ -1,97 +1,87 @@
+import { CompleteRegisterFormValue } from './../../store/reducers/complete-register.reducers';
+import { FormGroupState, AbstractControlState } from 'ngrx-forms';
+import { SubmitForm } from './../../store/actions/complete-register.actions';
 import { AuthService } from './../../shared/auth.service';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { UserService } from './../../shared/user.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { User } from '../../shared/user';
 import { environment } from '../../../environments/environment';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../store/reducers';
+import * as selectors from '../../store/selectors/complete-register.selectors';
+import { getProjectName } from '../../store/selectors/utils.selectors';
 
 @Component({
   selector: 'sm-complete-register',
   templateUrl: './complete-register.component.html',
-  styleUrls: ['./complete-register.component.scss']
+  styleUrls: ['./complete-register.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CompleteRegisterComponent implements OnInit {
 
+  user$: Observable<User>;
+  errorMessage$: Observable<string>;
+  formState$: Observable<FormGroupState<CompleteRegisterFormValue>>;
+  controlPassword$: Observable<AbstractControlState<string>>;
+  controlPasswordRepeat$: Observable<AbstractControlState<string>>;
+  errorsPassword$: Observable<ValidationErrors>;
+  errorsPasswordRepeat$: Observable<ValidationErrors>;
+  projectName$: Observable<string>;
+
   constructor(
-    private route: ActivatedRoute,
-    private userService: UserService,
-    private router: Router,
-    private authService: AuthService) { }
-
-  user: User = {
-    email: undefined,
-    alias: undefined,
-    registerkey: undefined,
-    id: 0,
-    iat: 0,
-    exp: 0,
-    is_admin: 0
-  };
-
-  registerForm: FormGroup;
-
-  errorMessage: string;
-
-  submitted = false;
-
-  projectName: string;
+    private store: Store<State>) { }
 
   ngOnInit() {
 
-    this.projectName = environment.projectName;
+    this.projectName$ = this.store.pipe(
+      select(getProjectName)
+    );
 
-    this.route.params
-    .pipe(
-      map(params => params['registerkey']),
-      switchMap(key => this.userService.getByRegisterKey(key))
-    ).subscribe(
-    user => {
-      if (user) {
-        this.user = user;
-      } else {
-        this.router.navigate(['/login']);
-      }
-    },
-    err => {
-      this.router.navigate(['/login']);
-    });
+    this.user$ = this.store.pipe(
+      select(selectors.getUser)
+    );
 
-    this.registerForm = new FormGroup({
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      passwordRepeat: new FormControl('')
-    }, this.passwordValidator);
-  }
+    this.errorMessage$ = this.store.pipe(
+      select(selectors.getErrorMessage)
+    );
 
-  hasError(name: string) {
-    const control = this.registerForm.get(name);
-    return control.invalid && (control.dirty || this.submitted);
+    this.formState$ = this.store.pipe(
+      select(selectors.completeRegisterFormState)
+    );
+
+
+    this.controlPassword$ = this.store.pipe(
+      select(selectors.controlPassword),
+    );
+
+    this.controlPasswordRepeat$ = this.store.pipe(
+      select(selectors.controlPasswordRepeat),
+    );
+
+    this.errorsPassword$ = this.controlPassword$.pipe(
+      filter(control => control.isTouched),
+      map(control => {
+        return control.errors;
+      })
+    );
+
+
+    this.errorsPasswordRepeat$ = this.controlPasswordRepeat$.pipe(
+      filter(control => control.isTouched),
+      map(control => {
+        return control.errors;
+      })
+    );
   }
 
   complete() {
-    if (this.registerForm.invalid) {
-      this.submitted = true;
-    } else {
-      this.authService.activateAccount(
-        this.user,
-        this.registerForm.value.password)
-        .subscribe(
-          result => {
-            if (result) {
-              this.router.navigate(['/login']);
-            } else {
-              this.errorMessage = 'Oops, something went wrong! Please try again later.';
-            }
-          },
-          err => {
-            this.errorMessage = err;
-          });
-
-      this.errorMessage = '';
-      this.submitted = false;
-    }
+    this.store.pipe(select(selectors.getUser)).subscribe(user => {
+      this.store.dispatch(new SubmitForm());
+    });
   }
 
   passwordValidator(control: AbstractControl) {

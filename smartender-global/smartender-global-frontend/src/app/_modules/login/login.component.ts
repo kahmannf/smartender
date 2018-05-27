@@ -1,9 +1,18 @@
-import { AuthService } from './../../shared/auth.service';
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, ValidationErrors } from '@angular/forms';
+import { Store, select } from '@ngrx/store';
+import { FormGroupState } from 'ngrx-forms';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { State } from '../../store/reducers';
+import { LoginFormValue } from '../../store/reducers/login.reducers';
+import * as selectors from '../../store/selectors/login.selectors';
+import { AuthService } from '../../shared/auth.service';
+import { filter, map } from 'rxjs/operators';
+import { LoginSubmitForm } from '../../store/actions/login.actions';
+import { getProjectName } from '../../store/selectors/utils.selectors';
 
 @Component({
   selector: 'sm-login',
@@ -12,54 +21,47 @@ import { environment } from '../../../environments/environment';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private auth: AuthService, private router: Router) { }
+  loginFormState$: Observable<FormGroupState<LoginFormValue>>;
+  errorMessage$: Observable<string>;
+  errorEmail$: Observable<ValidationErrors>;
+  errorPassword$: Observable<ValidationErrors>;
+  projectName$: Observable<string>;
 
-  loginForm: FormGroup;
-
-  projectName: string;
-
-  errorMessage = '';
-
-  submitted = false;
+  constructor(
+    private store: Store<State>,
+    private auth: AuthService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    this.projectName = environment.projectName;
+    this.projectName$ = this.store.pipe(
+      select(getProjectName)
+    );
 
-    this.loginForm = new FormGroup({
-      email: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
-    });
+    this.errorMessage$ = this.store.pipe(
+      select(selectors.getLoginErrorMessage)
+    );
+
+    this.loginFormState$ = this.store.pipe(
+      select(selectors.getLoginForm)
+    );
+
+    this.errorEmail$ = this.store.pipe(
+      select(selectors.loginEmailControl),
+      filter(control => control.isTouched),
+      map(control => control.errors)
+    );
+
+    this.errorPassword$ = this.store.pipe(
+      select(selectors.loginPasswordControl),
+      filter(control => control.isTouched),
+      map(control => control.errors)
+    );
   }
 
   login() {
-    if (this.loginForm.invalid) {
-      this.submitted = true;
-    } else {
-      this.auth.login(this.loginForm.value.email, this.loginForm.value.password)
-      .subscribe(result => {
-        if (result) {
-          this.router.navigate(['/home']);
-        } else {
-          this.errorMessage = 'Ooppps, Seems like something went wrong! Please try again later.';
-        }
-      },
-      err => {
-        if (err instanceof HttpErrorResponse) {
-          if (err.status === 401) {
-            this.errorMessage = 'Invalid email/password combination!';
-          } else {
-            this.errorMessage = 'Ooppps, Seems like something went wrong! Please try again later.';
-          }
-        }
-      });
-      this.submitted = false;
-      this.errorMessage = '';
-    }
+    this.store.dispatch(new LoginSubmitForm());
   }
 
-  isInvalid(name: string, errorCode: string) {
-    const control = this.loginForm.get(name);
-    return control.hasError(errorCode) && (control.dirty || this.submitted);
-  }
 
 }

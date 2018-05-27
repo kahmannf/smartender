@@ -4,11 +4,11 @@
 
     </div>
     <div class="col-sm-8 col-md-4">
-      <form [formGroup]="registerForm" (ngSubmit)="complete()">
+      <form novalidate [ngrxFormState]="(formState$ | async)">
         <div class="form-group mt-5">
           <h1>
             <img width="100" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-            {{projectName}}
+            {{projectName$ | async}}
 
           </h1>
         </div>
@@ -19,28 +19,33 @@
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input class="form-control" type="text" id="email" disabled value="{{user.email}}">
+          <input class="form-control" type="text" id="email" disabled value="{{(user$ | async).email}}">
         </div>
         <div class="form-group">
           <label for="alias">Alias</label>
-          <input class="form-control" type="text" id="alias" disabled value="{{user.alias}}">
+          <input class="form-control" type="text" id="alias" disabled value="{{(user$ | async).alias}}">
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input class="form-control" type="password" id="password" formControlName="password">
-          <div class="text-danger" *ngIf="hasError('password')">
-            Password has to be at least 6 characters long!
-          </div>
+          <input class="form-control" type="password" id="password" [ngrxFormControlState]="(controlPassword$ | async)">
         </div>
         <div class="form-group">
           <label for="passwordrepeat">Password (confirm)</label>
-          <input class="form-control" type="password" id="passwordrepeat" formControlName="passwordRepeat">
-          <div class="text-danger" *ngIf="hasError('passwordRepeat')">
+          <input class="form-control" type="password" id="passwordrepeat" [ngrxFormControlState]="(controlPasswordRepeat$ | async)">
+        </div>
+        <div class="form-group" *ngIf="(errorsPassword$ | async) as pwErrors">
+          <div class="text-danger" *ngIf="(pwErrors.required || pwErrors.minLength)">
+            Password has to be at least 6 characters long!
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="(errorsPasswordRepeat$ | async) as pwErrors">
+          <div class="text-danger" *ngIf="pwErrors.required || pwErrors.passwordRepeat">
             Passwords do not match!
           </div>
         </div>
         <div class="form-group">
-          <button testRegisterSubmit type="submit" class="form-control btn btn-primary">Activate Account</button>
+          <button testRegisterSubmit type="submit" class="form-control btn btn-primary" (click)="complete()" >Activate Account</button>
         </div>
         <div class="form-group">
           <button type="button" [routerLink]="'/login'" class="form-control btn btn-primary">Back to login</button>

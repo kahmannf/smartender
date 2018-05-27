@@ -4,11 +4,11 @@
 
     </div>
     <div class="col-sm-8 col-md-4">
-      <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <form novalidate [ngrxFormState]="loginFormState$ | async" >
         <div class="form-group mt-5">
           <h1>
             <img width="100" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-            {{projectName}}
+            {{projectName$ | async}}
 
           </h1>
         </div>
@@ -19,23 +19,27 @@
         </div>
         <div class="form-group">
           <label for="email">Email</label>
-          <input formControlName="email" type="text" class="form-control" id="email">
-          <div class="text-danger" *ngIf="isInvalid('email', 'required')">
-            Please enter your email
+          <input [ngrxFormControlState]="(loginFormState$ | async).controls.email" type="text" class="form-control" id="email">
+          <div *ngIf="(errorEmail$ | async) as errorEmail">
+            <div class="text-danger" *ngIf="errorEmail.required">
+                Please enter your email
+            </div>
           </div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input formControlName="password" type="password" class="form-control" id="password">
-          <div class="text-danger" *ngIf="isInvalid('password', 'required')">
+          <input [ngrxFormControlState]="(loginFormState$ | async).controls.password" type="password" class="form-control" id="password">
+          <div *ngIf="errorPassword$ | async as errorPassword">
+            <div class="text-danger" *ngIf="errorPassword.required">
               Please enter your password
+            </div>
           </div>
         </div>
         <div class="form-group" class="text-danger">
-          {{errorMessage}}
+          {{errorMessage$ | async}}
         </div>
         <div class="form-group mt-3">
-          <button testLoginButton type="submit" class="form-control btn btn-primary">Login</button>
+          <button testLoginButton type="submit" class="form-control btn btn-primary" (click)="login()">Login</button>
         </div>
         <div class="form-group">
           <button type="button" [routerLink]="'/register'" class="form-control btn btn-primary">Register</button>

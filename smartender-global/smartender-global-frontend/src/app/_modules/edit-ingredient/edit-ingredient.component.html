@@ -1,5 +1,6 @@
 <div>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" >
+  <!-- <form [formGroup]="form" (ngSubmit)="onSubmit()" > -->
+  <form (ngSubmit)="onSubmit()" >
     <div class="form-group">
       <label for="name">Name</label>
       <input class="form-control" type="text" autocomplete="off" id="name" formControlName="name">

@@ -1,3 +1,4 @@
+import { RegisterkeyResolver } from './resolvers/registerkey.resolver';
 import { ManageDrinksComponent } from './_modules/manage-drinks/manage-drinks.component';
 import { ManageIngredientsComponent } from './_modules/manage-ingredients/manage-ingredients.component';
 import { AdminGuard } from './guards/admin.guard';
@@ -42,7 +43,7 @@ const routes: Routes = [
     ]},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'complete-register/:registerkey', component: CompleteRegisterComponent },
+  { path: 'complete-register/:registerkey', component: CompleteRegisterComponent, resolve: { data: RegisterkeyResolver } },
   { path: '**', redirectTo: '/home'},
 ];
 

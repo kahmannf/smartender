@@ -167,7 +167,7 @@ const getByRegisterkey = (registerkey) => {
         resolve(row);
       }
       else {
-        resolve(`No user with registerkey ${registerkey}`);
+        reject(`No user with registerkey ${registerkey}`);
       }
     });
   });

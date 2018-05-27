@@ -5,7 +5,8 @@
       <button testButtonSwitch class="btn btn-primary mt-3" style="display: block;" [routerLink]="['/home', 'machines', 'new']" >Register Machine!</button>
     </div>
     <div class="col col-sm-8 col-md-5" *ngIf="machines && machines.length > 0">
-      <form testCreateSessionForm [formGroup]="createSessionForm" (ngSubmit)="onCreate()" >
+      <!-- <form testCreateSessionForm [formGroup]="createSessionForm" (ngSubmit)="onCreate()" > -->
+      <form testCreateSessionForm (ngSubmit)="onCreate()" >
         <div class="form-group">
           <label for="name">Session-name</label>
           <input autocomplete="off" type="text" formControlName="name" id="name" class="form-control">
@@ -16,7 +17,8 @@
         <div class="form-group">
           <label for="machineid">Machine:</label>
           <select id="machineid" formControlName="machineid" class="form-control">
-            <option *ngFor="let machine of machines" [ngValue]="machine.id">{{machine.name}}</option>
+            <!-- <option *ngFor="let machine of machines" [ngValue]="machine.id">{{machine.name}}</option> -->
+            <option *ngFor="let machine of machines" >{{machine.name}}</option>
           </select>
           <div class="text-danger" *ngIf="hasError('machineid', 'min')">
             Select a machine
