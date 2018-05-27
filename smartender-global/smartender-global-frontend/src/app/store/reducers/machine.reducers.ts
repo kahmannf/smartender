@@ -105,7 +105,6 @@ export function machineReducer(state: MachineState = initialState, action: Machi
     case MachineActionTypes.RegisterMachineSuccessful: {
       let createMachineForm3 = setValue({ machinekey: '', name: '' }, state.createMachineState.createMachineForm);
       createMachineForm3 = reset(createMachineForm3);
-      console.dir(createMachineForm3);
       return {
         ...state,
         createMachineState: {
