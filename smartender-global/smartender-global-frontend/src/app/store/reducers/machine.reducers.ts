@@ -5,15 +5,24 @@ import { logger } from '../../shared/logger';
 
 export interface MachineState {
   userMachines: Machine[];
+  selectedMachineId: number;
 }
 
 export const initialState: MachineState = {
   userMachines: [],
+  selectedMachineId: 0,
 };
 
 export function machineReducer(state: MachineState = initialState, action: MachineActions) {
 
   switch (action.type) {
+
+    case MachineActionTypes.SelectMachine: {
+      return {
+        ...state,
+        selectedMachineId: action.payload.id
+      };
+    }
 
     case MachineActionTypes.LoadUserMachinesSuccessful: {
       return {

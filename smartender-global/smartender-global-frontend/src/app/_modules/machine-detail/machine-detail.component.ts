@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Machine } from '../../shared/machine';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../store/reducers';
+import { getSelectedMachine } from '../../store/selectors/machine.selectors';
 
 @Component({
   selector: 'sm-machine-detail',
@@ -12,31 +15,14 @@ import { Machine } from '../../shared/machine';
 })
 export class MachineDetailComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private machineService: MachineService) { }
-
-  id$: Observable<number>;
-
   machine$: Observable<Machine>;
 
-  machine: Machine = {
-    id: 0,
-    owner_id: 0,
-    name: '',
-    isAvailable: false,
-    isBusy: false
-  };
+  constructor(private route: ActivatedRoute, private store: Store<State>) { }
 
   ngOnInit() {
-    this.id$ = this.route.params.pipe(map(params => params['id']));
-
-    const getById$ = this.id$.pipe(switchMap(id => this.machineService.getMachineById(id)));
-    const bySocket$ = this.id$.pipe(switchMap(id => this.machineService.subscribeMachineById(id)));
-
-    this.machine$ = bySocket$.pipe(merge(getById$));
-
-    this.machine$.subscribe(machine => {
-      this.machine = machine;
-    });
+    this.machine$ = this.route.params.pipe(
+      switchMap(() => this.store.pipe(select(getSelectedMachine)))
+    );
 
   }
 }

@@ -2,13 +2,14 @@ import { Action } from '@ngrx/store';
 import { Machine } from '../../shared/machine';
 
 export enum MachineActionTypes {
-  LoadUserMachines = '[Machine] load usre machines',
+  LoadUserMachines = '[Machine] load user machines',
   LoadUserMachinesSuccessful = '[Machine] load usre machines successful',
   LoadUserMachinesFailure = '[Machine] load usre machines failure',
   RegisterMachine = '[Machine] register machine',
   RegisterMachineSuccessful = '[Machine] register machine successful',
   RegisterMachineFailure = '[Machine] register machine failure',
   UpdateMachine = '[Machine] update machine',
+  SelectMachine = '[Machine] select machine',
 }
 
 export class LoadUserMachines implements Action {
@@ -49,6 +50,12 @@ export class UpdateMachine implements Action {
   constructor(public payload: Machine) {}
 }
 
+export class SelectMachine implements Action {
+  readonly type = MachineActionTypes.SelectMachine;
+
+  constructor(public payload: Machine) {}
+}
+
 export type MachineActions =
 | LoadUserMachines
 | LoadUserMachinesSuccessful
@@ -56,4 +63,5 @@ export type MachineActions =
 | RegisterMachine
 | RegisterMachineSuccessful
 | RegisterMachineFailure
-| UpdateMachine;
+| UpdateMachine
+| SelectMachine;

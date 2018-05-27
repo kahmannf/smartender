@@ -31,14 +31,45 @@ const isUserOwner = (machine_id, user_id) => {
 
 const getUserMachines = (user_id) => {
   return new Promise((resolve, reject) => {
-    var sql = "select name, id, owner_id from machine where owner_id = ?";
+    var sql = "select id from machine where owner_id = ?";
     var params = [user_id];
 
     db.all(sql, params, (err, rows) => {
       if(err) {
         reject(err);
       } else {
-        resolve(rows);
+        const expected = rows.length;
+        let actual = 0;
+
+        if(expected === actual) {
+          resolve([]);
+        } else {
+          let result = [];
+
+          for(let i = 0; i < expected; i++) {
+            getMachineById(rows[i].id)
+            .then(machine => {
+              if(machine) {
+                result.push(machine);
+              }
+
+              actual++;
+
+              if(actual === expected) {
+                resolve(result);
+              }
+            })
+            .catch(err => {
+              logger.error(err, 500);
+
+              actual++;
+
+              if(actual === expected) {
+                resolve(result);
+              }
+            });
+          }
+        }
       } 
     });
   });

@@ -1,7 +1,6 @@
 import { UserSession } from '../../shared/user-session';
 import { logger } from './../../shared/logger';
 import { SessionActions, SessionActionTypes } from './../actions/session.actions';
-import { stat } from 'fs';
 
 
 export interface SessionState {

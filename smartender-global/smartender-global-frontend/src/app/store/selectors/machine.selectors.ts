@@ -9,3 +9,7 @@ export const getUserMachines = createSelector(
   state => state.userMachines
 );
 
+export const getSelectedMachine = createSelector(
+  getMachineState,
+  state => state.userMachines.find(x => x.id === state.selectedMachineId)
+);

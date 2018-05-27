@@ -29,7 +29,7 @@ const routes: Routes = [
       { path: 'drink/:id', component: DrinkDetailComponent},
       { path: 'machines', component: MachinesComponent, children: [
         { path: 'new', component: CreateMachineComponent},
-        { path: 'machine/:id', component: MachineDetailComponent}
+        { path: 'view', component: MachineDetailComponent}
       ]},
       { path: 'sessions', component: SessionsComponent, children: [
         { path: 'new', component: CreateSessionComponent},
