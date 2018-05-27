@@ -1,6 +1,7 @@
+import { UserSession } from '../../shared/user-session';
 import { logger } from './../../shared/logger';
 import { SessionActions, SessionActionTypes } from './../actions/session.actions';
-import { UserSession } from '../../shared/user-session';
+import { stat } from 'fs';
 
 
 export interface SessionState {
@@ -18,6 +19,27 @@ export function sessionReducer(state: SessionState = initialState, action: Sessi
       return {
         ...state,
         userSessions: action.payload
+      };
+    }
+
+    case SessionActionTypes.UpdateSessionMachine: {
+      const machine = action.payload;
+
+      const cleanedList =  state.userSessions.filter(x => x.machine.id !== machine.id);
+      const updateSessions = state.userSessions.filter(x => x.machine.id === machine.id);
+
+      const updatedSessions = [];
+
+      // tslint:disable-next-line:prefer-const
+      for (let session of updateSessions) {
+
+        const sess = { ...session, machine };
+        updatedSessions.push(sess);
+      }
+
+      return {
+        ...state,
+        userSessions: [...cleanedList, ...updatedSessions]
       };
     }
 

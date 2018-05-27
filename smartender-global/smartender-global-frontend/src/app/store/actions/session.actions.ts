@@ -1,3 +1,5 @@
+import { Machine } from './../../shared/machine';
+import { Session } from './../../shared/session';
 import { ServerOperationResult } from './../../shared/server-operation-result';
 import { Action } from '@ngrx/store';
 import { UserSession } from '../../shared/user-session';
@@ -10,6 +12,7 @@ export enum SessionActionTypes  {
   SetActiveSession = '[Session] set active session',
   SetActiveSessionSuccessful = '[Session] set active session successful',
   SetActiveSessionFailure = '[Session] set active session failure',
+  UpdateSessionMachine = '[Session] update session machine',
 }
 
 
@@ -47,10 +50,17 @@ export class SetActiveSessionFailure implements Action {
   constructor(public payload: any) {}
 }
 
+export class UpdateSessionMachine implements Action {
+  readonly type = SessionActionTypes.UpdateSessionMachine;
+
+  constructor(public payload: Machine) {}
+}
+
 export type SessionActions =
 | LoadUserSessions
 | LoadUserSessionsSuccessful
 | LoadUserSessionsFailure
 | SetActiveSession
 | SetActiveSessionSuccessful
-| SetActiveSessionFailure;
+| SetActiveSessionFailure
+| UpdateSessionMachine;

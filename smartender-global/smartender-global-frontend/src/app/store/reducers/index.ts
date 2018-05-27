@@ -1,3 +1,4 @@
+import { MachineState, machineReducer } from './machine.reducers';
 import { SessionState, sessionReducer } from './session.reducers';
 import { LoginState, loginReducer } from './login.reducers';
 import { CompleteRegisterState, completeRegisterReducer } from './complete-register.reducers';
@@ -15,6 +16,7 @@ import { UtilsState, utilsReducer } from './utils.reducers';
 export interface State {
   completeRegister: CompleteRegisterState;
   login: LoginState;
+  machine: MachineState;
   session: SessionState;
   user: UserState;
   utils: UtilsState;
@@ -25,6 +27,7 @@ export interface State {
 export const reducers: ActionReducerMap<State> = {
   completeRegister: completeRegisterReducer,
   login: loginReducer,
+  machine: machineReducer,
   session: sessionReducer,
   user: userReducer,
   utils: utilsReducer,

@@ -4,7 +4,7 @@ import { Machine } from './machine';
 import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { ConnectorService } from '../service-client/connector.service';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

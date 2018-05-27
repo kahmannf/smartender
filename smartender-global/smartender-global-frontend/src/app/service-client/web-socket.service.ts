@@ -11,16 +11,16 @@ export class WebSocketService {
 
   constructor() { }
 
-  private socket: SocketIOClient.Socket;
+  // private socket: SocketIOClient.Socket;
 
   connectToChannel<T>(channel: string): Observable<T> {
-    this.socket = io(environment.apiBaseUrl);
+    const socket = io(environment.apiBaseUrl);
 
     const observable = new Observable<T>(observer_internal => {
-      this.socket.on(channel, (machine) => {
+      socket.on(channel, (machine) => {
         observer_internal.next(machine);
       });
-      return () => this.socket.disconnect();
+      return () => socket.disconnect();
     });
 
     return observable;

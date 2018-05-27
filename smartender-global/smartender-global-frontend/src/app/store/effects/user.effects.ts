@@ -12,6 +12,7 @@ import { of, merge } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { LoadUserSessions } from '../actions/session.actions';
+import { LoadUserMachines } from '../actions/machine.actions';
 
 @Injectable()
 export class UserEffects {
@@ -32,6 +33,7 @@ export class UserEffects {
     return new RouterNavigated();
   })),
   this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => new LoadUserSessions())),
+  this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => new LoadUserMachines())),
   this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => new userActions.LoadUserInvites()))
   );
 

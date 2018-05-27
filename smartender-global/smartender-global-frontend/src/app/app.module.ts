@@ -1,10 +1,12 @@
+import { MachineService } from './shared/machine.service';
+import { SessionService } from './shared/session.service';
 import { SessionEffects } from './store/effects/session.effects';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { EffectsModule } from '@ngrx/effects';
 import { RouterStateSerializer, StoreRouterConnectingModule } from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, Store } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { NgrxFormsModule } from 'ngrx-forms';
 import { environment } from '../environments/environment';
@@ -34,8 +36,10 @@ import { CustomValidators } from './custom-validators';
 import { CustomRouterStateSerializer } from './shared/utils';
 import { CompleteRegisterEffects } from './store/effects/complete-register.effects';
 import { UserEffects } from './store/effects/user.effects';
-import { reducers, metaReducers } from './store/reducers/index';
+import { reducers, metaReducers, State } from './store/reducers/index';
 import { LoginEffects } from './store/effects/login.effects';
+import { UpdateHandler } from './updates';
+import { MachineEffects } from './store/effects/machine.effects';
 
 
 
@@ -77,7 +81,8 @@ import { LoginEffects } from './store/effects/login.effects';
       CompleteRegisterEffects,
       UserEffects,
       LoginEffects,
-      SessionEffects
+      SessionEffects,
+      MachineEffects
     ])
   ],
   providers: [
@@ -86,4 +91,20 @@ import { LoginEffects } from './store/effects/login.effects';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  updateHandler: UpdateHandler;
+
+  constructor(
+    private store: Store<State>,
+    private sessionService: SessionService,
+    private ma: MachineService
+  ) {
+
+    this.updateHandler = new UpdateHandler(
+      store,
+      sessionService,
+      ma
+    );
+  }
+}
