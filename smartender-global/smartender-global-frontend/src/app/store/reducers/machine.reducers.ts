@@ -25,7 +25,6 @@ export interface CreateMachieState {
 export interface MachineState {
   createMachineState: CreateMachieState;
   userMachines: Machine[];
-  selectedMachineId: number;
 }
 
 export const initialState: MachineState = {
@@ -34,7 +33,6 @@ export const initialState: MachineState = {
     errorMessage: ''
   },
   userMachines: [],
-  selectedMachineId: 0,
 };
 
 const createFromReducer = updateGroup<CreateMachineFormValue>({
@@ -69,13 +67,6 @@ export function machineReducer(state: MachineState = initialState, action: Machi
 
 
   switch (action.type) {
-
-    case MachineActionTypes.SelectMachine: {
-      return {
-        ...state,
-        selectedMachineId: action.payload.id
-      };
-    }
 
     case MachineActionTypes.LoadUserMachinesSuccessful: {
       return {

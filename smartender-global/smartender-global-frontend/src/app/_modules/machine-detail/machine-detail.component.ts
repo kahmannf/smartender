@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Machine } from '../../shared/machine';
 import { Store, select } from '@ngrx/store';
 import { State } from '../../store/reducers';
-import { getSelectedMachine } from '../../store/selectors/machine.selectors';
+import { getUserMachines } from '../../store/selectors/machine.selectors';
 
 @Component({
   selector: 'sm-machine-detail',
@@ -20,8 +20,18 @@ export class MachineDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute, private store: Store<State>) { }
 
   ngOnInit() {
+
     this.machine$ = this.route.params.pipe(
-      switchMap(() => this.store.pipe(select(getSelectedMachine)))
+      map(params => params['id']),
+      switchMap(id => this.store.pipe(
+        select(getUserMachines),
+        map(machines => {
+            // for some reason === doenst work here...
+            // damn javascript and equality operators
+            // tslint:disable-next-line:triple-equals
+            return machines.find(x => x.id == id);
+          })
+      ))
     );
 
   }

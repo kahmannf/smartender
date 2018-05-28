@@ -3,7 +3,7 @@
     <div class="col col-3">
       <ul class="list-group ml-2">
         <li *ngFor="let machine of machines$ | async" class="list-group-item" >
-          <a class="text-secondary" [routerLink]="'./view'" [routerLinkActive]="'text-dark'" (click)="selectMachine(machine)" >{{machine.name}}</a>
+          <a class="text-secondary" [routerLink]="'./view/' + machine.id" [routerLinkActive]="'text-dark'">{{machine.name}}</a>
         </li>
         <li class="list-group-item">
           <a class="text-secondary" [routerLink]="'./new'" [routerLinkActive]="'text-dark'">register machine</a>

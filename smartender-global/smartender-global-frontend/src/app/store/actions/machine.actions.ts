@@ -9,7 +9,6 @@ export enum MachineActionTypes {
   RegisterMachineSuccessful = '[Machine] register machine successful',
   RegisterMachineFailure = '[Machine] register machine failure',
   UpdateMachine = '[Machine] update machine',
-  SelectMachine = '[Machine] select machine',
 }
 
 export class LoadUserMachines implements Action {
@@ -50,11 +49,6 @@ export class UpdateMachine implements Action {
   constructor(public payload: Machine) {}
 }
 
-export class SelectMachine implements Action {
-  readonly type = MachineActionTypes.SelectMachine;
-
-  constructor(public payload: Machine) {}
-}
 
 export type MachineActions =
 | LoadUserMachines
@@ -63,5 +57,4 @@ export type MachineActions =
 | RegisterMachine
 | RegisterMachineSuccessful
 | RegisterMachineFailure
-| UpdateMachine
-| SelectMachine;
+| UpdateMachine;
