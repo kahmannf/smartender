@@ -15,7 +15,7 @@ const init = (socket_io) => {
 router.get('/mine', (req, res) => {
   session.getUserSessions(req.oauth.payload.id)
   .then(userSessions => {
-    res.json(userSessions);
+    res.json(userSessions.sort((a, b) => a.name < b.name ? 1 : -1));
   })
   .catch(err => {
     logger.error(err, 500);

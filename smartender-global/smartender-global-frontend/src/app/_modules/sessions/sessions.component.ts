@@ -3,6 +3,10 @@ import { SessionService } from './../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../shared/user.service';
 import { UserSession } from '../../shared/user-session';
+import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { State } from '../../store/reducers';
+import { getUserSessions } from '../../store/selectors/session.selectors';
 
 @Component({
   selector: 'sm-sessions',
@@ -11,25 +15,15 @@ import { UserSession } from '../../shared/user-session';
 })
 export class SessionsComponent implements OnInit {
 
-  constructor(
-    private sessionService: SessionService
-  ) { }
+  sessions$: Observable<UserSession[]>;
 
-  sessions: UserSession[] = [];
+  constructor(
+    private store: Store<State>
+  ) { }
 
   ngOnInit() {
 
-    this.sessionService.getMySessions().subscribe(
-      result => {
-        this.sessions = result;
-      }
-    );
-
-    this.sessionService.sessionCreated
-    .pipe(
-      switchMap(result => this.sessionService.getMySessions())
-    )
-    .subscribe(result =>  this.sessions = result);
+    this.sessions$ = this.store.pipe(select(getUserSessions));
   }
 
 }
