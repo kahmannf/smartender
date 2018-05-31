@@ -44,7 +44,8 @@ export class NavbarComponent implements OnInit {
     );
 
     this.sessions$ = this.store.pipe(
-      select(sessionSelectors.getUserSessions)
+      select(sessionSelectors.getUserSessions),
+      map(sessions => sessions.filter(x => !!x.active))
     );
 
     this.activeSession$ = this.store.pipe(

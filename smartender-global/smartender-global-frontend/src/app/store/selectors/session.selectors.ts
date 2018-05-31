@@ -20,3 +20,28 @@ export const getActiveSessionMachine = createSelector(
   getActiveSession,
   session => session ? session.machine : undefined
 );
+
+export const getDetailSession = createSelector(
+  getSessionState,
+  state => state.detailSession
+);
+
+export const getDetailSessionMembers = createSelector(
+  getSessionState,
+  state => state.detailedSessionUsers
+);
+
+export const getUserSearchForm = createSelector(
+  getSessionState,
+  state => state.searchForm
+);
+
+export const getSearchResult = createSelector(
+  getSessionState,
+  state => state.searchResult
+);
+
+export const getUserSearchString = createSelector(
+  getSessionState,
+  state => state.lastSearchValue
+);

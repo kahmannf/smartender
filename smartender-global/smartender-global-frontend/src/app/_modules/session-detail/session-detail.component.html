@@ -1,32 +1,32 @@
-<div class="container">
+<div class="container" *ngIf="session$ | async as session">
   <div class="row">
     <div class="col">
 
     </div>
     <div class="col">
-      <div testControlButtons *ngIf="canEditSession()">
+      <div testControlButtons *ngIf="canEditSession(session, (user$ | async))">
         <div class="form-group" *ngIf="!session.active">
-          <button type="button" (click)="activateSession()" class="form-control btn btn-outline-success">activate</button>
+          <button type="button" (click)="activateSession(session.id)" class="form-control btn btn-outline-success">activate</button>
         </div>
         <div class="form-group" *ngIf="session.active">
-          <button type="button" (click)="deactivateSession()" class="form-control btn btn-outline-danger">deactivate</button>
+          <button type="button" (click)="deactivateSession(session.id)" class="form-control btn btn-outline-danger">deactivate</button>
         </div>
-        <div class="form-group" *ngIf="session.owner_id === currentUser.id" >
+        <div class="form-group" *ngIf="session.owner_id === (user$ | async).id" >
           <button type="button" class="form-control btn btn-danger" (click)="delete()">delete</button>
         </div>
-        <div class="form-group" *ngIf="session.owner_id !== currentUser.id" >
+        <div class="form-group" *ngIf="session.owner_id !== (user$ | async).id" >
           <button type="button" class="form-control btn btn-danger" (click)="leave()" >leave</button>
         </div>
       </div>
     </div>
   </div>
-  <div testMembersRow class="row mt-2" *ngIf="canEditSession() && members">
+  <div testMembersRow class="row mt-2" *ngIf="canEditSession(session, (user$ | async)) && (sessionMembers$ | async)">
     <div class="col">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Members:</h5>
           <div class="list-group row px-3">
-            <div class="list-group-item" *ngFor="let member of members">
+            <div class="list-group-item" *ngFor="let member of (sessionMembers$ | async)">
               <div class="row">
                 <div class="col col-auto text-center my-auto">
                   {{member[0].alias}}
@@ -35,15 +35,15 @@
 
                 </div>
                 <div class="col col-auto px-1" *ngIf="member[0].id !== session.owner_id">
-                  <button type="button" class="btn btn-outline-danger" >Kick</button>
+                  <button type="button" class="btn btn-outline-danger" (click)="kick(member[0].id)" >Kick</button>
                 </div>
                 <div class="col col-auto px-1" *ngIf="member[0].id !== session.owner_id">
-                  <button type="button" class="btn btn-outline-primary permission-button" *ngIf="!member[1].can_edit_machine">Allow Machine Edit</button>
-                  <button type="button" class="btn btn-outline-danger permission-button" *ngIf="member[1].can_edit_machine" >Deny Machine Edit</button>
+                  <button type="button" class="btn btn-outline-primary permission-button" *ngIf="!member[1].can_edit_machine" (click)="allowMachineEdit(member[0].id)" >Allow Machine Edit</button>
+                  <button type="button" class="btn btn-outline-danger permission-button" *ngIf="member[1].can_edit_machine" (click)="denyMachineEdit(member[0].id)" >Deny Machine Edit</button>
                 </div>
                 <div class="col col-auto px-1" *ngIf="member[0].id !== session.owner_id">
-                  <button type="button" class="btn btn-outline-primary permission-button" *ngIf="!member[1].can_edit_session" >Allow Session Edit</button>
-                  <button type="button" class="btn btn-outline-danger permission-button" *ngIf="member[1].can_edit_session" >Deny Session Edit</button>
+                  <button type="button" class="btn btn-outline-primary permission-button" *ngIf="!member[1].can_edit_session" (click)="allowSessionEdit(member[0].id)" >Allow Session Edit</button>
+                  <button type="button" class="btn btn-outline-danger permission-button" *ngIf="member[1].can_edit_session" (click)="denySessionEdit(member[0].id)" >Deny Session Edit</button>
                 </div>
                 <div class="col col-auto px-1" *ngIf="member[0].id === session.owner_id">
                   <button type="button" class="btn btn-outline-primary font-italic cursor-default" disabled>Owner</button>
@@ -55,23 +55,19 @@
       </div>
     </div>
   </div>
-  <div testInviteRow class="row mt-2" *ngIf="canEditSession()">
+  <div testInviteRow class="row mt-2" *ngIf="canEditSession((session$ | async), (user$ | async))">
     <div class="col">
       <div class="card">
         <div class="card-body">
           <h5 class="card-title">Invite people:</h5>
-          <!-- <form [formGroup]="searchForm" (ngSubmit)="search()" class="row"> -->
-          <form (ngSubmit)="search()" class="row">
+          <form [ngrxFormState]="userSearchFormState$" class="row">
             <div class="col col-auto pl-3">
               <label for="search">Search (alias or email):</label>
-              <input id="search" type="text" formControlName="searchValue" class="form-control">
+              <input id="search" type="text" [ngrxFormControlState]="(userSearchFormState$ | async).controls.searchString" class="form-control">
             </div>
-            <!-- <div class="col col-auto px-1">
-              <button type="submit" class="btn btn-outline-primary">Search</button>
-            </div> -->
           </form>
-          <div class="list-group row px-3 my-3" *ngIf="userSearchResult">
-            <div class="list-group-item" *ngFor="let user of userSearchResult.items">
+          <div class="list-group row px-3 my-3" *ngIf="userSearchResult$ | async as searchResult">
+            <div class="list-group-item" *ngFor="let user of searchResult.items">
               <div class="row">
                 <div class="col col-auto text-center my-auto">
                   {{user.alias}}
@@ -87,16 +83,16 @@
           </div>
           <div class="row">
             <div class="col">
-              <div *ngIf="userSearchResult" class="text-muted">
-                {{getResultText()}}
+              <div *ngIf="userSearchResult$ | async as searchResult" class="text-muted">
+                {{getResultText(searchResult)}}
               </div>
             </div>
 
             <div class="col col-auto px-1">
-              <button type="button" class="btn btn-outline-primary" [disabled]="!canGetPrevious()" (click)="getPrevious()">Previous</button>
+              <button type="button" class="btn btn-outline-primary" [disabled]="!canGetPrevious(userSearchResult$ | async)" (click)="getPrevious()">Previous</button>
             </div>
             <div class="col col-auto px-1">
-              <button type="button" class="btn btn-outline-primary" [disabled]="!canGetNext()" (click)="getNext()">Next</button>
+              <button type="button" class="btn btn-outline-primary" [disabled]="!canGetNext(userSearchResult$ | async)" (click)="getNext()">Next</button>
             </div>
           </div>
         </div>
@@ -106,5 +102,5 @@
 </div>
 <p>
 
- TODO: remove {{session | json }}
+ TODO: remove {{session$ | async | json }}
 </p>
