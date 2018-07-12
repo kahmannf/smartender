@@ -37,6 +37,9 @@ The modem will send the command to the arduino.
 The arduino reports its status the the modem (available/busy)
 
 # Commands
+
+## Concept 1: Simple Start and End
+
 A command is a set of operation-commands with a start and end marker.
 An operation command is a set of three bytes:
 1. Operation order: Commands with the same operation order will be executed simultanious. Others in order. Min value: 0
@@ -72,4 +75,22 @@ Notice that this operation command has the command order 5. it is not required t
 50 
 
 254
+
+## Concept 2: Small Protocoll
+
+All data is send within a frame. This frame defines the data structure and length. A checksum will be appended after the end marker.
+
+
+### Smartender Arduino Serial Protocol (Version 0):
+  
+  |description|value (unsinged or < 8-Bit Integer)|value (bitwise)|bytes|
+  |-|-|-|-|
+  start marker|   2^24| 11111111 - 11111111 - 11111111 | 3|
+  protocol version (in case futher logic changes)|-|-|2|
+  length (total bytes of data, not including header or end marker)|0-2^16|-| 2|
+  data|-|-|as many as value of length|
+  end marker|    2^24-1| 11111111 - 11111111 - 11111110 | 3|
+  checksum: something to validate the integrity of the data|-|-|1|
+
+Smartender Arduino Serial Protocol version 0 data are always three bytes. They have the same structure as the commands in Concept 1.
 
