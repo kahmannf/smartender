@@ -13,10 +13,12 @@ This command is send to the backend. Frontend can request a machine object conta
 Backend recives machine-commands and redirects them to the machine-manager. The machinekey will be transmitted with each command.
 
 Backend can request a live status via `baseurl_machinemamager/status/:machinekey`. The machinemanager will respond with a json object:
+```json
 {
-  available: boolean, // represents wheter the machine is online and registered at the machinemanager 
-  busy: boolean // represents whether the machine is currently operating or available
+  "available": "boolean, represents wheter the machine is online and registered at the machinemanager", 
+  "busy": "boolean, represents whether the machine is currently operating or available"
 }
+```
 
 When a machine status changes (connected/disconnected, available/busy) the machinemamager reports a change to the backend via `baseurl_backend/machine_service/report/:machinekey`.
 The backend is then supposed to get the new status in a seperate request.

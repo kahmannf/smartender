@@ -1,14 +1,28 @@
+import { getSearchResult, getUserSearchForm } from './../../store/selectors/session.selectors';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserSession } from './../../shared/user-session';
 import { UserService } from './../../shared/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionService } from './../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
-import { map, switchMap, merge } from 'rxjs/operators';
+import { map, switchMap, merge, filter } from 'rxjs/operators';
 import { Session } from '../../shared/session';
 import { User } from '../../shared/user';
-import { of } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import { PageResult } from '../../shared/page-result';
+import { State } from '../../store/reducers';
+import { Store, select } from '@ngrx/store';
+import {
+  LoadSession,
+  DeactivateSession,
+  ActivateSession,
+  GetNextSearchPage,
+  GetPreviousSearchPage
+} from '../../store/actions/session.actions';
+import { getDetailSession, getDetailSessionMembers } from '../../store/selectors/session.selectors';
+import { getCurrentUser } from '../../store/selectors/user.selectors';
+import { FormGroupState } from 'ngrx-forms';
+import { SearchFormValue } from '../../store/reducers/session.reducers';
 
 @Component({
   selector: 'sm-session-detail',
@@ -17,134 +31,61 @@ import { PageResult } from '../../shared/page-result';
 })
 export class SessionDetailComponent implements OnInit {
 
+  session$: Observable<Session>;
+  user$: Observable<User>;
+  sessionMembers$: Observable<[User, UserSession][]>;
+
+  userSearchFormState$: Observable<FormGroupState<SearchFormValue>>;
+  userSearchResult$: Observable<PageResult<User>>;
+
   constructor(
     private sessionService: SessionService,
     private route: ActivatedRoute,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private store: Store<State>
   ) { }
 
-  session: Session;
-  currentUser: User;
-
-  lastSearch: string;
-
-  userSearchResult: PageResult<User>;
-
-  members: [User, UserSession][];
-
-  searchForm: FormGroup;
 
   ngOnInit() {
-    this.searchForm = new FormGroup({
-      searchValue: new FormControl('')
-    });
 
-    this.searchForm.valueChanges.subscribe(values => {
-      this.search();
-    });
-
-    this.initSessionObservables();
-
-    this.userService.getCurrentUser().subscribe(
-      user => this.currentUser = user
-    );
-  }
-
-  initSessionObservables() {
-    const id$ = this.route.params
-    .pipe(
-      map(params => params['id'])
+    this.session$ = this.store.pipe(
+      select(getDetailSession)
     );
 
-    const initial$ = id$
-    .pipe(
-      switchMap(id => this.sessionService.getSessionById(id))
+    this.user$ = this.store.pipe(
+      select(getCurrentUser)
     );
 
-    const updates$ = id$
-    .pipe(
-      switchMap(id => this.sessionService.getSessionUpdates(id))
+    this.sessionMembers$ = this.store.pipe(
+      select(getDetailSessionMembers)
     );
 
-    this.userService.getCurrentUser().subscribe(
-      user => {
-
-        const user_updates$ = id$
-        .pipe(
-          switchMap(id => this.sessionService.getSessionsUpdates(user.id)
-            .pipe(
-              map(something => id)// allways return id for this sequence
-            )
-          ),
-          switchMap(id => this.sessionService.getSessionById(id))
-        );
-
-        const all$ = initial$.pipe(merge(updates$), merge(user_updates$));
-
-        all$.subscribe(
-          session => {
-            if (session) {
-              this.session = session;
-            } else {
-              this.router.navigate(['/home', 'sessions']);
-            }
-          },
-          error => console.log('error in sessiondetail component obseravable')
-        );
-
-        const updateMembers$ = all$
-        .pipe(
-          switchMap(session => {
-            if (session && session.members) {
-              const ids = [];
-              // tslint:disable-next-line:prefer-const
-              for (let member of session.members) {
-                ids.push(member.user_id);
-              }
-
-              if (ids.length > 0) {
-                return this.userService.getByIdArray(ids);
-              } else {
-                return of<User[]>([]);
-              }
-
-            } else {
-              return of<User[]>([]);
-            }
-          })
-        );
-
-        updateMembers$.subscribe(users => {
-          if (users && users.length) {
-            const result: [User, UserSession][] = [];
-            // tslint:disable-next-line:prefer-const
-            for (let res_user of users) {
-              if (this.session && this.session.members) {
-                const sessUser = this.session.members.find(us => us.user_id === res_user.id);
-                result.push([res_user, sessUser]);
-              } else {
-                // result.push([res_user, undefined]);
-              }
-            }
-            this.members = result;
-          } else {
-            this.members = [];
-          }
-        });
-      }
+    this.userSearchResult$ = this.store.pipe(
+      select(getSearchResult)
     );
+
+    this.userSearchFormState$ = this.store.pipe(
+      select(getUserSearchForm)
+    );
+
+    this.route.params.pipe(
+      map(params => params['id']),
+      filter(id => !!id),
+      map(id => this.store.dispatch(new LoadSession(id)))
+    ).subscribe();
 
   }
 
-  canEditSession() {
-    if (this.currentUser && this.session) {
-      if (this.currentUser.id === this.session.owner_id) {
+
+  canEditSession(session: Session, user: User) {
+    if (user && session) {
+      if (user.id === session.owner_id) {
         return true;
-      } else if (this.session.members) {
+      } else if (session.members) {
         // tslint:disable-next-line:prefer-const
-        for (let member of this.session.members) {
-          if (member.user_id === this.currentUser.id && member.can_edit_session) {
+        for (let member of session.members) {
+          if (member.user_id === user.id && member.can_edit_session) {
             return true;
           }
         }
@@ -154,14 +95,14 @@ export class SessionDetailComponent implements OnInit {
     return false;
   }
 
-  canEditMachine() {
-    if (this.currentUser && this.session) {
-      if (this.currentUser.id === this.session.owner_id) {
+  canEditMachine(session: Session, user: User) {
+    if (user && session) {
+      if (user.id === session.owner_id) {
         return true;
-      } else if (this.session.members) {
+      } else if (session.members) {
         // tslint:disable-next-line:prefer-const
-        for (let member of this.session.members) {
-          if (member.user_id === this.currentUser.id && member.can_edit_machine) {
+        for (let member of session.members) {
+          if (member.user_id === user.id && member.can_edit_machine) {
             return true;
           }
         }
@@ -171,78 +112,72 @@ export class SessionDetailComponent implements OnInit {
     return false;
   }
 
-  deactivateSession() {
-    this.sessionService.deactivateSession(this.session.id).subscribe();
+  deactivateSession(id: number) {
+    this.store.dispatch(new DeactivateSession(id));
   }
 
-  activateSession() {
-    this.sessionService.activateSession(this.session.id).subscribe();
+  activateSession(id: number) {
+    this.store.dispatch(new ActivateSession(id));
   }
 
-  search() {
-    if (this.lastSearch !== this.searchForm.value.searchValue) {
-      this.lastSearch = this.searchForm.value.searchValue;
-      this.userService.searchFoSession(this.session.id, 20, 0, this.searchForm.value.searchValue)
-      .subscribe(page => {
-        this.userSearchResult = page;
-      });
-    }
+  canGetNext(result: PageResult<User>) {
+    return !!result && (result.total - result.limit) > (result.offset * result.limit);
   }
 
-  canGetNext() {
-    return this.userSearchResult
-    && (this.userSearchResult.limit * (this.userSearchResult.offset + 1)) < this.userSearchResult.total;
-  }
-
-  canGetPrevious() {
-    return this.userSearchResult && this.userSearchResult.offset > 0;
+  canGetPrevious(result: PageResult<User>) {
+    return !!result && result.offset > 0;
   }
 
   getNext() {
-    this.userService.searchFoSession(this.session.id, 20, this.userSearchResult.offset + 1, this.searchForm.value.searchValue)
-    .subscribe(page => {
-      this.userSearchResult = page;
-    });
+    this.store.dispatch(new GetNextSearchPage());
   }
 
   getPrevious() {
-    this.userService.searchFoSession(this.session.id, 20, this.userSearchResult.offset - 1, this.searchForm.value.searchValue)
-    .subscribe(page => {
-      this.userSearchResult = page;
-    });
+    this.store.dispatch(new GetPreviousSearchPage());
   }
 
-  getResultText() {
-    let result = 'Results ' + ((this.userSearchResult.offset * this.userSearchResult.limit) + 1);
+  getResultText(userSearchResult: PageResult<User>) {
+    let result = 'Results ' + ((userSearchResult.offset * userSearchResult.limit) + 1);
     result += ' - ';
-    if ((this.userSearchResult.offset + 1) * this.userSearchResult.limit > this.userSearchResult.total) {
-      result += this.userSearchResult.total;
+    if ((userSearchResult.offset + 1) * userSearchResult.limit > userSearchResult.total) {
+      result += userSearchResult.total;
     } else {
-      result += ((this.userSearchResult.offset + 1) * this.userSearchResult.limit);
+      result += ((userSearchResult.offset + 1) * userSearchResult.limit);
     }
 
-    result += ' of ' + this.userSearchResult.total;
+    result += ' of ' + userSearchResult.total;
     return result;
   }
 
   invite(userid: number) {
-    this.sessionService.inviteUser(this.session.id, userid).subscribe(trigger => {
-      this.refresh();
-    });
   }
 
   refresh() {
-    this.userService.searchFoSession(this.session.id, 20, this.userSearchResult.offset, this.searchForm.value.searchValue)
-    .subscribe(page => {
-      this.userSearchResult = page;
-    });
+  }
+
+  allowMachineEdit(userid: number) {
+
+  }
+
+  allowSessionEdit(userid: number) {
+
+  }
+
+  denyMachineEdit(userid: number) {
+
+  }
+
+  denySessionEdit(userid: number) {
+
+  }
+
+  kick(userid: number) {
+
   }
 
   delete() {
-    this.sessionService.deleteSession(this.session.id).subscribe();
   }
 
   leave() {
-    this.sessionService.leaverSession(this.session.id).subscribe();
   }
 }

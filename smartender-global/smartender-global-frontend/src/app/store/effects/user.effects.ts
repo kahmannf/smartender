@@ -28,10 +28,10 @@ export class UserEffects {
 
   @Effect()
   loadCurrentUserSuccessful$ = merge(
-  this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => {
-    this.router.navigate(['home']);
-    return new RouterNavigated();
-  })),
+  // this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => {
+  //   this.router.navigate(['home']);
+  //   return new RouterNavigated();
+  // })),
   this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => new LoadUserSessions())),
   this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => new LoadUserMachines())),
   this.actions$.pipe(ofType(UserActionTypes.LoadCurrentUserSuccessful), map(action => new userActions.LoadUserInvites()))

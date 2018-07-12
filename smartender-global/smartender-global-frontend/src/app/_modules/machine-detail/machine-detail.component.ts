@@ -1,5 +1,5 @@
 import { MachineService } from './../../shared/machine.service';
-import { map, switchMap, subscribeOn, merge } from 'rxjs/operators';
+import { map, switchMap, subscribeOn, merge, filter } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
