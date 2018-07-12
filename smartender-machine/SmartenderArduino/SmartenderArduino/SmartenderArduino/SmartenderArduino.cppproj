@@ -206,7 +206,13 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="include\FrameReader.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="Sketch.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\FrameReader.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Content Include="readme.html">
@@ -218,6 +224,10 @@
       <Project>4a5a9986-bdca-44a2-a9ec-7adf92d9a467</Project>
       <Private>True</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="include" />
+    <Folder Include="src" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
