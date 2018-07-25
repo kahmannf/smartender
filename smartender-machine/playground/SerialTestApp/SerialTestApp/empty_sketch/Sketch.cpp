@@ -18,11 +18,11 @@ void setup() {
 	PORTD = 0b11111100;
 
 	//PORTB = 0b00111111;
-	Serial.write(0x30);
-	Serial.write(0x30);
-	Serial.write(0x30);
-	Serial.write(0x30);
-	Serial.flush();
+	//Serial.write(0x30);
+	//Serial.write(0x30);
+	//Serial.write(0x30);
+	//Serial.write(0x30);
+	//Serial.flush();
 }
 
 void loop() {
