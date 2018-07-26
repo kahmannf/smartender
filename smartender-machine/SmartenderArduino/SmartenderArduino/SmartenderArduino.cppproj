@@ -166,6 +166,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\ArduinoCommunicator\ArduinoCommunicator.cppproj">
+      <Name>ArduinoCommunicator</Name>
+      <Project>{79c875a5-7055-478f-ae3f-27473bb434e5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\ArduinoCore\ArduinoCore.cppproj">
       <Name>ArduinoCore</Name>
       <Project>{53f0de13-85f1-4ac6-9625-f4c095789547}</Project>

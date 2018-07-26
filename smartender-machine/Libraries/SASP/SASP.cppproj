@@ -159,16 +159,29 @@
     <Compile Include="include\SASP_Interpreter.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="include\SASP_Responder.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\SASP_Frame.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\SASP_Interpreter.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\SASP_Responder.cpp">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="include" />
     <Folder Include="src" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ArduinoCommunicator\ArduinoCommunicator.cppproj">
+      <Name>ArduinoCommunicator</Name>
+      <Project>{79c875a5-7055-478f-ae3f-27473bb434e5}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

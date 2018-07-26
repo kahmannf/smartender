@@ -5,11 +5,13 @@
 * Author: Laptop
 */
 
-#include "SASP_Frame.h"
 
 #ifndef __SASP_INTERPRETER_H__
 #define __SASP_INTERPRETER_H__
 
+#include "SASP_Frame.h"
+#include "SASP_Responder.h"
+#include "../../ArduinoCommunicator/include/ArduinoCommunicator.h"
 
 class SASP_Interpreter
 {
@@ -18,13 +20,18 @@ public:
 protected:
 private:
   SASP_Frame * frame;
+  SASP_Responder * responder;
+  ArduinoCommunicator * communicator;
 
 //functions
 public:
-	SASP_Interpreter();
+  void do_cycle();
+	SASP_Interpreter(ArduinoCommunicator * communicator);
 	~SASP_Interpreter();
 protected:
 private:
+  void process_incomming();
+  void update_status();
 	SASP_Interpreter( const SASP_Interpreter &c );
 	SASP_Interpreter& operator=( const SASP_Interpreter &c );
 

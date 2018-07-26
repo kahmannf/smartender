@@ -9,6 +9,8 @@ Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "ArduinoCore", "..\Libraries
 EndProject
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "SASP", "..\Libraries\SASP\SASP.cppproj", "{59B99BCC-31E8-4E8F-8F8A-FF1209CA43EC}"
 EndProject
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "ArduinoCommunicator", "..\Libraries\ArduinoCommunicator\ArduinoCommunicator.cppproj", "{79C875A5-7055-478F-AE3F-27473BB434E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|AVR = Debug|AVR
@@ -27,6 +29,10 @@ Global
 		{59B99BCC-31E8-4E8F-8F8A-FF1209CA43EC}.Debug|AVR.Build.0 = Debug|AVR
 		{59B99BCC-31E8-4E8F-8F8A-FF1209CA43EC}.Release|AVR.ActiveCfg = Release|AVR
 		{59B99BCC-31E8-4E8F-8F8A-FF1209CA43EC}.Release|AVR.Build.0 = Release|AVR
+		{79C875A5-7055-478F-AE3F-27473BB434E5}.Debug|AVR.ActiveCfg = Debug|AVR
+		{79C875A5-7055-478F-AE3F-27473BB434E5}.Debug|AVR.Build.0 = Debug|AVR
+		{79C875A5-7055-478F-AE3F-27473BB434E5}.Release|AVR.ActiveCfg = Release|AVR
+		{79C875A5-7055-478F-AE3F-27473BB434E5}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

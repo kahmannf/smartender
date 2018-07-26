@@ -11,12 +11,12 @@
 
 SerialCommunicator::SerialCommunicator()
 {
-  init(9600, SERIAL_8N1);
+  this->init(9600, SERIAL_8N1);
 }
 
 SerialCommunicator::SerialCommunicator(unsigned long baud, uint8_t config)
 {
-  init(baud, config);
+  this->init(baud, config);
 } 
 
 void SerialCommunicator::init(unsigned long baud, uint8_t config)
@@ -31,12 +31,14 @@ void SerialCommunicator::send(int value)
 
 int SerialCommunicator::available()
 {
-  return Serial.available();
+  int isAvailable = Serial.available();
+  return isAvailable;
 }
 
 int SerialCommunicator::read()
 {
-  return Serial.read();
+  int value = Serial.read();
+  return value;
 }
 
 // default destructor
