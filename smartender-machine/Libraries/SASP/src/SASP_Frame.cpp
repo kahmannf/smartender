@@ -77,6 +77,14 @@ void SASP_Frame::check_for_header_start()
 
 void SASP_Frame::finalize_header()
 {
+  if(this->bytes_read == SASP_HEADER_LENGTH)
+  {
+    if(this->get_header_version_field() != SASP_VERSION)
+    {
+      this->status = SASP_FRAME_STATUS_CANCELED;
+    }
+    
+  }
 }
 
 void SASP_Frame::finalize_body()
@@ -85,6 +93,30 @@ void SASP_Frame::finalize_body()
 
 void SASP_Frame::finalize_frame()
 {
+}
+
+long SASP_Frame::get_header_version_field()
+{
+  if(this->bytes_read < SASP_HEADER_LENGTH)
+  {
+    return -1;
+  }
+  else 
+  {
+    int version = 0;
+    for(int i = SASP_VERSION_END_INDEX; i >= SASP_VERSION_START_INDEX; i--)
+    {
+      if((SASP_VERSION_END_INDEX - i) * 8 > 0)
+      {
+        version = version | (this->data[i] << (SASP_VERSION_END_INDEX - i) * 8) 
+      }
+      else 
+      {
+        version = version | (this->data[i]);
+      }
+    }
+    return version;
+  }
 }
 
 
